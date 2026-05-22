@@ -214,6 +214,7 @@ class AlienFormations {
 
                     //add points to reach designated position in formation
                     //do it by calculating the higher axis pixel distance, and dividing both axis thistances by that number
+                    int POINTS_TO_CALCULATE_WITH_OFFSET = 0;
                     double maxDistance = Math.max( Math.abs(finalY-nextY), Math.abs(finalX-nextX) );
                     double dxPerFrame = (finalX-nextX)/maxDistance;
                     double dyPerFrame = (finalY-nextY)/maxDistance;
@@ -221,23 +222,25 @@ class AlienFormations {
                     if( maxDistance > 0 ){
                         for( int i = 1; i <= maxDistance; i++ ){
                             pointsList.add( new PointOfPath( (int)(nextX + (dxPerFrame*i)), (int)(nextY + (dyPerFrame*i)) ) );
+                            POINTS_TO_CALCULATE_WITH_OFFSET++;
                         }
                     }
 
 
                     //5. FINALLY CREATE AND ADD ALIEN
 
+                    PointOfPath formationPoint = new PointOfPath( finalX, finalY );
                     switch ( type ) {
                         case GOEI:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, null, pointsList) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case ZAKO:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, null, pointsList) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case BOSS_GALAGA:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, null, pointsList) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         default:

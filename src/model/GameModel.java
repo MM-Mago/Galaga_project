@@ -27,13 +27,6 @@ public class GameModel implements ModelForView, ModelForController{
     private static final WorldBounds bounds = new WorldBounds( MODEL_SCREEN_WIDTH, MODEL_SCREEN_HEIGHT );
     
 
-    //--------------------------------
-    //PRIVATE STATIC FINAL VARIABLES
-    //--------------------------------
-
-    private static int frameInFormationState; //only used for update in formation
-
-
     //------------------
     //PRIVATE VARIABLES
     //------------------
@@ -97,7 +90,6 @@ public class GameModel implements ModelForView, ModelForController{
         //counters
         activePlayerShotsCount = 0;
         numStage = 1;
-        frameInFormationState = 0;
         frameNumber = 0;
         secondsInState = 0;
         coins = 0;
@@ -125,8 +117,6 @@ public class GameModel implements ModelForView, ModelForController{
     //-----------------------
     //PUBLIC STATIC METHODS
     //-----------------------
-
-    public static int getFrameInFormationState(){ return frameInFormationState; }
 
     public static int getSreenWidth(){ return MODEL_SCREEN_WIDTH; }
     public static int getSreenHeight(){ return MODEL_SCREEN_HEIGHT; }
@@ -226,7 +216,7 @@ public class GameModel implements ModelForView, ModelForController{
                 //GET NEW ALIENS AND ADD THEM
                 //--------------------------------------
 
-                ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens();
+                ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens( frameNumber );
                 for( Alien a: aliensToAdd){ addEntity(a); }
 
 
@@ -236,7 +226,9 @@ public class GameModel implements ModelForView, ModelForController{
                 //use radius = half max dimension
                 for( PlayerShot pShot: playerShotsList ){
                     for( Alien a: aliensList ){
-                        if( a.checkCollisionWithPlayerShot(pShot) ) break; // without break would kill more than one
+                        if( a.checkCollisionWithPlayerShot(pShot) ){
+                            break; // without break would kill more than one
+                        }
                     }
                 }
             }

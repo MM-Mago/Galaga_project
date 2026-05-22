@@ -15,14 +15,14 @@ public class Zako extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public Zako( int speed, WorldBounds bounds, Queue<PointOfPath> path) {
-        super( Entities.ZAKO.getWidth(), Entities.ZAKO.getHeight(), speed, bounds, path, true, RotationDirection.D );
+    public Zako( int speed, WorldBounds bounds, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint ) {
+        super( Entities.ZAKO.getWidth(), Entities.ZAKO.getHeight(), speed, bounds, path, true, RotationDirection.D , POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
         entityName = Entities.ZAKO;
     }
 
     @Override
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
-        return new Zako(this.speed, this.bounds, newPath);
+        return new Zako(this.speed, this.bounds, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
     }  
 }

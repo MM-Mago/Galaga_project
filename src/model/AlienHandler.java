@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import controller.GameController;
 import model.entities.Alien;
 
 
@@ -24,6 +25,10 @@ class AlienHandler {
     private ArrayList<Alien> presentStageAliens;
     private ArrayList<Alien> presentFormationAliens;
 
+    private int formationOffset;
+    private boolean isFormationOffsetGrowing;
+    private static final int MAX_FORMATION_OFFSET = 30;
+    private static final int PIXELS_OFFSET_PER_SECOND = 15;
 
     //--------------------------------
     //PUBLIC COSTRUCTOR
@@ -35,6 +40,8 @@ class AlienHandler {
         presentStageAliens = new ArrayList<Alien>();
         numStage = 1;
         numFormation = 0;
+        formationOffset = 0;
+        isFormationOffsetGrowing = true;
     }
 
     
@@ -54,9 +61,28 @@ class AlienHandler {
     //PACKAGE-PROTECTED METHODS
     //--------------------------------
 
-    ArrayList<Alien> updateHandlerAndGetNewAliens(){
+    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber ){
 
         ArrayList<Alien> newAliens = new ArrayList<Alien>();
+
+        //update offset
+        //offset growing and not all frames
+
+
+        if( isFormationOffsetGrowing && ( ( frameNumber % ( GameController.getFramePerSeconds() / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
+            formationOffset++;
+            if( formationOffset >= MAX_FORMATION_OFFSET ) { isFormationOffsetGrowing = false; }
+        }
+        //offset shrinking and not all frames
+        else if( ( !isFormationOffsetGrowing ) && ( ( frameNumber % ( GameController.getFramePerSeconds() / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
+            formationOffset--;
+            if( formationOffset <= ( - MAX_FORMATION_OFFSET ) ) { isFormationOffsetGrowing = true; }
+        }
+        for( Alien a: presentStageAliens ){
+            a.updateOffset( formationOffset );
+        }
+
+
 
         //case first formation
         if( numFormation == 0 ){
@@ -117,4 +143,6 @@ class AlienHandler {
 
     int getNumStage(){ return numStage; }
     int getNumFormation(){ return numFormation; }
+    int getFormationOffset(){ return formationOffset; }
+
 }
