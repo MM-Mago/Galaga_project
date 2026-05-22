@@ -8,6 +8,7 @@ import controller.GameController;
 import model.GameModel;
 import model.data.PointOfPath;
 import model.data.WorldBounds;
+import shared.Entities;
 import shared.RotationDirection;
 
 public abstract class Alien extends Entity {
@@ -19,8 +20,9 @@ public abstract class Alien extends Entity {
 
     protected static final int INIT_X = -16;
     protected static final int INIT_Y = -16;
-    protected static final PointOfPath CENTER_POINT_FOR_OFFSET = new PointOfPath( 112, 40 );
-    protected static final int MAX_DISTANCE_FROM_CENTER = 100;
+    protected static final PointOfPath CENTER_POINT_FOR_OFFSET = new PointOfPath( 112 - ( Entities.BOSS_GALAGA.getWidth()/2 ), 40 );
+    protected static final int MAX_DISTANCE_FROM_CENTERX = 50;
+    protected static final int MAX_DISTANCE_FROM_CENTERY = 100;
 
 
     //----------------------------
@@ -81,9 +83,11 @@ public abstract class Alien extends Entity {
     @Override
     public void update( int frameNumber ) {
 
-        //calculate offset
+        //init offsets
         int formationOffsetX = offset;
         int formationOffsetY = 0;
+        int formationOffsetXWhenYChanging = offset / 2;
+
 
         //if in formation
         if( !isAttacking ){
@@ -91,8 +95,9 @@ public abstract class Alien extends Entity {
             //calculate distance from center
             double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + (this.width/2 +1) );
             double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + (this.height/2 +1) );
-            double distanceFromCenter = Math.sqrt(distanceFromCenterX*distanceFromCenterX + distanceFromCenterY*distanceFromCenterY); //didnt use MAth.pow because expensive
-            double scaleFactor = distanceFromCenter / MAX_DISTANCE_FROM_CENTER;
+            //double distanceFromCenter = Math.sqrt(distanceFromCenterX*distanceFromCenterX + distanceFromCenterY*distanceFromCenterY); //didnt use MAth.pow because expensive
+            double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
+            double scaleFactorY = distanceFromCenterY / MAX_DISTANCE_FROM_CENTERY;
         
             //check if formationOffsetY should start changing
             if( GameModel.AreAllStageAlienPathsEmpty() && offset == 0 ){
@@ -101,8 +106,8 @@ public abstract class Alien extends Entity {
             //change formationOffsetY  if needed and scale both
             if( isOffsetYChanging ){
 
-                formationOffsetX = (int)(formationOffsetX*scaleFactor);
-                formationOffsetY = (int)Math.abs( offset*scaleFactor );
+                formationOffsetX = (int)(formationOffsetXWhenYChanging*scaleFactorX);
+                formationOffsetY = (int)Math.abs( offset*scaleFactorY );
 
                 //check for alien on the left of the screen and put x offset negative
                 if( formationPoint.x() < ( bounds.width()/2 ) ){
