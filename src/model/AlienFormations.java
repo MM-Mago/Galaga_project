@@ -42,6 +42,8 @@ class AlienFormations {
 
     private static final int TEST_SPEED = 2;
 
+    private static GameModel model;
+
 
     //--------------------------------
     //PACKAGE-PROTECTED NESTED RECORDS
@@ -92,7 +94,8 @@ class AlienFormations {
     //PACKAGE-PROTECTED STATIC METHODS
     //--------------------------------
 
-    static void initFormations(){
+    static void initFormations( GameModel model){
+        AlienFormations.model = model;
 
         //initialize ALL formations
         
@@ -232,15 +235,15 @@ class AlienFormations {
                     PointOfPath formationPoint = new PointOfPath( finalX, finalY );
                     switch ( type ) {
                         case GOEI:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case ZAKO:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case BOSS_GALAGA:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, null, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         default:

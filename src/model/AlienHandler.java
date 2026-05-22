@@ -24,6 +24,7 @@ class AlienHandler {
 
     private ArrayList<Alien> presentStageAliens;
     private ArrayList<Alien> presentFormationAliens;
+    private static final int ALIENS_PER_STAGE = 8; //TO CHANGE LATER!!!!!!!!!!!!
 
     private int formationOffset;
     private boolean isFormationOffsetGrowing;
@@ -34,8 +35,8 @@ class AlienHandler {
     //PUBLIC COSTRUCTOR
     //--------------------------------
 
-    AlienHandler( ){
-        AlienFormations.initFormations();
+    AlienHandler( GameModel model ){
+        AlienFormations.initFormations( model );
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
         numStage = 1;
@@ -140,6 +141,8 @@ class AlienHandler {
 
         return isCompleted;
     }
+
+    boolean isStageFull(){ return ( presentStageAliens.size() == ALIENS_PER_STAGE ); }
 
     int getNumStage(){ return numStage; }
     int getNumFormation(){ return numFormation; }

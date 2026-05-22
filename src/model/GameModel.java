@@ -38,7 +38,7 @@ public class GameModel implements ModelForView, ModelForController{
     private GameState state;
 
     //alien handler
-    private AlienHandler alienHandler;
+    private static AlienHandler alienHandler;
 
     //four separate lists to better manage collisions
     private ArrayList<Entity> entitiesList;
@@ -81,7 +81,7 @@ public class GameModel implements ModelForView, ModelForController{
         state = GameState.INITIAL_SCREEN;
 
         //init alienHandler
-        alienHandler = new AlienHandler();
+        alienHandler = new AlienHandler( this );
 
         //init player
         player = new Player( bounds );
@@ -120,6 +120,7 @@ public class GameModel implements ModelForView, ModelForController{
 
     public static int getSreenWidth(){ return MODEL_SCREEN_WIDTH; }
     public static int getSreenHeight(){ return MODEL_SCREEN_HEIGHT; }
+    public static boolean isStageFull(){ return alienHandler.isStageFull(); }
     
 
     //------------------

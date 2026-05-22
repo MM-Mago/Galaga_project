@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import controller.GameController;
+import model.GameModel;
 import model.data.PointOfPath;
 import model.data.WorldBounds;
 import shared.RotationDirection;
@@ -18,6 +19,8 @@ public abstract class Alien extends Entity {
 
     protected static final int INIT_X = -16;
     protected static final int INIT_Y = -16;
+    protected static final PointOfPath CENTER_POINT_FOR_OFFSET = new PointOfPath( 112, 40 );
+    protected static final int MAX_DISTANCE_FROM_CENTER = 100;
 
 
     //----------------------------
@@ -28,6 +31,7 @@ public abstract class Alien extends Entity {
     protected boolean isOneShot; //one shot to kill
     protected boolean isAttacking; //attacking means going to formation or already exited it
     protected boolean isDiving; //diving means that it extited formation to attack the player
+    protected boolean isOffsetYChanging;
 
     protected final PointOfPath formationPoint;
     protected final int POINTS_TO_CALCULATE_WITH_OFFSET;
@@ -39,7 +43,7 @@ public abstract class Alien extends Entity {
     private ArrayList<PointOfPath> pathArrayList;
     private LinkedList<PointOfPath> lastPoints;
     private int pointsCounter;
-    protected int formationOffsetX;
+    protected int offset;
 
 
     //----------------------
@@ -56,8 +60,9 @@ public abstract class Alien extends Entity {
         lastPoints = new LinkedList<PointOfPath>();
         isDiving = false;
         this.POINTS_TO_CALCULATE_WITH_OFFSET = POINTS_TO_CALCULATE_WITH_OFFSET;
-        formationOffsetX = 0;
+        offset = 0;
         this.formationPoint = formationPoint;
+        isOffsetYChanging = false;
         
     }// end costructor
 
@@ -76,13 +81,38 @@ public abstract class Alien extends Entity {
     @Override
     public void update( int frameNumber ) {
 
+        //calculate offset
+        int formationOffsetX = offset;
+        int formationOffsetY = 0;
 
         //if in formation
         if( !isAttacking ){
 
-            //TO IMPLEMENT MOVEMENT IN FORMATION                
-            x = (int)formationPoint.x() + formationOffsetX;
-            //y = (int)formationPoint.y() + offset; // to do better
+            //calculate distance from center
+            double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + (this.width/2 +1) );
+            double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + (this.height/2 +1) );
+            double distanceFromCenter = Math.sqrt(distanceFromCenterX*distanceFromCenterX + distanceFromCenterY*distanceFromCenterY); //didnt use MAth.pow because expensive
+            double scaleFactor = distanceFromCenter / MAX_DISTANCE_FROM_CENTER;
+        
+            //check if formationOffsetY should start changing
+            if( GameModel.isStageFull() && offset == 0 ){
+                isOffsetYChanging = true;
+            }
+            //change formationOffsetY  if needed and scale both
+            if( isOffsetYChanging ){
+
+                formationOffsetX = (int)(formationOffsetX*scaleFactor);
+                formationOffsetY = (int)Math.abs( offset*scaleFactor );
+
+                //check for alien on the left of the screen and put x offset negative
+                if( formationPoint.x() < ( bounds.width()/2 ) ){
+                    formationOffsetX = -Math.abs( formationOffsetX ); 
+                }
+                //fix also aliens on the right
+                else{
+                    formationOffsetX = Math.abs( formationOffsetX ); 
+                }
+            }
 
 
 
@@ -94,9 +124,10 @@ public abstract class Alien extends Entity {
 
             //offset change 
             x = (int)formationPoint.x() + formationOffsetX;
+            y = (int)formationPoint.y() + formationOffsetY;
 
             //update angle if in formation
-            updateAngle( new PointOfPath( x - formationOffsetX, y ) );
+            updateAngle( new PointOfPath( x - formationOffsetX, y - formationOffsetY ) );
         }
 
         //if not in formation
@@ -157,7 +188,7 @@ public abstract class Alien extends Entity {
     public boolean isOneShot(){ return isOneShot; }
     public int getXFromCenterX( int centerX ){ return( centerX - ( this.width/2 )); }
     public int getYFromCenterY( int centerY ){ return( centerY - ( this.height/2 )); }
-    public void updateOffset( int offset ) { this.formationOffsetX = offset; }
+    public void updateOffset( int offset ) { this.offset = offset; }
 
     
     //-----------------
