@@ -135,11 +135,11 @@ public abstract class Alien extends Entity {
                 //cycle interator
                 pointsSkipped++;
                 pointsCounter++;
-                        
-                //update angle when reaching formation
-                updateAngle( null );
             }
-
+                        
+            //update angle if reaching formation
+            if( ! isDiving ) updateAngle( null );
+            
             //if attacking after formation
             if( isDiving ){
                 
