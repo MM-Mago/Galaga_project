@@ -24,7 +24,7 @@ class AlienHandler {
 
     private ArrayList<Alien> presentStageAliens;
     private ArrayList<Alien> presentFormationAliens;
-    private static final int ALIENS_PER_STAGE = 8; //TO CHANGE LATER!!!!!!!!!!!!
+    private static final int ALIENS_PER_STAGE = 16; //TO CHANGE LATER!!!!!!!!!!!!
 
     private int formationOffset;
     private boolean isFormationOffsetGrowing;
@@ -143,6 +143,13 @@ class AlienHandler {
     }
 
     boolean isStageFull(){ return ( presentStageAliens.size() == ALIENS_PER_STAGE ); }
+    boolean AreAllStageAlienPathsEmpty(){
+        boolean temp = true;
+        for( Alien a : presentStageAliens ){
+            if ( !(a.isPathEmpty()) )  temp = false;
+            }
+        return temp;
+    }
 
     int getNumStage(){ return numStage; }
     int getNumFormation(){ return numFormation; }

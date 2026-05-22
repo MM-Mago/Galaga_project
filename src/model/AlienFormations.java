@@ -37,12 +37,10 @@ class AlienFormations {
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
     private static final int DEFINED_STAGES_IN_FILE = 1;
-    private static final int DEFINED_FORMATIONS_IN_FILE = 1;
+    private static final int DEFINED_FORMATIONS_IN_FILE = 2;
     private static final int DEFINED_ALIENS_IN_FILE = 8;
 
     private static final int TEST_SPEED = 2;
-
-    private static GameModel model;
 
 
     //--------------------------------
@@ -95,7 +93,6 @@ class AlienFormations {
     //--------------------------------
 
     static void initFormations( GameModel model){
-        AlienFormations.model = model;
 
         //initialize ALL formations
         
@@ -165,8 +162,8 @@ class AlienFormations {
 
                     // we read all 4 lines
                     // must add [] wich signals to consider {} as separate strings
-                    String finalPosStr = buffRead.readLine().trim().replaceAll("[{}]", "");
                     String startPosStr = buffRead.readLine().trim().replaceAll("[{}]", "");
+                    String finalPosStr = buffRead.readLine().trim().replaceAll("[{}]", "");
                     String directionsStr = buffRead.readLine().trim().replaceAll("[{}]", "");
                     String pixelsStr = buffRead.readLine().trim().replaceAll("[{}]", "");
 

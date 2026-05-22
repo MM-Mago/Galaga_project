@@ -121,6 +121,7 @@ public class GameModel implements ModelForView, ModelForController{
     public static int getSreenWidth(){ return MODEL_SCREEN_WIDTH; }
     public static int getSreenHeight(){ return MODEL_SCREEN_HEIGHT; }
     public static boolean isStageFull(){ return alienHandler.isStageFull(); }
+    public static boolean AreAllStageAlienPathsEmpty(){ return alienHandler.AreAllStageAlienPathsEmpty(); }
     
 
     //------------------

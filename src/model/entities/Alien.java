@@ -95,7 +95,7 @@ public abstract class Alien extends Entity {
             double scaleFactor = distanceFromCenter / MAX_DISTANCE_FROM_CENTER;
         
             //check if formationOffsetY should start changing
-            if( GameModel.isStageFull() && offset == 0 ){
+            if( GameModel.AreAllStageAlienPathsEmpty() && offset == 0 ){
                 isOffsetYChanging = true;
             }
             //change formationOffsetY  if needed and scale both
@@ -185,6 +185,7 @@ public abstract class Alien extends Entity {
     
     public Queue<PointOfPath> getPathCopy(){ return new LinkedList<PointOfPath>( path ); }
     public boolean isAttacking(){ return isAttacking; }
+    public boolean isPathEmpty(){ return path.isEmpty(); }
     public boolean isOneShot(){ return isOneShot; }
     public int getXFromCenterX( int centerX ){ return( centerX - ( this.width/2 )); }
     public int getYFromCenterY( int centerY ){ return( centerY - ( this.height/2 )); }
