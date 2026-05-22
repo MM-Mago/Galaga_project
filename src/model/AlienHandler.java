@@ -146,7 +146,8 @@ class AlienHandler {
     boolean AreAllStageAlienPathsEmpty(){
         boolean temp = true;
         for( Alien a : presentStageAliens ){
-            if ( !(a.isPathEmpty()) )  temp = false;
+            //check if omne of them is not to remove and has not and an empty path
+            if ( !( a.isPathEmpty() || a.isToRemove() ) )  temp = false;
             }
         return temp;
     }

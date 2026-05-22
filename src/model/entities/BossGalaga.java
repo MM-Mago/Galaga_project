@@ -25,4 +25,12 @@ public class BossGalaga extends Alien {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
         return new BossGalaga(this.speed, this.bounds, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
     }
+
+    @Override
+    public void update(int frameNumber) {
+    
+        super.update(frameNumber);
+
+        if( isOneShot ) this.entityName = Entities.BOSS_GALAGA_ONE_SHOT;
+    }
 }
