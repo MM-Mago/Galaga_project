@@ -132,7 +132,7 @@ public abstract class Alien extends Entity {
             y = (int)formationPoint.y() + formationOffsetY;
 
             //update angle if in formation
-            updateAngle( new PointOfPath( x - formationOffsetX, y - formationOffsetY ) );
+            updateAngleWithoutPath( new PointOfPath( x - formationOffsetX, y - formationOffsetY ) );
         }
 
         //if not in formation
@@ -174,7 +174,7 @@ public abstract class Alien extends Entity {
             }
                         
             //update angle if reaching formation
-            if( ! isDiving ) updateAngle( null );
+            if( ! isDiving ) updateAngleWhileInPath();
             
             //if attacking after formation
             if( isDiving ){
@@ -239,7 +239,8 @@ public abstract class Alien extends Entity {
     //PRIVATE METHODS
     //----------------------------
 
-    private void updateAngle( PointOfPath newP ){
+    //use newP only for undefined paths
+    private void updateAngleWithoutPath( PointOfPath newP ){
 
         final int LAST_POINTS_SIZE = 20;
         final int RADIUS = LAST_POINTS_SIZE / 2 - 1;
@@ -276,5 +277,9 @@ public abstract class Alien extends Entity {
 
         // set new RotationDirection
         direction = RotationDirection.fromAngle( angle );
-    }
+
+    }// end updateAngleWithoutPath
+
+    private void updateAngleWhileInPath(){ updateAngleWithoutPath( null ); }
+
 }

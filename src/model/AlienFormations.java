@@ -36,11 +36,15 @@ class AlienFormations {
     private final static String CHARSET = "utf-8"; //o UTF-8
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
-    private static final int DEFINED_STAGES_IN_FILE = 1;
-    private static final int DEFINED_FORMATIONS_IN_FILE = 3;
-    private static final int DEFINED_ALIENS_IN_FILE = 8;
 
-    private static final int TEST_SPEED = 2;
+    //--------------------------------
+    //PACKAGE-PRIVATE VARIABLES
+    //--------------------------------
+    static final int DEFINED_STAGES_IN_FILE = 1;
+    static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
+    static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
+
+    static final int TEST_SPEED = 2;
 
 
     //--------------------------------
@@ -116,7 +120,7 @@ class AlienFormations {
                 StagePaths stageNToFill = new StagePaths(new ArrayList<FormationPaths>());
 
                 //create m formationLists to fill
-                for(int m = 1; m <= DEFINED_FORMATIONS_IN_FILE; m++ ){
+                for(int m = 1; m <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE; m++ ){
 
                     FormationPaths formationMToFill = new FormationPaths(new ArrayList<Alien>());
                     stageNToFill.formationsList().add(formationMToFill);
@@ -131,8 +135,8 @@ class AlienFormations {
 
             while( ( ( line = buffRead.readLine() ) != null ) 
                 && ( nStage <= DEFINED_STAGES_IN_FILE ) 
-                && ( mFormation <= DEFINED_FORMATIONS_IN_FILE ) 
-                && ( kAlien <= DEFINED_ALIENS_IN_FILE ) ){
+                && ( mFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE ) 
+                && ( kAlien <= DEFINED_ALIENS_PER_FORMATION_IN_FILE ) ){
                 
 
 
@@ -271,7 +275,7 @@ class AlienFormations {
         ArrayList<Alien> formationCopy = new ArrayList<Alien>();
 
         //check for invalid numbers
-        if( numStage > DEFINED_STAGES_IN_FILE || numFormation > DEFINED_FORMATIONS_IN_FILE || numStage < 1 || numFormation < 1 ){ return null; };
+        if( numStage > DEFINED_STAGES_IN_FILE || numFormation > DEFINED_FORMATIONS_PER_STAGE_IN_FILE || numStage < 1 || numFormation < 1 ){ return null; };
 
 
 
@@ -297,6 +301,6 @@ class AlienFormations {
 
     static boolean isValidFormation( int numStage, int numFormation ){
         // is valid number 
-        return( numStage <= DEFINED_STAGES_IN_FILE && numFormation <= DEFINED_FORMATIONS_IN_FILE && numStage >= 1 && numFormation >= 1 );
+        return( numStage <= DEFINED_STAGES_IN_FILE && numFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE && numStage >= 1 && numFormation >= 1 );
     }
 }
