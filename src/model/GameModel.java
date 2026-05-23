@@ -138,6 +138,7 @@ public class GameModel implements ModelForView, ModelForController{
         else if (e instanceof PlayerShot ){ playerShotsList.add((PlayerShot)e);}
     } //end addEntity
 
+
     //------------------------
     //PUBLIC METHODS FOR VIEW
     //------------------------
@@ -152,7 +153,6 @@ public class GameModel implements ModelForView, ModelForController{
         return bounds;
     }
 
-
     //entities and records
     @Override
     public ArrayList<Record> getRecordList(){ return this.recordList; } //get the best five records 
@@ -160,7 +160,6 @@ public class GameModel implements ModelForView, ModelForController{
     public Initials getSelectionInitials(){ return this.selectionInitials; } //get the present initials that are being chosen
     @Override
     public ArrayList<EntityInfo> getEntityListForView(){
-
         
         ArrayList<EntityInfo> entityInfos = new ArrayList<EntityInfo>();
 
@@ -171,7 +170,6 @@ public class GameModel implements ModelForView, ModelForController{
         return entityInfos;
 
     } //get the whole list of active entities
-
 
     //game stats
     @Override

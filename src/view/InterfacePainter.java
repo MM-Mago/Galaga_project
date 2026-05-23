@@ -52,11 +52,13 @@ class InterfacePainter {
 
         //1UP, WICH HAS TO FLASH 2 TIMES A SECOND
         final int FLASHES_PER_SECOND = 2;
+        final int ONE_UP_OFFSET = 20;
         if( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.GAME_OVER ){
-            if( ( frameOfView / (GameController.getFramePerSeconds() / (FLASHES_PER_SECOND*2) ) ) % FLASHES_PER_SECOND == 0 ) g.drawImage(SpriteLibrary.getSprite("1UP"), 16, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            if( ( frameOfView / (GameController.getFramePerSeconds() / (FLASHES_PER_SECOND*2) ) ) % FLASHES_PER_SECOND == 0 ) g.drawImage(SpriteLibrary.getSprite("1UP"), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
         else{
-            g.drawImage(SpriteLibrary.getSprite("1UP" ), Entities.PLAYER.getWidth(), 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            int xOffset = 20;
+            g.drawImage(SpriteLibrary.getSprite("1UP" ), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
 
         //HIGH SCORE TEXT
