@@ -25,6 +25,8 @@ public class GameModel implements ModelForView, ModelForController{
     private static final int MODEL_SCREEN_WIDTH = 224;
     private static final int MODEL_SCREEN_HEIGHT = 288;
     private static final WorldBounds bounds = new WorldBounds( MODEL_SCREEN_WIDTH, MODEL_SCREEN_HEIGHT );
+    private static final int SCORE_PER_LIFE = 70000;
+    private static final int SCORE_FOR_FIRST_LIFE = 20000;
     
 
     //------------------
@@ -192,6 +194,9 @@ public class GameModel implements ModelForView, ModelForController{
         @Override
         public void update( int frameNumber ){
 
+            //save initial frame score
+            int initialScore = score;
+
 
             //update frameNumber
             this.frameNumber = frameNumber; 
@@ -287,6 +292,20 @@ public class GameModel implements ModelForView, ModelForController{
             if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 2 ){
                 state = GameState.PLAYING;
                 secondsInState = 0;
+            }
+
+            //update lives
+            if( score < SCORE_PER_LIFE){ // case first life
+                if( ( initialScore < SCORE_FOR_FIRST_LIFE ) && ( SCORE_FOR_FIRST_LIFE < score) ){ // check if already gotten
+                    lives++;
+                }
+            }
+            else{ //case other lives
+                int totalLifeToHaveAcquired = 1 + ( ( score - SCORE_FOR_FIRST_LIFE ) / SCORE_PER_LIFE );
+                int scoreForPresentLife = SCORE_FOR_FIRST_LIFE + totalLifeToHaveAcquired * SCORE_PER_LIFE; 
+                if( initialScore < scoreForPresentLife ){ // check if already gotten
+                    lives++;
+                }
             }
 
         }// end update 
