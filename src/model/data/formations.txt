@@ -15,22 +15,22 @@
         [goei 1]
             {88,-20}
             {120,78}
-            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,UL,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
+            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,L,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
             {20,7,1,3,1,2,1,1,1,3,1,3,1,3,2,3,1,1,80,1,3,1,1,1,1,1,2,1,2,2,1,11,1,2,2,1,1,1,1,1,1,1,4,2,2,3,1,2,1,13,1,3,1,2,1,2,2,1,3,2,1,3}
         [goei 2]
             {88,-40}
             {120,65}
-            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,UL,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
+            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,L,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
             {40,7,1,3,1,2,1,1,1,3,1,3,1,3,2,3,1,1,80,1,3,1,1,1,1,1,2,1,2,2,1,11,1,2,2,1,1,1,1,1,1,1,4,2,2,3,1,2,1,13,1,3,1,2,1,2,2,1,3,2,1,3}
         [goei 3]
             {88,-60}
             {104,65}
-            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,UL,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
+            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,L,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
             {60,7,1,3,1,2,1,1,1,3,1,3,1,3,2,3,1,1,80,1,3,1,1,1,1,1,2,1,2,2,1,11,1,2,2,1,1,1,1,1,1,1,4,2,2,3,1,2,1,13,1,3,1,2,1,2,2,1,3,2,1,3}
         [goei 4]
             {88,-80}
             {104,78}
-            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,UL,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
+            {D,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DR,D,DL,D,DL,D,DL,D,DL,D,DL,L,DL,L,DL,L,DL,L,DL,L,L,UL,L,UL,L,UL,L,UL,L,UL,U,L,U}
             {80,7,1,3,1,2,1,1,1,3,1,3,1,3,2,3,1,1,80,1,3,1,1,1,1,1,2,1,2,2,1,11,1,2,2,1,1,1,1,1,1,1,4,2,2,3,1,2,1,13,1,3,1,2,1,2,2,1,3,2,1,3}
         [zako 1]
             {136,-20}
@@ -56,43 +56,43 @@
         [goei 1]
             {-25,250}
             {88,65}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {25,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U}
+            {25,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [boss_Galaga 1]
             {-45,250}
             {88,46}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {45,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U}
+            {45,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [goei 2]
             {-65,250}
             {88,78}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {65,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U}
+            {65,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [boss_Galaga 2]
             {-85,250}
             {104,46}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {85,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U}
+            {85,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [goei 3]
             {-105,250}
             {136,65}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {105,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U} 
+            {105,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [boss_Galaga 3]
             {-125,250}
             {120,46}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {125,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U} 
+            {125,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [goei 4]
             {-145,250}
             {136,78}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {145,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U} 
+            {145,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         [boss_Galaga 4]
             {-165,250}
             {136,46}
-            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,UL,L,UL,L,DL,L,DL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,D,DR,R,DR,R,DR,R,DR,R,DR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U}
-            {165,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,12,1,5,1,2,1,1,1,1,8,1,1,1,1,1,1,3,1,10,1,3,1,1,1,1,1,1,8,1,1,1,1,2,1,5}
+            {R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,R,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UR,U,UL,U,UL,U,UL,U,UL,L,UL,L,UL,L,DL,L,DL,L,DL,D,DL,D,DL,D,DR,D,DR,D,DR,D,DR,R,DR,R,UR,R,UR,R,UR,U,UR,U,UR,U} 
+            {165,1,3,1,1,1,3,1,1,1,1,1,1,3,1,1,1,12,1,5,1,2,1,2,1,4,1,3,1,1,1,4,1,2,1,1,1,1,1,1,1,1,1,2,1,1,1,1,2,1,2,1,3,1,2,1,2,1,1,1,8,1,6,1,3,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8,1,2,1,1,7,1,1,2,1,8}
         (formation 3)
         [alien 1]
             {}
