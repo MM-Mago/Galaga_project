@@ -231,7 +231,7 @@ public class GameModel implements ModelForView, ModelForController{
                 //use radius = half max dimension
                 for( PlayerShot pShot: playerShotsList ){
                     for( Alien a: aliensList ){
-                        if( a.checkCollisionWithPlayerShot(pShot) ){
+                        if( a.checkCollisionWithPlayerShot(pShot) && a.isToRemove() ){
                             score += a.getScoreValue();
                             break; // without break would kill more than one
                         }
@@ -277,7 +277,9 @@ public class GameModel implements ModelForView, ModelForController{
             }
 
 
-            // to do
+            //--------------------------------------
+            //UPDATE COUNTERS
+            //--------------------------------------
 
             //update highScore
             if( score > highScore ) highScore = score;

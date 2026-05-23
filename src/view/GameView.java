@@ -125,7 +125,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
     private void initGameFrame(){
 
-        this.gameFrame = new JFrame("galaga");
+        this.gameFrame = new JFrame("Galaga");
         gameFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
 
     }//end initGameFrame

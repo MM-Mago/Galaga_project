@@ -143,6 +143,7 @@ class AlienFormations {
                 
                 line = line.trim(); //remove initial spaces
                 if (line.isEmpty()) continue; //if empty skip cicle
+                else if (line.startsWith("!")){ break; }
                 else if (line.startsWith("|")){ nStage++; mFormation = -1; }//check if reading new stage, ininitialized at -1
                 else if (line.startsWith("(")){ mFormation++; kAlien = -1; }//check if reading new Formation
                 else if (line.startsWith("[")){ kAlien++; //check if reading new Alien
@@ -286,9 +287,12 @@ class AlienFormations {
         // Index: 0 1 3    | 0 1 2 3    | 0 1 2  3
 
         //fix numeration
-        if(numStage<3) numStage--;
-        else if(numStage == 3 ) numStage = 3;
-        else{ numStage = numStage%4;}
+        if(numStage<3) numStage--; //stage 1 and 2
+        else if(numStage == 3 ) numStage = 3; //stage 3 (first challenging)
+        else if(numStage % 4 == 0) numStage = 1; //ex. stage 4
+        else if( (numStage - 1) % 4 == 0) numStage = 2; //ex. stage 5
+        else if( (numStage - 2) % 4 == 0) numStage = 0; //ex. stage 6
+        else if( (numStage - 3) % 4 == 0) numStage = 3; //other challenging stages
         numFormation--;
 
         for( Alien a: stageList.get(numStage).formationsList().get(numFormation).alienList()  ){
@@ -303,4 +307,15 @@ class AlienFormations {
         // is valid number 
         return( numStage <= DEFINED_STAGES_IN_FILE && numFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE && numStage >= 1 && numFormation >= 1 );
     }
+
+    
+    //--------------------------------
+    //PRIVATE STATIC METHODS
+    //--------------------------------
+
+    private static Queue<PointOfPath> copyAlienPathToTheRight(Queue<PointOfPath> pointsList){
+        return new LinkedList<PointOfPath>();
+    }// end copyAlienPathToTheRight
+
+    private static void addTwoDivingAliens( ArrayList<Alien> formationList ){}
 }
