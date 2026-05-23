@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 
 //----------------------------------------------------------------------------------
@@ -25,7 +26,7 @@ import java.util.LinkedList;
 //----------------------------------------------------------------------------------
 
 //EVERYTHING PACKAGE-PROTECTED OR PRIVATE
-class AlienFormations {
+class AlienFormationsLibrary {
         
 
     //--------------------------------
@@ -37,10 +38,12 @@ class AlienFormations {
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
 
+
     //--------------------------------
     //PACKAGE-PRIVATE VARIABLES
     //--------------------------------
-    static final int DEFINED_STAGES_IN_FILE = 1;
+
+    static final int DEFINED_STAGES_IN_FILE = 2;
     static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
     static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
 
@@ -89,7 +92,7 @@ class AlienFormations {
     //PRIVATE COSTRUCTOR
     //--------------------------------
 
-    private AlienFormations(){}
+    private AlienFormationsLibrary(){}
 
 
     //--------------------------------
@@ -187,49 +190,68 @@ class AlienFormations {
 
                     // Direction array (D, DR, L...)
                     String[] directionsStringsArray = directionsStr.split(",");
-                    Direction[] directionsArray = new Direction[directionsStringsArray.length];
-                    for (int i = 0; i < directionsArray.length; i++) {
-                        directionsArray[i] = Direction.valueOf(directionsStringsArray[i]);
+
+
+                    //check for shifted aliens ( to left or right )
+                    Queue<PointOfPath> pointsList;
+                    if( ( directionsStringsArray[0].toUpperCase().equals("RIGHT") ) || ( directionsStringsArray[0].toUpperCase().equals("LEFT" ) ) ){
+                        
+                        //4. PRODUCE LIST OF POINTOFPATH
+
+                        int alienIndexToCopy = ( Integer.parseInt( pixelsStr ) - 1 );
+                        //copy alien path with offset
+                        pointsList = copyAlienPathWithOffset(stageList.get(nStage).formationsList.get(mFormation).alienList.get(alienIndexToCopy).copyAlien(), directionsStringsArray[0].toUpperCase() );
+
                     }
+                    //if fully declared aliens continue direction array
+                    else{
+                        Direction[] directionsArray = new Direction[directionsStringsArray.length];
+                        for (int i = 0; i < directionsArray.length; i++) {
+                            directionsArray[i] = Direction.valueOf(directionsStringsArray[i]);
+                        }
 
-                    // pixels array (20, 7, 1...)
-                    String[] pixelsStrings = pixelsStr.split(",");
-                    int[] pixelsArray = new int[pixelsStrings.length];
-                    for (int i = 0; i < pixelsStrings.length; i++) {
-                        pixelsArray[i] = Integer.parseInt(pixelsStrings[i]);
-                    }
+                        // pixels array (20, 7, 1...)
+                        String[] pixelsStrings = pixelsStr.split(",");
+                        int[] pixelsArray = new int[pixelsStrings.length];
+                        for (int i = 0; i < pixelsStrings.length; i++) {
+                            pixelsArray[i] = Integer.parseInt(pixelsStrings[i]);
+                        }
 
 
-                    //4. PRODUCE LIST OF POINTOFPATH
+                        //4. PRODUCE LIST OF POINTOFPATH
 
-                    //initialize list and next point, add first point
-                    Queue<PointOfPath> pointsList = new LinkedList<PointOfPath>();
-                    int nextX = startX;
-                    int nextY = startY;
-                    pointsList.add( new PointOfPath(startX, startY));
+                        //initialize list and next point, add first point
+                        pointsList = new LinkedList<PointOfPath>();
+                        int nextX = startX;
+                        int nextY = startY;
+                        pointsList.add( new PointOfPath(startX, startY));
 
-                    //add every saved point
-                    for( int i = 0; i < pixelsArray.length; i++ ){
-                        for( int j = 0; j < pixelsArray[i]; j++ ){
-                            nextX = nextX + directionsArray[i].getDx();
-                            nextY = nextY + directionsArray[i].getDy();
-                            pointsList.add(new PointOfPath( nextX , nextY ));
+                        //add every saved point
+                        for( int i = 0; i < pixelsArray.length; i++ ){
+                            for( int j = 0; j < pixelsArray[i]; j++ ){
+                                nextX = nextX + directionsArray[i].getDx();
+                                nextY = nextY + directionsArray[i].getDy();
+                                pointsList.add(new PointOfPath( nextX , nextY ));
+                            }
                         }
                     }
-
+                    
                     //add points to reach designated position in formation
                     //do it by calculating the higher axis pixel distance, and dividing both axis thistances by that number
+                    int lastX = (int)new ArrayList<PointOfPath>( pointsList ).getLast().x();
+                    int lastY = (int)new ArrayList<PointOfPath>( pointsList ).getLast().y();
                     int POINTS_TO_CALCULATE_WITH_OFFSET = 0;
-                    double maxDistance = Math.max( Math.abs(finalY-nextY), Math.abs(finalX-nextX) );
-                    double dxPerFrame = (finalX-nextX)/maxDistance;
-                    double dyPerFrame = (finalY-nextY)/maxDistance;
+                    double maxDistance = Math.max( Math.abs(finalY-lastY), Math.abs(finalX-lastX) );
+                    double dxPerFrame = (finalX-lastX)/maxDistance;
+                    double dyPerFrame = (finalY-lastY)/maxDistance;
                     //and then add all points if maxDistance > 0
                     if( maxDistance > 0 ){
                         for( int i = 1; i <= maxDistance; i++ ){
-                            pointsList.add( new PointOfPath( (int)(nextX + (dxPerFrame*i)), (int)(nextY + (dyPerFrame*i)) ) );
+                            pointsList.add( new PointOfPath( (int)(lastX + (dxPerFrame*i)), (int)(lastY + (dyPerFrame*i)) ) );
                             POINTS_TO_CALCULATE_WITH_OFFSET++;
                         }
                     }
+                    
 
 
                     //5. FINALLY CREATE AND ADD ALIEN
@@ -309,13 +331,69 @@ class AlienFormations {
     }
 
     
-    //--------------------------------
+//--------------------------------
     //PRIVATE STATIC METHODS
     //--------------------------------
 
-    private static Queue<PointOfPath> copyAlienPathToTheRight(Queue<PointOfPath> pointsList){
-        return new LinkedList<PointOfPath>();
-    }// end copyAlienPathToTheRight
+    private static Queue<PointOfPath> copyAlienPathWithOffset( Alien a, String side ){
+
+        //init variables and lists
+        Queue<PointOfPath> pointsList = a.getPathCopy();
+        LinkedList<PointOfPath> newPath = new LinkedList<PointOfPath>();
+        List<PointOfPath> arrayList = new ArrayList<>(pointsList).subList(0, pointsList.size() - a.getPointsToCalculateWithOffset() - 1 );
+        final int OFFSET = 16;
+
+        //init angle
+        int angle;
+        if( side.toUpperCase().equals( "RIGHT" ) ){ angle = 90; }
+        else if( side.toUpperCase().equals( "LEFT" ) ){ angle = 270; }
+        else throw new IllegalArgumentException( "side must be left or right" );
+
+        
+        // init radius
+        final int RADIUS = 10; 
+
+        // 2. Cicliamo su tutti i punti per generare la nuova traiettoria spostata
+        for( int i = 0; i < arrayList.size(); i++ ){
+
+            // Calcoliamo startI e endI blindandoli dentro i limiti dell'array
+            int startI = Math.max(0, i - RADIUS);
+            int endI = Math.min(arrayList.size() - 1, i + RADIUS);
+
+            PointOfPath startP = arrayList.get(startI);
+            PointOfPath endP   = arrayList.get(endI);
+
+            // Calcoliamo il vettore direzione media del segmento
+            double dx = endP.x() - startP.x();
+            double dy = endP.y() - startP.y();
+
+            // Calcoliamo l'angolo della traiettoria originaria in radianti
+            double pathAngle = Math.atan2(dy, dx);
+
+            // Aggiungiamo l'angolo di offset (90 o 270 gradi convertiti in radianti)
+            // Questo crea il vettore "Normale" (perpendicolare alla tangente)
+            double offsetAngle = pathAngle + Math.toRadians(angle);
+
+            // Preleviamo il punto centrale attuale
+            PointOfPath currentP = arrayList.get(i);
+
+            // Calcoliamo la nuova posizione usando seno e coseno.
+            // Uso Math.round invece del semplice cast a (int) per evitare 
+            // gli errori di arrotondamento e i saltelli di 1 pixel di cui parlavamo prima!
+            int newX = (int) Math.round(currentP.x() + OFFSET * Math.cos(offsetAngle));
+            int newY = (int) Math.round(currentP.y() + OFFSET * Math.sin(offsetAngle));
+
+            // Creiamo il nuovo punto. 
+            // NOTA: se hai aggiunto forcedDirection al costruttore nel fix precedente, 
+            // ricordati di passarlo qui (es. currentP.forcedDirection())
+            PointOfPath newPoint = new PointOfPath(newX, newY);
+
+            newPath.add( newPoint );
+        }
+
+        return newPath;
+
+    }// end copyAlienPathWithOffset
 
     private static void addTwoDivingAliens( ArrayList<Alien> formationList ){}
 }

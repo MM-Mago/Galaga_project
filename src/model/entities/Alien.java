@@ -195,6 +195,7 @@ public abstract class Alien extends Entity {
     public boolean isOneShot(){ return isOneShot; }
     public int getXFromCenterX( int centerX ){ return( centerX - ( this.width/2 )); }
     public int getYFromCenterY( int centerY ){ return( centerY - ( this.height/2 )); }
+    public int getPointsToCalculateWithOffset(){ return POINTS_TO_CALCULATE_WITH_OFFSET; };
     public void updateOffset( int offset ) { this.offset = offset; }
 
     

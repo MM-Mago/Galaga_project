@@ -24,7 +24,7 @@ class AlienHandler {
 
     private ArrayList<Alien> presentStageAliens;
     private ArrayList<Alien> presentFormationAliens;
-    private static final int ALIENS_PER_STAGE = AlienFormations.DEFINED_ALIENS_PER_FORMATION_IN_FILE * AlienFormations.DEFINED_FORMATIONS_PER_STAGE_IN_FILE;
+    private static final int ALIENS_PER_STAGE = AlienFormationsLibrary.DEFINED_ALIENS_PER_FORMATION_IN_FILE * AlienFormationsLibrary.DEFINED_FORMATIONS_PER_STAGE_IN_FILE;
 
     private int formationOffset;
     private boolean isFormationOffsetGrowing;
@@ -36,7 +36,7 @@ class AlienHandler {
     //--------------------------------
 
     AlienHandler( GameModel model ){
-        AlienFormations.initFormations( model );
+        AlienFormationsLibrary.initFormations( model );
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
         numStage = 1;
@@ -89,8 +89,8 @@ class AlienHandler {
         if( numFormation == 0 ){
 
             numFormation++;
-            if( AlienFormations.isValidFormation(numStage, numFormation) ){ // checked for valid formation
-                presentFormationAliens = AlienFormations.getFormationCopy(numStage, numFormation);
+            if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
+                presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
                 newAliens = presentFormationAliens;
                 presentStageAliens.addAll(newAliens);
             }
@@ -106,8 +106,8 @@ class AlienHandler {
                 
                 //only formation completed
                     numFormation++;
-                if( AlienFormations.isValidFormation(numStage, numFormation) ){ // checked for valid formation
-                    presentFormationAliens = AlienFormations.getFormationCopy(numStage, numFormation);
+                if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
+                    presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
                     newAliens = presentFormationAliens;
                     presentStageAliens.addAll(newAliens);
                 }

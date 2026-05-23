@@ -57,7 +57,6 @@ class InterfacePainter {
             if( ( frameOfView / (GameController.getFramePerSeconds() / (FLASHES_PER_SECOND*2) ) ) % FLASHES_PER_SECOND == 0 ) g.drawImage(SpriteLibrary.getSprite("1UP"), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
         else{
-            int xOffset = 20;
             g.drawImage(SpriteLibrary.getSprite("1UP" ), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
 
