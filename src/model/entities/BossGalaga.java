@@ -12,6 +12,14 @@ public class BossGalaga extends Alien {
 
 
     //------------------
+    //PRIVATE VARIABLES
+    //------------------
+
+    protected final int SCORE_VALUE = 150;
+    protected final int SCORE_VALUE_CHARGING = 400;
+
+
+    //------------------
     //COSTRUCTOR
     //------------------
 
@@ -33,4 +41,11 @@ public class BossGalaga extends Alien {
 
         if( isOneShot ) this.entityName = Entities.BOSS_GALAGA_ONE_SHOT;
     }
+    
+    @Override
+    public int getScoreValue() {
+        if( isAttacking ) return SCORE_VALUE_CHARGING;
+        else return SCORE_VALUE;
+    }
+    
 }

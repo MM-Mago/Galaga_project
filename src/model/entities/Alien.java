@@ -34,6 +34,7 @@ public abstract class Alien extends Entity {
     protected boolean isAttacking; //attacking means going to formation or already exited it
     protected boolean isDiving; //diving means that it extited formation to attack the player
     protected boolean isOffsetYChanging;
+    protected int offset;
 
     protected final PointOfPath formationPoint;
     protected final int POINTS_TO_CALCULATE_WITH_OFFSET;
@@ -45,7 +46,6 @@ public abstract class Alien extends Entity {
     private ArrayList<PointOfPath> pathArrayList;
     private LinkedList<PointOfPath> lastPoints;
     private int pointsCounter;
-    protected int offset;
 
 
     //----------------------
@@ -74,6 +74,7 @@ public abstract class Alien extends Entity {
     //--------------------------------
 
     public abstract Alien copyAlien();//alien copy method to implement in concrete class
+    public abstract int getScoreValue();// get SCORE_VALUE
 
 
     //----------------------------
@@ -93,8 +94,8 @@ public abstract class Alien extends Entity {
         if( !isAttacking ){
 
             //calculate distance from center
-            double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + (this.width/2 +1) );
-            double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + (this.height/2 +1) );
+            double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
+            double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + ( (double)this.height / 2 ) );
             //double distanceFromCenter = Math.sqrt(distanceFromCenterX*distanceFromCenterX + distanceFromCenterY*distanceFromCenterY); //didnt use MAth.pow because expensive
             double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
             double scaleFactorY = distanceFromCenterY / MAX_DISTANCE_FROM_CENTERY;
@@ -121,7 +122,6 @@ public abstract class Alien extends Entity {
 
 
 
-            direction = RotationDirection.U;
 
             //state in formation changer
             if( frameNumber <= GameController.getFramePerSeconds()/2 ) animationFrame = 1;
@@ -132,7 +132,8 @@ public abstract class Alien extends Entity {
             y = (int)formationPoint.y() + formationOffsetY;
 
             //update angle if in formation
-            updateAngleWithoutPath( new PointOfPath( x - formationOffsetX, y - formationOffsetY ) );
+            updateAngleWithNewPoint( new PointOfPath( x - formationOffsetX, y - formationOffsetY ) );
+            direction = RotationDirection.U;
         }
 
         //if not in formation
@@ -240,7 +241,7 @@ public abstract class Alien extends Entity {
     //----------------------------
 
     //use newP only for undefined paths
-    private void updateAngleWithoutPath( PointOfPath newP ){
+    private void updateAngleWithNewPoint( PointOfPath newP ){
 
         final int LAST_POINTS_SIZE = 20;
         final int RADIUS = LAST_POINTS_SIZE / 2 - 1;
@@ -278,8 +279,8 @@ public abstract class Alien extends Entity {
         // set new RotationDirection
         direction = RotationDirection.fromAngle( angle );
 
-    }// end updateAngleWithoutPath
+    }// end updateAngleWithNewPoint
 
-    private void updateAngleWhileInPath(){ updateAngleWithoutPath( null ); }
+    private void updateAngleWhileInPath(){ updateAngleWithNewPoint( null ); }
 
 }

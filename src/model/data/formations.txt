@@ -4,9 +4,7 @@
 # { for initial center coordinates, in formation center coordinates, list directions, number of pixels in stated direction
 # # for comments
 # empty lines ignored
-# spaces ignored
-
-#remember to not use more than 4 pixel in the same direction for curves
+# indentation ignored
 
 
 

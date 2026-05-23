@@ -229,6 +229,7 @@ public class GameModel implements ModelForView, ModelForController{
                 for( PlayerShot pShot: playerShotsList ){
                     for( Alien a: aliensList ){
                         if( a.checkCollisionWithPlayerShot(pShot) ){
+                            score += a.getScoreValue();
                             break; // without break would kill more than one
                         }
                     }

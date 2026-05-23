@@ -10,6 +10,14 @@ import shared.RotationDirection;
 
 public class Zako extends Alien {
 
+    
+    //------------------
+    //PRIVATE VARIABLES
+    //------------------
+
+    protected final int SCORE_VALUE = 50;
+    protected final int SCORE_VALUE_CHARGING = 100;
+    
 
     //------------------
     //COSTRUCTOR
@@ -25,4 +33,11 @@ public class Zako extends Alien {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
         return new Zako(this.speed, this.bounds, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
     }  
+
+    @Override
+    public int getScoreValue() {
+        if( isAttacking ) return SCORE_VALUE_CHARGING;
+        else return SCORE_VALUE;
+    }
+
 }
