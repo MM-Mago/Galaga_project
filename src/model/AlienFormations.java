@@ -40,7 +40,7 @@ class AlienFormations {
     private static final int DEFINED_FORMATIONS_IN_FILE = 2;
     private static final int DEFINED_ALIENS_IN_FILE = 8;
 
-    private static final int TEST_SPEED = 2;
+    private static final int TEST_SPEED = 1;
 
 
     //--------------------------------

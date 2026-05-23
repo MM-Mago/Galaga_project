@@ -241,7 +241,7 @@ public abstract class Alien extends Entity {
 
     private void updateAngle( PointOfPath newP ){
 
-        final int LAST_POINTS_SIZE = 10;
+        final int LAST_POINTS_SIZE = 20;
         final int RADIUS = LAST_POINTS_SIZE / 2 - 1;
 
         //update lastPoints
