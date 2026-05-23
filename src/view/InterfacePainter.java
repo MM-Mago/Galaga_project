@@ -81,13 +81,13 @@ class InterfacePainter {
             for( int i = 0; i < ( lives - 1 ) && ( i < 8 ); i++ ){
                 final int pWidth = Entities.PLAYER.getWidth();
                 final int pHeight = Entities.PLAYER.getHeight();
-                final int margin = 1;
+                final int margin = 2;
                 final int separator = 2;
                 g.drawImage( SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, 1 ), ( (pWidth  + separator)*i + margin ) , bounds.height() - pHeight, pWidth, pHeight, null );
             }
         }
 
-        //GALAGA text
+        //GALAGA TEXT
         if( gameState == GameState.INITIAL_SCREEN ){
             if( secondsInState > 0 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("GALAGA");
@@ -98,7 +98,7 @@ class InterfacePainter {
             }
         }
 
-        //SCORE text
+        //SCORE TEXT
         if( gameState == GameState.INITIAL_SCREEN ){
             if( secondsInState > 1 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("SCORE");
@@ -109,7 +109,7 @@ class InterfacePainter {
             }
         }
 
-        //50_100 and zako
+        //50_100 AND ZAKO
         if( gameState == GameState.INITIAL_SCREEN ){
             if( secondsInState > 2 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("50_100");
@@ -128,7 +128,7 @@ class InterfacePainter {
             }
         }
 
-        //80_160 and goei
+        //80_160 AND GOEI
         if( gameState == GameState.INITIAL_SCREEN ){
             if( secondsInState > 3 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("80_160");
@@ -160,7 +160,7 @@ class InterfacePainter {
             }
         }
 
-        //SCORE number
+        //SCORE NUMBER
         if( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED ){
             int yMargin = 1;
             int xMargin = 41;

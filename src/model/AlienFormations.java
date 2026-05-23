@@ -37,10 +37,10 @@ class AlienFormations {
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
     private static final int DEFINED_STAGES_IN_FILE = 1;
-    private static final int DEFINED_FORMATIONS_IN_FILE = 2;
+    private static final int DEFINED_FORMATIONS_IN_FILE = 3;
     private static final int DEFINED_ALIENS_IN_FILE = 8;
 
-    private static final int TEST_SPEED = 1;
+    private static final int TEST_SPEED = 2;
 
 
     //--------------------------------

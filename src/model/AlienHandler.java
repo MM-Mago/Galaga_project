@@ -24,7 +24,7 @@ class AlienHandler {
 
     private ArrayList<Alien> presentStageAliens;
     private ArrayList<Alien> presentFormationAliens;
-    private static final int ALIENS_PER_STAGE = 16; //TO CHANGE LATER!!!!!!!!!!!!
+    private static final int ALIENS_PER_STAGE = 24; //TO CHANGE LATER!!!!!!!!!!!!
 
     private int formationOffset;
     private boolean isFormationOffsetGrowing;
