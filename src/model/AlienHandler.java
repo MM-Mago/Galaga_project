@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import controller.GameController;
 import model.entities.Alien;
+import shared.SharedCostants;
 
 
 //------------------------------------------------------------------------------------------------
@@ -70,12 +71,12 @@ class AlienHandler {
         //offset growing and not all frames
 
 
-        if( isFormationOffsetGrowing && ( ( frameNumber % ( GameController.getFramePerSeconds() / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
+        if( isFormationOffsetGrowing && ( ( frameNumber % ( SharedCostants.FRAMES_PER_SECOND / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
             formationOffset++;
             if( formationOffset >= MAX_FORMATION_OFFSET ) { isFormationOffsetGrowing = false; }
         }
         //offset shrinking and not all frames
-        else if( ( !isFormationOffsetGrowing ) && ( ( frameNumber % ( GameController.getFramePerSeconds() / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
+        else if( ( !isFormationOffsetGrowing ) && ( ( frameNumber % ( SharedCostants.FRAMES_PER_SECOND / PIXELS_OFFSET_PER_SECOND) ) == 0 ) ){
             formationOffset--;
             if( formationOffset <= ( - MAX_FORMATION_OFFSET ) ) { isFormationOffsetGrowing = true; }
         }

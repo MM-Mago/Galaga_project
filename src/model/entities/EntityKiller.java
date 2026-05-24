@@ -1,17 +1,17 @@
 package model.entities;
 
-import model.data.WorldBounds;
+import shared.SharedCostants;
 
 public class EntityKiller extends Entity {
 
     private EntityKiller entityKiller;
 
-    private EntityKiller( WorldBounds bounds ) {
-        super(0, 0, bounds.width(), bounds.height(), 0, bounds, null );
+    private EntityKiller() {
+        super(0, 0, SharedCostants.MODEL_SCREEN_WIDTH, SharedCostants.MODEL_SCREEN_HEIGHT, 0, null );
     }
 
-    public void initEntityKiller( WorldBounds bounds ){
-        this.entityKiller = new EntityKiller(bounds);
+    public void initEntityKiller(){
+        this.entityKiller = new EntityKiller();
     }
 
     public EntityKiller getEntityKiller(){ 
@@ -21,7 +21,6 @@ public class EntityKiller extends Entity {
 
     @Override
     public void update(int frameNumber) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
     

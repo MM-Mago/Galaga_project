@@ -3,7 +3,6 @@ package model.api;
 import java.util.List;
 
 import model.data.Initials;
-import model.data.WorldBounds;
 import shared.GameState;
 
 public interface ModelForController {
@@ -26,7 +25,6 @@ public interface ModelForController {
 
     //game state
     public GameState getState(); //get the present state of the game
-    public WorldBounds getBounds(); //get the world bounds dimensions
     public int getSecondsInState(); //get seconds passed in a certain state
 
     //entities and records

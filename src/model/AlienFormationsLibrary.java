@@ -1,7 +1,5 @@
 package model;
 
-import java.util.Queue;
-
 import model.data.PointOfPath;
 import model.entities.Alien;
 import model.entities.BossGalaga;
@@ -17,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 
 //----------------------------------------------------------------------------------
@@ -259,15 +258,15 @@ class AlienFormationsLibrary {
                     PointOfPath formationPoint = new PointOfPath( finalX, finalY );
                     switch ( type ) {
                         case GOEI:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case ZAKO:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         case BOSS_GALAGA:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, model.getBounds(), pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
                             break;
 
                         default:
@@ -354,7 +353,7 @@ class AlienFormationsLibrary {
     }
 
     
-//--------------------------------
+    //--------------------------------
     //PRIVATE STATIC METHODS
     //--------------------------------
 
@@ -376,41 +375,38 @@ class AlienFormationsLibrary {
         // init radius
         final int RADIUS = 10; 
 
-        // 2. Cicliamo su tutti i punti per generare la nuova traiettoria spostata
+        // cycle all points
         for( int i = 0; i < arrayList.size(); i++ ){
 
-            // Calcoliamo startI e endI blindandoli dentro i limiti dell'array
+            // calculate startI e endI blocking them withing array indexes
             int startI = Math.max(0, i - RADIUS);
             int endI = Math.min(arrayList.size() - 1, i + RADIUS);
 
             PointOfPath startP = arrayList.get(startI);
             PointOfPath endP   = arrayList.get(endI);
 
-            // Calcoliamo il vettore direzione media del segmento
+            // calculate x incrase and y increase to calculate the angle
             double dx = endP.x() - startP.x();
             double dy = endP.y() - startP.y();
 
-            // Calcoliamo l'angolo della traiettoria originaria in radianti
+            // calculate original angle in radiants
             double pathAngle = Math.atan2(dy, dx);
 
-            // Aggiungiamo l'angolo di offset (90 o 270 gradi convertiti in radianti)
-            // Questo crea il vettore "Normale" (perpendicolare alla tangente)
+            // calculate offseted angle (90 o 270 degrees converted in radiants)
             double offsetAngle = pathAngle + Math.toRadians(angle);
 
-            // Preleviamo il punto centrale attuale
+            // get present central point
             PointOfPath currentP = arrayList.get(i);
 
-            // Calcoliamo la nuova posizione usando seno e coseno.
-            // Uso Math.round invece del semplice cast a (int) per evitare 
-            // gli errori di arrotondamento e i saltelli di 1 pixel di cui parlavamo prima!
+            // calculate new point using sin and cos
+            // use Math.round because of automatic floor rounding of (int) cast
             int newX = (int) Math.round(currentP.x() + OFFSET * Math.cos(offsetAngle));
             int newY = (int) Math.round(currentP.y() + OFFSET * Math.sin(offsetAngle));
 
-            // Creiamo il nuovo punto. 
-            // NOTA: se hai aggiunto forcedDirection al costruttore nel fix precedente, 
-            // ricordati di passarlo qui (es. currentP.forcedDirection())
+            // create new point
             PointOfPath newPoint = new PointOfPath(newX, newY);
 
+            //add point
             newPath.add( newPoint );
         }
 

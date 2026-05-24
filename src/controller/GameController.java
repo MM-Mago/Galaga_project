@@ -6,6 +6,7 @@ import controller.api.ActionHandlerForView;
 import controller.api.ControllerForMain;
 import model.api.ModelForController;
 import shared.GameState;
+import shared.SharedCostants;
 import view.api.ViewForController;
 
 public class GameController implements ControllerForMain, ActionHandlerForView {
@@ -15,8 +16,8 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //COSTANTS
     //------------------
 
-    private static final int FRAME_PER_SECONDS = 60;
-    private static final int MILLISECONDS_PER_FRAME = (int)(1000/FRAME_PER_SECONDS);
+    private static final int FRAMES_PER_SECOND = SharedCostants.FRAMES_PER_SECOND;
+    private static final int MILLISECONDS_PER_FRAME = (int)(1000/FRAMES_PER_SECOND);
     
 
     //------------------
@@ -81,7 +82,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     }
 
     private void updateFramenumber(){
-        if( this.frameNumber > FRAME_PER_SECONDS ) this.frameNumber = 0;
+        if( this.frameNumber > FRAMES_PER_SECOND ) this.frameNumber = 0;
         this.frameNumber++;
     }
 
@@ -160,14 +161,5 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     @Override
     public void stopTimer(){
         timer.stop();
-    }
-
-
-    //------------------------
-    //PUBLIC METHODS
-    //------------------------
-
-    public static int getFramePerSeconds() {
-        return FRAME_PER_SECONDS;
     }
 }

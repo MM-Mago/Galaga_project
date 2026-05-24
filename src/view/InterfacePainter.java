@@ -5,12 +5,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
-import controller.GameController;
 import model.api.ModelForView;
-import model.data.WorldBounds;
 import shared.Entities;
 import shared.GameState;
 import shared.RotationDirection;
+import shared.SharedCostants;
 
 //------------------------------------------------------------------------------------------------
 //THIS CLASS IS ONLY USED TO PAINT ALL THE ENTITIES IN THE LIST USING THE RIGHT SPRITES
@@ -35,11 +34,14 @@ class InterfacePainter {
         
         Color oldColor = g.getColor();
 
+        final int FRAMES_PER_SECOND = SharedCostants.FRAMES_PER_SECOND;
+        final int UNSCALED_WIDTH = SharedCostants.MODEL_SCREEN_WIDTH;
+        final int UNSCALED_HEIGHT = SharedCostants.MODEL_SCREEN_HEIGHT;
+
         final int SPRITE_MODEL_WIDTH = 76;
         final int SPRITE_MODEL_HEIGHT = 8;
 
         final GameState gameState = model.getState();
-        final WorldBounds bounds = model.getBounds();
         final int score = model.getScore();
         final int highScore = model.getHighScore();
         final int lives = model.getLives();
@@ -54,7 +56,7 @@ class InterfacePainter {
         final int FLASHES_PER_SECOND = 2;
         final int ONE_UP_OFFSET = 20;
         if( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.GAME_OVER ){
-            if( ( frameOfView / (GameController.getFramePerSeconds() / (FLASHES_PER_SECOND*2) ) ) % FLASHES_PER_SECOND == 0 ) g.drawImage(SpriteLibrary.getSprite("1UP"), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            if( ( frameOfView / ( FRAMES_PER_SECOND / (FLASHES_PER_SECOND*2) ) ) % FLASHES_PER_SECOND == 0 ) g.drawImage(SpriteLibrary.getSprite("1UP"), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
         else{
             g.drawImage(SpriteLibrary.getSprite("1UP" ), ONE_UP_OFFSET, 1, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
@@ -73,8 +75,8 @@ class InterfacePainter {
         //CREDITS COUNTER
         if( gameState == GameState.INITIAL_SCREEN || gameState == GameState.COIN_INSERTED|| ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState < 4 ) ){
             final int margin = 1;
-            g.drawImage(SpriteLibrary.getSprite("CREDIT" ), Entities.PLAYER.getWidth(), (bounds.height() - SPRITE_MODEL_HEIGHT - margin), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-            paintNumberFromLeftToRight(g, credits, "WHITE", Entities.PLAYER.getWidth()*4,(bounds.height() - SPRITE_MODEL_HEIGHT - margin) );
+            g.drawImage(SpriteLibrary.getSprite("CREDIT" ), Entities.PLAYER.getWidth(), (UNSCALED_HEIGHT - SPRITE_MODEL_HEIGHT - margin), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            paintNumberFromLeftToRight(g, credits, "WHITE", Entities.PLAYER.getWidth()*4,(UNSCALED_HEIGHT - SPRITE_MODEL_HEIGHT - margin) );
         }
 
         //LIVES SPRITES
@@ -84,7 +86,7 @@ class InterfacePainter {
                 final int pHeight = Entities.PLAYER.getHeight();
                 final int margin = 2;
                 final int separator = 2;
-                g.drawImage( SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, 1 ), ( (pWidth  + separator)*i + margin ) , bounds.height() - pHeight, pWidth, pHeight, null );
+                g.drawImage( SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, 1 ), ( (pWidth  + separator)*i + margin ) , UNSCALED_HEIGHT - pHeight, pWidth, pHeight, null );
             }
         }
 
@@ -93,7 +95,7 @@ class InterfacePainter {
             if( secondsInState > 0 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("GALAGA");
                 int offSet = 22;
-                int xSprite = ( model.getBounds().width()/2 ) - offSet;
+                int xSprite = ( UNSCALED_WIDTH/2 ) - offSet;
                 int ySprite = Entities.PLAYER.getHeight()*2;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
             }
@@ -104,7 +106,7 @@ class InterfacePainter {
             if( secondsInState > 1 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("SCORE");
                 int offSet = 40;
-                int xSprite = ( model.getBounds().width()/2 ) - offSet;
+                int xSprite = ( UNSCALED_WIDTH/2 ) - offSet;
                 int ySprite = Entities.PLAYER.getHeight()*3 + SPRITE_MODEL_HEIGHT;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
             }
@@ -117,12 +119,12 @@ class InterfacePainter {
                 int offsetX = 15;
                 int zakoOffsetX = 40;
                 int zakoOffsetY = 4;
-                int xSprite = ( model.getBounds().width()/2 ) - offsetX;
+                int xSprite = ( UNSCALED_WIDTH/2 ) - offsetX;
                 int ySprite = Entities.PLAYER.getHeight()*4 + SPRITE_MODEL_HEIGHT*2;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
 
                 //used player dimensions because of default sprite dimensions
-                if( frameOfView < ( GameController.getFramePerSeconds() / 2 ) ){
+                if( frameOfView < ( FRAMES_PER_SECOND) / 2 ){
                     g.drawImage( SpriteLibrary.getSprite(Entities.ZAKO, RotationDirection.U, 1), xSprite - zakoOffsetX, ySprite - zakoOffsetY, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), null );
                 }
                 else g.drawImage( SpriteLibrary.getSprite(Entities.ZAKO, RotationDirection.U, 2), xSprite - zakoOffsetX, ySprite - zakoOffsetY, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), null );
@@ -136,12 +138,12 @@ class InterfacePainter {
                 int offsetX = 15;
                 int goeiOffsetX = 40;
                 int goeiOffsetY = 4;
-                int xSprite = ( model.getBounds().width()/2 ) - offsetX;
+                int xSprite = ( UNSCALED_WIDTH/2 ) - offsetX;
                 int ySprite = Entities.PLAYER.getHeight()*5 + SPRITE_MODEL_HEIGHT*3;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
 
                 //used player dimensions because of default sprite dimensions
-                if( frameOfView < ( GameController.getFramePerSeconds() / 2 ) ){
+                if( frameOfView < ( FRAMES_PER_SECOND / 2 ) ){
                     g.drawImage( SpriteLibrary.getSprite(Entities.GOEI, RotationDirection.U, 1), xSprite - goeiOffsetX, ySprite - goeiOffsetY, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), null );
                 }
                 else g.drawImage( SpriteLibrary.getSprite(Entities.GOEI, RotationDirection.U, 2), xSprite - goeiOffsetX, ySprite - goeiOffsetY, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), null );
@@ -150,7 +152,7 @@ class InterfacePainter {
 
         //COIN_INSERTED_SCREEN
         if( gameState == GameState.COIN_INSERTED ){
-            g.drawImage( SpriteLibrary.getSprite( "COIN_INSERTED_SCREEN" ), 0, 0, model.getBounds().width(), model.getBounds().height(), null);
+            g.drawImage( SpriteLibrary.getSprite( "COIN_INSERTED_SCREEN" ), 0, 0, UNSCALED_WIDTH, UNSCALED_HEIGHT, null);
             for( int i = 0; i < 3; i++ ){
                 int animationFrame = 1;
                 BufferedImage player = SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, animationFrame );
@@ -183,13 +185,13 @@ class InterfacePainter {
             BufferedImage playerTempImg = SpriteLibrary.getSprite( "PLAYER" );
             if( secondsInState < 4 ){
                 tempOffsetY = 2;
-                g.drawImage( playerTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ) );
+                g.drawImage( playerTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ) );
             }
             else{
                 tempOffsetY = -2;
-               g.drawImage( playerTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
+               g.drawImage( playerTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
             }
         }
 
@@ -199,8 +201,8 @@ class InterfacePainter {
             final int tempOffsetX = -35;
             final int tempNumberOffsetX = 10;
             BufferedImage stageTempImg = SpriteLibrary.getSprite( "STAGE" );
-            g.drawImage( stageTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-            paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ) );
+            g.drawImage( stageTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ) );
         }       
 
         g.setColor(oldColor);

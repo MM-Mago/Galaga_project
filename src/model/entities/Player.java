@@ -1,8 +1,8 @@
 package model.entities;
 
-import model.data.WorldBounds;
 import shared.Entities;
 import shared.RotationDirection;
+import shared.SharedCostants;
 
 //da fare con singleton
 public class Player extends Entity {
@@ -30,8 +30,8 @@ public class Player extends Entity {
     //COSTRUCTOR
     //------------------
 
-    public Player( WorldBounds bounds ){
-        super( INIT_X, INIT_Y, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), INIT_SPEED, bounds, RotationDirection.U );
+    public Player(){
+        super( INIT_X, INIT_Y, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), INIT_SPEED, RotationDirection.U );
         entityName = Entities.PLAYER;
     }
 
@@ -62,7 +62,7 @@ public class Player extends Entity {
         //left out of bounds
         if(this.x - X_BOUNDS_MARGIN < 0) this.x = X_BOUNDS_MARGIN;
         //right out of bounds
-        if(this.x + this.width + X_BOUNDS_MARGIN > bounds.width()) this.x = bounds.width() - this.width - X_BOUNDS_MARGIN;
+        if(this.x + this.width + X_BOUNDS_MARGIN > SharedCostants.MODEL_SCREEN_WIDTH) this.x = SharedCostants.MODEL_SCREEN_WIDTH - this.width - X_BOUNDS_MARGIN;
     }
 
     public void setPlayerMovingRight(Boolean moving){ this.isPlayerMovingRight = moving; }

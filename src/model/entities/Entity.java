@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.data.WorldBounds;
 import shared.Entities;
 import shared.RotationDirection;
 
@@ -9,9 +8,6 @@ public abstract class Entity {
     //-----------------------------
     //PROTECTED ENTITY VARIABLES
     //-----------------------------
-
-    //WorldBounds Record
-    protected final WorldBounds bounds;
 
     protected Entities entityName;
     protected int x;
@@ -29,7 +25,7 @@ public abstract class Entity {
     //PROTECTED COSTRUCTOR
     //----------------------
 
-    protected Entity( int x, int y, int width, int height, int speed, WorldBounds bounds, RotationDirection direction ){
+    protected Entity( int x, int y, int width, int height, int speed, RotationDirection direction ){
         this.x = x;
         this.y = y;
         this.dx = 0;
@@ -37,7 +33,6 @@ public abstract class Entity {
         this.width = width;
         this.height = height;
         this.speed = speed;
-        this.bounds = bounds;
         this.direction = direction;
         isToRemove = false;
         animationFrame = 1;
