@@ -71,14 +71,14 @@ class InterfacePainter {
         //------------------------------
 
         //CREDITS COUNTER
-        if( gameState == GameState.INITIAL_SCREEN || gameState == GameState.COIN_INSERTED|| ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState < 3 ) ){
+        if( gameState == GameState.INITIAL_SCREEN || gameState == GameState.COIN_INSERTED|| ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState < 4 ) ){
             final int margin = 1;
             g.drawImage(SpriteLibrary.getSprite("CREDIT" ), Entities.PLAYER.getWidth(), (bounds.height() - SPRITE_MODEL_HEIGHT - margin), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
             paintNumberFromLeftToRight(g, credits, "WHITE", Entities.PLAYER.getWidth()*4,(bounds.height() - SPRITE_MODEL_HEIGHT - margin) );
         }
 
         //LIVES SPRITES
-        if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 2 ) || gameState == GameState.PLAYING ||  gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
+        if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 3 ) || gameState == GameState.PLAYING ||  gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
             for( int i = 0; i < ( lives - 1 ) && ( i < 8 ); i++ ){
                 final int pWidth = Entities.PLAYER.getWidth();
                 final int pHeight = Entities.PLAYER.getHeight();
@@ -173,7 +173,35 @@ class InterfacePainter {
             }
             paintNumberFromRightToLeft(g, score, "WHITE", xMargin, SPRITE_MODEL_HEIGHT + yMargin );
         }
-       
+
+        //PLAYER 1 TEXT
+        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState < 4 || secondsInState > 5 ) ){
+            final int tempPlayerNumber = 1;
+            final int tempOffsetY;
+            final int tempOffsetX = -35;
+            final int tempNumberOffsetX = 20;
+            BufferedImage playerTempImg = SpriteLibrary.getSprite( "PLAYER" );
+            if( secondsInState < 4 ){
+                tempOffsetY = 2;
+                g.drawImage( playerTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ) );
+            }
+            else{
+                tempOffsetY = -2;
+               g.drawImage( playerTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
+            }
+        }
+
+        //STAGE N TEXT
+        if( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -35;
+            final int tempNumberOffsetX = 10;
+            BufferedImage stageTempImg = SpriteLibrary.getSprite( "STAGE" );
+            g.drawImage( stageTempImg, ( model.getBounds().width() / 2 + tempOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( model.getBounds().width() / 2 + tempNumberOffsetX ), ( ( model.getBounds().height() / 2 ) + tempOffsetY ) );
+        }       
 
         g.setColor(oldColor);
 

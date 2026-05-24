@@ -285,11 +285,11 @@ public class GameModel implements ModelForView, ModelForController{
             if( score > highScore ) highScore = score;
 
             //update state
-            if( state == GameState.LOADING_FIRST_STAGE && secondsInState > 4 ){
+            if( state == GameState.LOADING_FIRST_STAGE && secondsInState > 6 ){
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }
-            if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 2 ){
+            if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 4 ){
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }
