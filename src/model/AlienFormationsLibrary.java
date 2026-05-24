@@ -418,5 +418,5 @@ class AlienFormationsLibrary {
 
     }// end copyAlienPathWithOffset
 
-    private static void addTwoDivingAliens( ArrayList<Alien> formationList ){}
+    //private static void addTwoDivingAliens( ArrayList<Alien> formationList ){}
 }
