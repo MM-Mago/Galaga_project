@@ -43,7 +43,7 @@ class AlienFormationsLibrary {
     //PACKAGE-PRIVATE VARIABLES
     //--------------------------------
 
-    static final int DEFINED_STAGES_IN_FILE = 2;
+    static final int DEFINED_STAGES_IN_FILE = 3;
     static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
     static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
 
@@ -298,7 +298,7 @@ class AlienFormationsLibrary {
         ArrayList<Alien> formationCopy = new ArrayList<Alien>();
 
         //check for invalid numbers
-        if( numStage > DEFINED_STAGES_IN_FILE || numFormation > DEFINED_FORMATIONS_PER_STAGE_IN_FILE || numStage < 1 || numFormation < 1 ){ return null; };
+        if( ! isValidFormation(numStage, numFormation)){ throw new IllegalStateException( "check for valid numbers first" ); };
 
 
 
@@ -311,8 +311,8 @@ class AlienFormationsLibrary {
         //fix numeration
         if(numStage<3) numStage--; //stage 1 and 2
         else if(numStage == 3 ) numStage = 3; //stage 3 (first challenging)
-        else if(numStage % 4 == 0) numStage = 1; //ex. stage 4
-        else if( (numStage - 1) % 4 == 0) numStage = 2; //ex. stage 5
+        else if(numStage % 4 == 0) numStage = 2; //ex. stage 4
+        else if( (numStage - 1) % 4 == 0) numStage = 1; //ex. stage 5
         else if( (numStage - 2) % 4 == 0) numStage = 0; //ex. stage 6
         else if( (numStage - 3) % 4 == 0) numStage = 3; //other challenging stages
         numFormation--;
@@ -327,7 +327,29 @@ class AlienFormationsLibrary {
 
     static boolean isValidFormation( int numStage, int numFormation ){
         // is valid number 
-        return( numStage <= DEFINED_STAGES_IN_FILE && numFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE && numStage >= 1 && numFormation >= 1 );
+
+        //check formation number
+        boolean isValidFormation = false;
+        if( numFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE && numFormation >= 1  )  isValidFormation = true;
+        
+        //check stage number
+        boolean isValidStage = false;
+        if( numStage > 0 && numStage <= DEFINED_STAGES_IN_FILE && numStage < 4 ) isValidStage = true; // ex. 1,2,3
+        else if( DEFINED_STAGES_IN_FILE == 1 ){
+            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
+        }
+        else if( DEFINED_STAGES_IN_FILE == 2 ){
+            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
+            if( (numStage - 1) % 4 == 0 ) isValidStage = true; // ex 5
+        }
+        else if( DEFINED_STAGES_IN_FILE == 3 ){
+            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
+            if( (numStage - 4) % 4 == 0 ) isValidStage = true; // ex 4
+            if( (numStage - 1) % 4 == 0 ) isValidStage = true; // ex 5
+        }
+        else if( DEFINED_STAGES_IN_FILE >= 4 ){ isValidStage = true; }
+
+        return ( isValidFormation && isValidStage );
     }
 
     
