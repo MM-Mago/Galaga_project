@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 import model.api.ModelForView;
 import shared.GameState;
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 
 //TO DO STOP AT LOADING
@@ -82,7 +82,7 @@ public class BackgroundPainter {
         g = (Graphics2D)g;
         Color oldColor = g.getColor();
 
-        final int MAX_BACKGROUND_DY = SharedCostants.MODEL_SCREEN_WIDTH;
+        final int MAX_BACKGROUND_DY = SharedConstants.MODEL_SCREEN_WIDTH;
         GameState gameState = model.getState();
         int secondsInState = model.getSecondsInState();
 

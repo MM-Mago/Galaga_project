@@ -11,7 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.api.ModelForView;
-import shared.SharedCostants;
+import shared.SharedConstants;
 import view.api.ViewForController;
 import controller.api.ActionHandlerForView;
 
@@ -106,8 +106,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
         //paint external overlay
         int margin = 20;
-        g.fillRect( SharedCostants.MODEL_SCREEN_WIDTH , 0, this.getWidth() - SharedCostants.MODEL_SCREEN_WIDTH + margin, this.getHeight() + margin );
-        g.fillRect( 0 , SharedCostants.MODEL_SCREEN_HEIGHT, this.getWidth() + margin, this.getHeight() - SharedCostants.MODEL_SCREEN_HEIGHT + margin );
+        g.fillRect( SharedConstants.MODEL_SCREEN_WIDTH , 0, this.getWidth() - SharedConstants.MODEL_SCREEN_WIDTH + margin, this.getHeight() + margin );
+        g.fillRect( 0 , SharedConstants.MODEL_SCREEN_HEIGHT, this.getWidth() + margin, this.getHeight() - SharedConstants.MODEL_SCREEN_HEIGHT + margin );
 
 
         g.setColor(oldColor);
@@ -133,8 +133,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
     private void updateScale( Graphics2D g2d ){
 
-        this.scaleX = GAME_PANEL_WIDTH/SharedCostants.MODEL_SCREEN_WIDTH;
-        this.scaleY = GAME_PANEL_HEIGHT/SharedCostants.MODEL_SCREEN_HEIGHT;
+        this.scaleX = GAME_PANEL_WIDTH/SharedConstants.MODEL_SCREEN_WIDTH;
+        this.scaleY = GAME_PANEL_HEIGHT/SharedConstants.MODEL_SCREEN_HEIGHT;
         double scale = Math.min( this.scaleX, this.scaleY );
         g2d.scale(scale, scale);
         

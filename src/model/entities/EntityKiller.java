@@ -1,13 +1,13 @@
 package model.entities;
 
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 public class EntityKiller extends Entity {
 
     private EntityKiller entityKiller;
 
     private EntityKiller() {
-        super(0, 0, SharedCostants.MODEL_SCREEN_WIDTH, SharedCostants.MODEL_SCREEN_HEIGHT, 0, null );
+        super(0, 0, SharedConstants.MODEL_SCREEN_WIDTH, SharedConstants.MODEL_SCREEN_HEIGHT, 0, null );
     }
 
     public void initEntityKiller(){

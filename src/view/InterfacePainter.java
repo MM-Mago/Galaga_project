@@ -9,7 +9,7 @@ import model.api.ModelForView;
 import shared.Entities;
 import shared.GameState;
 import shared.RotationDirection;
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 //------------------------------------------------------------------------------------------------
 //THIS CLASS IS ONLY USED TO PAINT ALL THE ENTITIES IN THE LIST USING THE RIGHT SPRITES
@@ -34,9 +34,9 @@ class InterfacePainter {
         
         Color oldColor = g.getColor();
 
-        final int FRAMES_PER_SECOND = SharedCostants.FRAMES_PER_SECOND;
-        final int UNSCALED_WIDTH = SharedCostants.MODEL_SCREEN_WIDTH;
-        final int UNSCALED_HEIGHT = SharedCostants.MODEL_SCREEN_HEIGHT;
+        final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
+        final int UNSCALED_WIDTH = SharedConstants.MODEL_SCREEN_WIDTH;
+        final int UNSCALED_HEIGHT = SharedConstants.MODEL_SCREEN_HEIGHT;
 
         final int SPRITE_MODEL_WIDTH = 76;
         final int SPRITE_MODEL_HEIGHT = 8;

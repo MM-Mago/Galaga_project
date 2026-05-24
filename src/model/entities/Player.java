@@ -2,7 +2,7 @@ package model.entities;
 
 import shared.Entities;
 import shared.RotationDirection;
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 //da fare con singleton
 public class Player extends Entity {
@@ -62,7 +62,7 @@ public class Player extends Entity {
         //left out of bounds
         if(this.x - X_BOUNDS_MARGIN < 0) this.x = X_BOUNDS_MARGIN;
         //right out of bounds
-        if(this.x + this.width + X_BOUNDS_MARGIN > SharedCostants.MODEL_SCREEN_WIDTH) this.x = SharedCostants.MODEL_SCREEN_WIDTH - this.width - X_BOUNDS_MARGIN;
+        if(this.x + this.width + X_BOUNDS_MARGIN > SharedConstants.MODEL_SCREEN_WIDTH) this.x = SharedConstants.MODEL_SCREEN_WIDTH - this.width - X_BOUNDS_MARGIN;
     }
 
     public void setPlayerMovingRight(Boolean moving){ this.isPlayerMovingRight = moving; }

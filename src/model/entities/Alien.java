@@ -8,7 +8,7 @@ import model.GameModel;
 import model.data.PointOfPath;
 import shared.Entities;
 import shared.RotationDirection;
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 public abstract class Alien extends Entity {
 
@@ -84,7 +84,7 @@ public abstract class Alien extends Entity {
     public void update( int frameNumber ) {
 
         //init variables
-        final int FRAMES_PER_SECOND = SharedCostants.FRAMES_PER_SECOND;
+        final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
         //init offsets
         int formationOffsetX = offset;
         int formationOffsetY = 0;
@@ -112,7 +112,7 @@ public abstract class Alien extends Entity {
                 formationOffsetY = (int)Math.abs( offset*scaleFactorY );
 
                 //check for alien on the left of the screen and put x offset negative
-                if( formationPoint.x() < ( SharedCostants.MODEL_SCREEN_WIDTH/2 ) ){
+                if( formationPoint.x() < ( SharedConstants.MODEL_SCREEN_WIDTH/2 ) ){
                     formationOffsetX = -Math.abs( formationOffsetX ); 
                 }
                 //fix also aliens on the right
@@ -239,7 +239,7 @@ public abstract class Alien extends Entity {
 
     //method for tests
     public boolean checkCollisionWith( ){
-        if( x > 0 && x < SharedCostants.MODEL_SCREEN_WIDTH && y > 0 && y < SharedCostants.MODEL_SCREEN_HEIGHT ){
+        if( x > 0 && x < SharedConstants.MODEL_SCREEN_WIDTH && y > 0 && y < SharedConstants.MODEL_SCREEN_HEIGHT ){
             isToRemove = true;
             return true;
         }

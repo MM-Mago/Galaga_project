@@ -12,7 +12,7 @@ import model.entities.Player;
 import model.entities.PlayerShot;
 import shared.EntityInfo;
 import shared.GameState;
-import shared.SharedCostants;
+import shared.SharedConstants;
 
 public class GameModel implements ModelForView, ModelForController{
 
@@ -192,7 +192,7 @@ public class GameModel implements ModelForView, ModelForController{
 
             //update frameNumber
             this.frameNumber = frameNumber; 
-            if( frameNumber == SharedCostants.FRAMES_PER_SECOND ) secondsInState++;
+            if( frameNumber == SharedConstants.FRAMES_PER_SECOND ) secondsInState++;
 
 
             //--------------------------------------

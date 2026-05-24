@@ -1,8 +1,8 @@
 package shared;
 
-public final class SharedCostants {
+public final class SharedConstants {
     
-    private SharedCostants(){}
+    private SharedConstants(){}
 
     //from controller
     public static final int FRAMES_PER_SECOND = 60;
