@@ -334,7 +334,7 @@ class AlienFormationsLibrary {
         
         //check stage number
         boolean isValidStage = false;
-        if( numStage > 0 && numStage <= DEFINED_STAGES_IN_FILE && numStage < 4 ) isValidStage = true; // ex. 1,2,3
+        if( numStage > 0 && numStage <= DEFINED_STAGES_IN_FILE && numStage < 3 ) isValidStage = true; // ex. 1,2
         else if( DEFINED_STAGES_IN_FILE == 1 ){
             if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
         }
@@ -346,6 +346,7 @@ class AlienFormationsLibrary {
             if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
             if( (numStage - 4) % 4 == 0 ) isValidStage = true; // ex 4
             if( (numStage - 1) % 4 == 0 ) isValidStage = true; // ex 5
+            if( numStage == 3 ) isValidStage = false; // only stage 3
         }
         else if( DEFINED_STAGES_IN_FILE >= 4 ){ isValidStage = true; }
 

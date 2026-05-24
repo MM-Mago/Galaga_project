@@ -295,15 +295,15 @@ public class GameModel implements ModelForView, ModelForController{
             }
 
             //update lives
-            if( score < SCORE_PER_LIFE){ // case first life
-                if( ( initialScore < SCORE_FOR_FIRST_LIFE ) && ( SCORE_FOR_FIRST_LIFE < score) ){ // check if already gotten
+            if( initialScore <= SCORE_FOR_FIRST_LIFE){ // case first life
+                if( SCORE_FOR_FIRST_LIFE <= score ){ // check if already gotten
                     lives++;
                 }
             }
             else{ //case other lives
-                int totalLifeToHaveAcquired = 1 + ( ( score - SCORE_FOR_FIRST_LIFE ) / SCORE_PER_LIFE );
-                int scoreForPresentLife = SCORE_FOR_FIRST_LIFE + totalLifeToHaveAcquired * SCORE_PER_LIFE; 
-                if( initialScore < scoreForPresentLife ){ // check if already gotten
+                int totalLifeToHaveAcquired = 1 + ( ( initialScore ) / SCORE_PER_LIFE );
+                int scoreForPresentLife = ( totalLifeToHaveAcquired ) * SCORE_PER_LIFE; 
+                if( initialScore < scoreForPresentLife && score >= scoreForPresentLife ){ // check if already gotten and if to get
                     lives++;
                 }
             }
