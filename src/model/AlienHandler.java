@@ -138,6 +138,7 @@ class AlienHandler {
         for( Alien alien: presentStageAliens ){
             if( !alien.isToRemove() ) return false;
         }
+        if( numFormation < 5 ) return false;
 
         return isCompleted;
     }

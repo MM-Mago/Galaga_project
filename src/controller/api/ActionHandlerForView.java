@@ -12,6 +12,6 @@ public interface ActionHandlerForView {
     public void cmdMovingRight( boolean active );
     public void cmdCoinInserted();
     public void cmdAction();
-
+    public void cmdNukeAll(); //for tests
 
 }

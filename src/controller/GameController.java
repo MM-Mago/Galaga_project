@@ -142,6 +142,11 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
         }
     }//end cmdAction
 
+    @Override
+    public void cmdNukeAll() {
+        model.nukeAll();
+    }
+
 
     //------------------------------
     //PUBLIC METHODS FOR MAIN

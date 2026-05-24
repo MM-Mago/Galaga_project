@@ -39,4 +39,7 @@ public interface ModelForController {
     public int getLives();
     public int getCoins();
     public int getNumStage();
+
+    //for tests
+    public void nukeAll();
 }

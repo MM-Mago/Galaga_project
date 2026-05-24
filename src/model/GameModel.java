@@ -362,4 +362,27 @@ public class GameModel implements ModelForView, ModelForController{
     public void confirmInitials(){
         //to do
     }
+
+    @Override
+    public void nukeAll() {
+        ArrayList<Entity> listCopy = new ArrayList<Entity>(entitiesList);
+        for( Entity e: listCopy ){
+            switch (e.getEntityName()) {
+                case PLAYER:
+                    break;
+                case PLAYER_SHOT:
+                    break;
+                case ALIEN_SHOT:
+                    entitiesList.remove(e);
+                    alienShotsList.remove(e);
+                default:
+                    if( e instanceof Alien ){
+                        if( ((Alien)e).checkCollisionWith(bounds) ){
+                            aliensList.remove(e);
+                            entitiesList.remove(e);
+                        }
+                    }
+            }
+        }
+    } // nuke all for tests
 }

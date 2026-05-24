@@ -236,6 +236,15 @@ public abstract class Alien extends Entity {
         return didCollide;
     }
 
+    //method for tests
+    public boolean checkCollisionWith( WorldBounds bounds ){
+        if( x > 0 && x < bounds.width() && y > 0 && y < bounds.height() ){
+            isToRemove = true;
+            return true;
+        }
+        else return false;
+    }
+
     
     //----------------------------
     //PRIVATE METHODS

@@ -192,7 +192,11 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
             case KeyEvent.VK_SPACE:
                 actionHandler.cmdAction();
                 break;
-                
+            
+            case KeyEvent.VK_N: // only for test
+                actionHandler.cmdNukeAll();
+                break;
+
             default:
                 break;
         }
