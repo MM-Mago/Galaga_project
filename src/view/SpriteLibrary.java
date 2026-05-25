@@ -234,7 +234,7 @@ class SpriteLibrary {
 
         BufferedImage medal;
         final int xInitialOffsetForMedals = 17*(16 + 2) + 1;
-        final int yOffsetForMedals = 9*(16 + 2) + 1 + 11;
+        final int yOffsetForMedals = 9*(16 + 2) + 1 + 9;
         final int medalHeight = 16;
         final int smallerMedalsWidth = 8;
         final int largerMedalsWidth = 16;

@@ -22,8 +22,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
     //PRIVATE STATIC FINAL COSTANTS
     //--------------------------------
 
-    private static final int GAME_PANEL_WIDTH = 450;
-    private static final int GAME_PANEL_HEIGHT = 600;
+    private static final int GAME_PANEL_WIDTH = 448;
+    private static final int GAME_PANEL_HEIGHT = 576;
 
     
     //------------------
@@ -61,8 +61,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
         //init frame and panel
         initGameFrame();
-        final int X_OFFSET_CORRECTION = -3;
-        final int Y_OFFSET_CORRECTION = -24;
+        final int X_OFFSET_CORRECTION = 0;
+        final int Y_OFFSET_CORRECTION = 0;
         this.setPreferredSize( new Dimension(GAME_PANEL_WIDTH + X_OFFSET_CORRECTION, GAME_PANEL_HEIGHT + Y_OFFSET_CORRECTION ) ); //numbers to fix offset
 
         //compose window
