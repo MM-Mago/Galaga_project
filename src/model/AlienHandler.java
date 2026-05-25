@@ -2,7 +2,6 @@ package model;
 
 import java.util.ArrayList;
 
-import controller.GameController;
 import model.entities.Alien;
 import shared.SharedConstants;
 
@@ -40,7 +39,7 @@ class AlienHandler {
         AlienFormationsLibrary.initFormations( model );
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
-        numStage = 1;
+        numStage = 1; //must be 1
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;

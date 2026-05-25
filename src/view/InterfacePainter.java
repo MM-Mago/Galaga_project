@@ -35,8 +35,8 @@ class InterfacePainter {
         Color oldColor = g.getColor();
 
         final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
-        final int UNSCALED_WIDTH = SharedConstants.MODEL_SCREEN_WIDTH;
-        final int UNSCALED_HEIGHT = SharedConstants.MODEL_SCREEN_HEIGHT;
+        final int UNSCALED_MAX_WIDTH = SharedConstants.MODEL_SCREEN_WIDTH;
+        final int UNSCALED_MAX_HEIGHT = SharedConstants.MODEL_SCREEN_HEIGHT;
 
         final int SPRITE_MODEL_WIDTH = 76;
         final int SPRITE_MODEL_HEIGHT = 8;
@@ -75,8 +75,8 @@ class InterfacePainter {
         //CREDITS COUNTER
         if( gameState == GameState.INITIAL_SCREEN || gameState == GameState.COIN_INSERTED|| ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState < 4 ) ){
             final int margin = 1;
-            g.drawImage(SpriteLibrary.getSprite("CREDIT" ), Entities.PLAYER.getWidth(), (UNSCALED_HEIGHT - SPRITE_MODEL_HEIGHT - margin), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-            paintNumberFromLeftToRight(g, credits, "WHITE", Entities.PLAYER.getWidth()*4,(UNSCALED_HEIGHT - SPRITE_MODEL_HEIGHT - margin) );
+            g.drawImage(SpriteLibrary.getSprite("CREDIT" ), Entities.PLAYER.getWidth(), (UNSCALED_MAX_HEIGHT - SPRITE_MODEL_HEIGHT - margin), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            paintNumberFromLeftToRight(g, credits, "WHITE", Entities.PLAYER.getWidth()*4,(UNSCALED_MAX_HEIGHT - SPRITE_MODEL_HEIGHT - margin) );
         }
 
         //LIVES SPRITES
@@ -86,7 +86,7 @@ class InterfacePainter {
                 final int pHeight = Entities.PLAYER.getHeight();
                 final int margin = 2;
                 final int separator = 2;
-                g.drawImage( SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, 1 ), ( (pWidth  + separator)*i + margin ) , UNSCALED_HEIGHT - pHeight, pWidth, pHeight, null );
+                g.drawImage( SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, 1 ), ( (pWidth  + separator)*i + margin ) , UNSCALED_MAX_HEIGHT - pHeight, pWidth, pHeight, null );
             }
         }
 
@@ -95,7 +95,7 @@ class InterfacePainter {
             if( secondsInState > 0 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("GALAGA");
                 int offSet = 22;
-                int xSprite = ( UNSCALED_WIDTH/2 ) - offSet;
+                int xSprite = ( UNSCALED_MAX_WIDTH/2 ) - offSet;
                 int ySprite = Entities.PLAYER.getHeight()*2;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
             }
@@ -106,7 +106,7 @@ class InterfacePainter {
             if( secondsInState > 1 ){
                 BufferedImage sprite = SpriteLibrary.getSprite("SCORE");
                 int offSet = 40;
-                int xSprite = ( UNSCALED_WIDTH/2 ) - offSet;
+                int xSprite = ( UNSCALED_MAX_WIDTH/2 ) - offSet;
                 int ySprite = Entities.PLAYER.getHeight()*3 + SPRITE_MODEL_HEIGHT;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
             }
@@ -119,7 +119,7 @@ class InterfacePainter {
                 int offsetX = 15;
                 int zakoOffsetX = 40;
                 int zakoOffsetY = 4;
-                int xSprite = ( UNSCALED_WIDTH/2 ) - offsetX;
+                int xSprite = ( UNSCALED_MAX_WIDTH/2 ) - offsetX;
                 int ySprite = Entities.PLAYER.getHeight()*4 + SPRITE_MODEL_HEIGHT*2;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
 
@@ -138,7 +138,7 @@ class InterfacePainter {
                 int offsetX = 15;
                 int goeiOffsetX = 40;
                 int goeiOffsetY = 4;
-                int xSprite = ( UNSCALED_WIDTH/2 ) - offsetX;
+                int xSprite = ( UNSCALED_MAX_WIDTH/2 ) - offsetX;
                 int ySprite = Entities.PLAYER.getHeight()*5 + SPRITE_MODEL_HEIGHT*3;
                 g.drawImage( sprite, xSprite, ySprite, SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null );
 
@@ -152,7 +152,7 @@ class InterfacePainter {
 
         //COIN_INSERTED_SCREEN
         if( gameState == GameState.COIN_INSERTED ){
-            g.drawImage( SpriteLibrary.getSprite( "COIN_INSERTED_SCREEN" ), 0, 0, UNSCALED_WIDTH, UNSCALED_HEIGHT, null);
+            g.drawImage( SpriteLibrary.getSprite( "COIN_INSERTED_SCREEN" ), 0, 0, UNSCALED_MAX_WIDTH, UNSCALED_MAX_HEIGHT, null);
             for( int i = 0; i < 3; i++ ){
                 int animationFrame = 1;
                 BufferedImage player = SpriteLibrary.getSprite( Entities.PLAYER, RotationDirection.U, animationFrame );
@@ -185,13 +185,13 @@ class InterfacePainter {
             BufferedImage playerTempImg = SpriteLibrary.getSprite( "PLAYER" );
             if( secondsInState < 4 ){
                 tempOffsetY = 2;
-                g.drawImage( playerTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ) );
+                g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ) );
             }
             else{
                 tempOffsetY = -2;
-               g.drawImage( playerTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
+               g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
             }
         }
 
@@ -201,9 +201,15 @@ class InterfacePainter {
             final int tempOffsetX = -35;
             final int tempNumberOffsetX = 10;
             BufferedImage stageTempImg = SpriteLibrary.getSprite( "STAGE" );
-            g.drawImage( stageTempImg, ( UNSCALED_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
-            paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_HEIGHT / 2 ) + tempOffsetY ) );
+            g.drawImage( stageTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+            paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ) );
         }       
+
+        //MEDALS
+        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) ){
+            final int margin = 1;
+            paintMedals(g, model.getNumStage(), UNSCALED_MAX_WIDTH - margin, UNSCALED_MAX_HEIGHT );
+        }
 
         g.setColor(oldColor);
 
@@ -246,7 +252,7 @@ class InterfacePainter {
 
     }// end paintNumberFromRight
 
-        /* for negatives paint 0, color must be YELLOW, BLUE OR WHITE */
+    /* for negatives paint 0, color must be YELLOW, BLUE OR WHITE */
     private static void paintNumberFromLeftToRight( Graphics2D g, int number, String color, int xMin, int yMin ){
 
         //check if negative
@@ -278,4 +284,41 @@ class InterfacePainter {
         }
 
     }// end paintNumberFromRight
+
+    private static void paintMedals( Graphics2D g, int nStage, int xMax, int yMax ){
+
+        ArrayList<Integer> valueList = new ArrayList<Integer>();
+
+        if( nStage == 0 ){
+            nStage = 1;
+            valueList.add( nStage );
+        } else {
+            // medals values ordered from bigger to smaller
+            int[] medals = {50, 30, 20, 10, 5, 1};
+            int temp = nStage;
+
+            // Algoritmo di scomposizione
+            for (int medalValue : medals) {
+                while (temp >= medalValue) {
+                    valueList.add(medalValue);
+                    temp -= medalValue;
+                }
+            }
+        }
+
+        //then draw medals
+        int presentXOffset = 0;
+        BufferedImage presentMedal = null;
+        for (int i = valueList.size() - 1; i >= 0; i--) {
+
+            if( i != valueList.size() - 1 ){ presentXOffset += presentMedal.getWidth(); }
+
+            presentMedal = SpriteLibrary.getMedal("MEDAL", valueList.get(i) );
+
+            g.drawImage(presentMedal, xMax - presentXOffset - presentMedal.getWidth(), yMax - presentMedal.getHeight(), presentMedal.getWidth(), presentMedal.getHeight(),  null);
+
+        }
+
+
+    }
 }

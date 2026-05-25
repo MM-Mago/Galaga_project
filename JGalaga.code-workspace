@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"java.project.referencedLibraries": [
+			"lib/**/*.jar",
+			"C:\\Galaga_project\\.vscode\\fond.jar"
+		]
+	}
+}
