@@ -38,7 +38,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
 
     //-----------------------------------
-    //COSTRUCTOR + 2 SINGLETON METHODS
+    //COSTRUCTOR + 3 SINGLETON METHODS
     //-----------------------------------
 
     private GameController( ViewForController view, ModelForController model ){
@@ -63,13 +63,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public static ControllerForMain getInstanceForMain(){
         if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
         return controller;
-    } //end getInstance
-
-    public static ActionHandlerForView getIstanceForView(){
-        if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
-        return controller;
-    }
-
+    } //end getInstanceForMain
 
     //------------------------
     //PRIVATE METHODS
@@ -120,7 +114,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     @Override
     public void cmdCoinInserted(){
         model.insertCoin();
-    }//end cmdCoingInserted
+    }//end cmdCoinInserted
 
     @Override
     public void cmdAction(){

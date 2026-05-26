@@ -150,7 +150,7 @@ public abstract class Alien extends Entity {
 
                 int dx = 0;
 
-                //CHECK IF NEXT POINT MUST ME OFFSETTED
+                //CHECK IF NEXT POINT MUST ME OFFSETTED TO REACH FORMATION WHEN MOVING
                 if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) ){
                     dx = (int)( (double)formationOffsetX / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                 }

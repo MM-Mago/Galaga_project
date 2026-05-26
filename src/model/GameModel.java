@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import model.api.ModelForController;
 import model.api.ModelForView;
-import model.data.Initials;
 import model.entities.Alien;
 import model.entities.AlienShot;
 import model.entities.Entity;
@@ -46,10 +45,6 @@ public class GameModel implements ModelForView, ModelForController{
     private ArrayList<AlienShot> alienShotsList;
     private ArrayList<PlayerShot> playerShotsList;
 
-    //records
-    private ArrayList<Record> recordList;
-    private Initials selectionInitials;
-
     //counters
     private int coins;
     private int lives;
@@ -66,7 +61,7 @@ public class GameModel implements ModelForView, ModelForController{
     private int secondsInState;
 
     //----------------------------------
-    //COSTRUCTOR + 2 SINGLETON METHODS
+    //COSTRUCTOR + 3 SINGLETON METHODS
     //----------------------------------
 
     private GameModel(){
@@ -147,11 +142,7 @@ public class GameModel implements ModelForView, ModelForController{
     @Override //all Overrides repetitive but needed
     public GameState getState(){ return this.state; } //get the present state of the game
 
-    //entities and records
-    @Override
-    public ArrayList<Record> getRecordList(){ return this.recordList; } //get the best five records 
-    @Override
-    public Initials getSelectionInitials(){ return this.selectionInitials; } //get the present initials that are being chosen
+    //entities
     @Override
     public ArrayList<EntityInfo> getEntityListForView(){
         
@@ -343,18 +334,6 @@ public class GameModel implements ModelForView, ModelForController{
         addEntity(shot);
         activePlayerShotsCount++;
         }
-    }
-
-    //moves between 3 letters and change them, for example if we got ABC and present letter is the middle B, calling moveLetterSelection(3,-4) will result in firstly looping back to B, then changing it to X
-    @Override 
-    public void moveLetterSelection( int orizontalMovement, int verticalMovement){
-        //to do
-    }
-    
-    //confirm the 3 initials displayed for the new record
-    @Override
-    public void confirmInitials(){
-        //to do
     }
 
     @Override

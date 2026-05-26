@@ -77,7 +77,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         return view;
     } //end initView
 
-    public static ViewForController getInstance(){
+    public static ViewForController getInstanceForController(){
         if(view == null ) throw new IllegalStateException("view not initialized! first call getInstance(model) ");
         return view;
     } //end getInstance

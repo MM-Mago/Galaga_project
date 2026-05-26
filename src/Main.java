@@ -10,7 +10,7 @@ public class Main {
             public void run () {
                 GameModel.initModel();
                 GameView.initView(GameModel.getInstanceForView());
-                GameController.initController(GameView.getInstance(), GameModel.getInstanceForController());
+                GameController.initController(GameView.getInstanceForController(), GameModel.getInstanceForController());
                 GameController.getInstanceForMain().startTimer();
             }
         });
