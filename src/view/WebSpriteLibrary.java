@@ -3,6 +3,7 @@ package view;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.canvas.ImageData;
 import org.teavm.jso.typedarrays.Uint8ClampedArray;
@@ -55,9 +56,29 @@ class WebSpriteLibrary {
         img.addEventListener("load", new EventListener<Event>() {
             @Override public void handleEvent(Event e) { onOneLoaded(); }
         });
+        img.addEventListener("error", new EventListener<Event>() {
+            @Override public void handleEvent(Event e) { onImageLoadError(src); }
+        });
         img.setSrc(src);
         return img;
     }
+
+    private static void onImageLoadError(String src) {
+        logError("Failed to load image: " + src);
+        loadedCount++;
+        if (loadedCount == TOTAL_IMAGES) {
+            logError("Some images failed to load. Attempting to start game anyway.");
+            buildShots();
+            if (onAllLoaded != null) onAllLoaded.run();
+        }
+    }
+
+    private static void logError(String msg) {
+        consoleError(msg);
+    }
+
+    @JSBody(params = "msg", script = "console.error('Galaga: ' + msg);")
+    private static native void consoleError(String msg);
 
     private static void onOneLoaded() {
         loadedCount++;
@@ -192,6 +213,9 @@ class WebSpriteLibrary {
     // Low-level canvas helpers
     // -----------------------------------------------------------------------
 
+    @JSBody(params = "img", script = "return img && img.complete && img.naturalHeight !== 0;")
+    private static native boolean isImageReady(HTMLImageElement img);
+
     private static HTMLCanvasElement clip(HTMLImageElement src,
             int sx, int sy, int sw, int sh, boolean flipX, boolean flipY) {
         HTMLCanvasElement c = makeCanvas(sw, sh);
@@ -201,42 +225,47 @@ class WebSpriteLibrary {
             ctx.translate(flipX ? sw : 0, flipY ? sh : 0);
             ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
         }
-        ctx.drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
+        if (isImageReady(src)) {
+            ctx.drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
+        }
         ctx.restore();
         return c;
     }
 
     private static HTMLCanvasElement clipFull(HTMLImageElement src) {
-        int w = src.getWidth();
-        int h = src.getHeight();
+        int w = isImageReady(src) ? src.getWidth() : 1;
+        int h = isImageReady(src) ? src.getHeight() : 1;
         HTMLCanvasElement c = makeCanvas(w, h);
         CanvasRenderingContext2D ctx = (CanvasRenderingContext2D) c.getContext("2d");
-        ctx.drawImage(src, 0, 0);
-        // PNG background is transparent; opaque near-black pixels are the NAMCO copyright text.
-        // Invert only grayscale opaque pixels: black text → white, leave colors unchanged.
-        ImageData data = ctx.getImageData(0, 0, w, h);
-        Uint8ClampedArray px = data.getData();
-        int len = w * h * 4;
-        for (int i = 0; i < len; i += 4) {
-            int a = px.get(i + 3);
-            if (a < 128) continue; // transparent — leave alone
-            int r = px.get(i), g = px.get(i + 1), b = px.get(i + 2);
-            // True gray: all channels within 10 of each other (excludes yellow/cyan antialiasing)
-            boolean isGray = Math.abs(r - g) < 10 && Math.abs(g - b) < 10 && Math.abs(r - b) < 10;
-            if (isGray && r < 240) {
-                // invert dark gray antialiasing → light gray for visibility on dark background
-                // leave near-white (r>=240) alone — those are already correct white text
-                int v = 255 - r;
-                px.set(i,     v);
-                px.set(i + 1, v);
-                px.set(i + 2, v);
+        if (isImageReady(src)) {
+            ctx.drawImage(src, 0, 0);
+            // PNG background is transparent; opaque near-black pixels are the NAMCO copyright text.
+            // Invert only grayscale opaque pixels: black text → white, leave colors unchanged.
+            ImageData data = ctx.getImageData(0, 0, w, h);
+            Uint8ClampedArray px = data.getData();
+            int len = w * h * 4;
+            for (int i = 0; i < len; i += 4) {
+                int a = px.get(i + 3);
+                if (a < 128) continue; // transparent — leave alone
+                int r = px.get(i), g = px.get(i + 1), b = px.get(i + 2);
+                // True gray: all channels within 10 of each other (excludes yellow/cyan antialiasing)
+                boolean isGray = Math.abs(r - g) < 10 && Math.abs(g - b) < 10 && Math.abs(r - b) < 10;
+                if (isGray && r < 240) {
+                    // invert dark gray antialiasing → light gray for visibility on dark background
+                    // leave near-white (r>=240) alone — those are already correct white text
+                    int v = 255 - r;
+                    px.set(i,     v);
+                    px.set(i + 1, v);
+                    px.set(i + 2, v);
+                }
             }
+            ctx.putImageData(data, 0, 0);
         }
-        ctx.putImageData(data, 0, 0);
         return c;
     }
 
     private static HTMLCanvasElement clipHalf(HTMLImageElement src, boolean bottom) {
+        if (!isImageReady(src)) return makeBlank(222, 21); // Return blank placeholder
         int w = src.getWidth(), h = src.getHeight() / 2;
         HTMLCanvasElement c = makeCanvas(w, h);
         CanvasRenderingContext2D ctx = (CanvasRenderingContext2D) c.getContext("2d");

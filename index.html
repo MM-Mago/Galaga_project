@@ -137,8 +137,63 @@
         </div>
     </div>
 
-    <script src="js/galaga.js"></script>
+    <script src="web/js/galaga.js"></script>
     <script>
+        // ── Debugging & Diagnostics ────────────────────────────────────
+        window.galagaDebug = {
+            logs: [],
+            addLog: function(msg) {
+                const ts = new Date().toLocaleTimeString();
+                const entry = `[${ts}] ${msg}`;
+                this.logs.push(entry);
+                console.log(entry);
+            }
+        };
+
+        window.addEventListener("error", function(e) {
+            window.galagaDebug.addLog(`ERROR: ${e.message}`);
+            if (e.error && e.error.javaException) {
+                try {
+                    var je = e.error.javaException;
+                    var msg = je.toString ? je.toString() : String(je);
+                    window.galagaDebug.addLog(`Java exception: ${msg}`);
+                    if (je.getStackTrace) {
+                        var frames = je.getStackTrace();
+                        for (var i = 0; i < frames.length; i++) {
+                            var f = frames[i];
+                            window.galagaDebug.addLog(`  at ${f.getClassName()}.${f.getMethodName()}(${f.getFileName()}:${f.getLineNumber()})`);
+                        }
+                    }
+                } catch(ex) { console.error("Exception logging error:", ex); }
+            }
+        });
+
+        window.addEventListener("unhandledrejection", function(e) {
+            window.galagaDebug.addLog(`Unhandled Promise Rejection: ${e.reason}`);
+        });
+
+        // Test image loading
+        window.galagaDebug.addLog("Starting Galaga...");
+        window.galagaDebug.testImages = function() {
+            const paths = [
+                "js/sprites/sprites.png",
+                "js/sprites/initial_screen_sprites.png",
+                "js/sprites/coin_inserted_screen.png",
+                "js/sprites/numbers.png",
+                "js/sprites/loading_screen_sprites.png",
+                "js/sprites/background-frame-0.png",
+                "js/sprites/background-frame-1.png",
+                "js/sprites/background-frame-2.png",
+                "js/sprites/background-frame-3.png"
+            ];
+            paths.forEach(path => {
+                const img = new Image();
+                img.onload = () => window.galagaDebug.addLog(`✓ Image loaded: ${path}`);
+                img.onerror = () => window.galagaDebug.addLog(`✗ Image failed: ${path}`);
+                img.src = path;
+            });
+        };
+
         // ── Java exception debug handler ──────────────────────────────────
         window.addEventListener("error", function(e) {
             if (e.error && e.error.javaException) {
@@ -200,7 +255,24 @@
         })();
 
         // ── Start ─────────────────────────────────────────────────────────
-        main();
+        setTimeout(() => {
+            window.galagaDebug.addLog("Checking Galaga initialization...");
+            window.galagaDebug.addLog(`main() function exists: ${typeof main !== 'undefined'}`);
+            window.galagaDebug.addLog(`window.galagaPlaying exists: ${typeof window.galagaPlaying !== 'undefined'}`);
+            window.galagaDebug.addLog(`Canvas element: ${document.getElementById('game-canvas') ? 'Found' : 'NOT FOUND'}`);
+            
+            // Test image loading
+            window.galagaDebug.testImages();
+            
+            // Start the game
+            if (typeof main === 'function') {
+                window.galagaDebug.addLog("Starting main()...");
+                main();
+            } else {
+                window.galagaDebug.addLog("ERROR: main() function not found!");
+                console.error("ERROR: main() function not found in galaga.js");
+            }
+        }, 100);
     </script>
 </body>
 </html>

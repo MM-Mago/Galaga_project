@@ -1,6 +1,9 @@
 package view;
 
+import org.teavm.jso.JSBody;
 import org.teavm.jso.canvas.CanvasRenderingContext2D;
+import org.teavm.jso.dom.events.Event;
+import org.teavm.jso.dom.events.EventListener;
 
 import model.GameModel;
 import model.api.ModelForView;
@@ -25,22 +28,44 @@ class WebBackgroundPainter {
     };
 
     private static org.teavm.jso.dom.html.HTMLImageElement[] frames;
+    private static int loadedFrames = 0;
 
     private WebBackgroundPainter() {}
 
     static void init() {
         org.teavm.jso.dom.html.HTMLDocument doc = org.teavm.jso.browser.Window.current().getDocument();
         frames = new org.teavm.jso.dom.html.HTMLImageElement[4];
+        loadedFrames = 0;
         for (int i = 0; i < 4; i++) {
+            final int frameIndex = i; // Create final copy for use in inner class
+            final String framePath = FRAME_PATHS[i]; // Create final copy for use in inner class
             org.teavm.jso.dom.html.HTMLImageElement img =
                 (org.teavm.jso.dom.html.HTMLImageElement) doc.createElement("img");
-            img.setSrc(FRAME_PATHS[i]);
-            frames[i] = img;
+            img.addEventListener("load", new EventListener<Event>() {
+                @Override public void handleEvent(Event e) { onFrameLoaded(); }
+            });
+            img.addEventListener("error", new EventListener<Event>() {
+                @Override public void handleEvent(Event e) { onFrameLoadError(framePath); }
+            });
+            img.setSrc(FRAME_PATHS[frameIndex]);
+            frames[frameIndex] = img;
         }
         presentFrame = 0;
         presentDY = 0;
         oldViewFrame = -1;
     }
+
+    private static void onFrameLoaded() {
+        loadedFrames++;
+    }
+
+    private static void onFrameLoadError(String path) {
+        consoleWarn("Background frame failed to load: " + path);
+        loadedFrames++;
+    }
+
+    @JSBody(params = "msg", script = "console.warn('Galaga: ' + msg);")
+    private static native void consoleWarn(String msg);
 
     static void paint(CanvasRenderingContext2D ctx, int frameOfView, ModelForView model) {
         GameState state = model.getState();
@@ -50,9 +75,13 @@ class WebBackgroundPainter {
 
         org.teavm.jso.dom.html.HTMLImageElement img = frames[presentFrame];
 
-        ctx.drawImage(img, 0, presentDY);
-        ctx.drawImage(img, 0, -MAX_BACKGROUND_DY + presentDY);
-        ctx.drawImage(img, 0,  MAX_BACKGROUND_DY + presentDY);
+        // Only draw if image has loaded
+        if (img != null && isImageLoaded(img)) {
+            ctx.drawImage(img, 0, presentDY);
+            ctx.drawImage(img, 0, -MAX_BACKGROUND_DY + presentDY);
+            ctx.drawImage(img, 0,  MAX_BACKGROUND_DY + presentDY);
+        }
+        // If image hasn't loaded yet, canvas background (black) is visible
 
         if (oldViewFrame != frameOfView) {
             boolean scroll = state == GameState.INITIAL_SCREEN
@@ -66,4 +95,7 @@ class WebBackgroundPainter {
 
         oldViewFrame = frameOfView;
     }
+
+    @JSBody(params = "img", script = "return img.complete && img.naturalHeight !== 0;")
+    private static native boolean isImageLoaded(org.teavm.jso.dom.html.HTMLImageElement img);
 }
