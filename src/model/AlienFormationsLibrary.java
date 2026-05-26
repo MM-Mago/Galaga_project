@@ -10,9 +10,8 @@ import model.entities.Zako;
 import shared.Entities;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,8 +32,6 @@ class AlienFormationsLibrary {
     //PRIVATE VARIABLES
     //--------------------------------
 
-    private final static String FORMATIONS_FILE_PATH = "src//model//data//formations.txt";
-    private final static String CHARSET = "utf-8"; //o UTF-8
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
 
@@ -105,9 +102,9 @@ class AlienFormationsLibrary {
         
         BufferedReader buffRead = null;
         try{
-            buffRead =  new BufferedReader(  
-                        new InputStreamReader( 
-                        new FileInputStream( FORMATIONS_FILE_PATH), CHARSET ) );
+            InputStream is = AlienFormationsLibrary.class.getClassLoader().getResourceAsStream( "model/data/formations.txt" );
+            if( is == null ) throw new IOException( "Resource not found: model/data/formations.txt" );
+            buffRead = new BufferedReader( new InputStreamReader( is, "utf-8" ) );
             String line = null;
             int nStage = -1;
             int mFormation = -1;
@@ -238,8 +235,9 @@ class AlienFormationsLibrary {
                     
                     //add points to reach designated position in formation
                     //do it by calculating the higher axis pixel distance, and dividing both axis thistances by that number
-                    int lastX = (int)new ArrayList<PointOfPath>( pointsList ).getLast().x();
-                    int lastY = (int)new ArrayList<PointOfPath>( pointsList ).getLast().y();
+                    ArrayList<PointOfPath> tempList = new ArrayList<PointOfPath>( pointsList );
+                    int lastX = (int)tempList.get( tempList.size() - 1 ).x();
+                    int lastY = (int)tempList.get( tempList.size() - 1 ).y();
                     int POINTS_TO_CALCULATE_WITH_OFFSET = 0;
                     double maxDistance = Math.max( Math.abs(finalY-lastY), Math.abs(finalX-lastX) );
                     double dxPerFrame = (finalX-lastX)/maxDistance;
@@ -279,9 +277,6 @@ class AlienFormationsLibrary {
             } //end while
 
         } // end try
-        catch( FileNotFoundException fnfe ){
-            fnfe.printStackTrace();
-        }
         catch( IOException ioe ){
             ioe.printStackTrace();
         }

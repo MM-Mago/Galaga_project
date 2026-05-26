@@ -1,7 +1,5 @@
 package controller;
 
-import javax.swing.Timer;
-
 import controller.api.ActionHandlerForView;
 import controller.api.ControllerForMain;
 import model.api.ModelForController;
@@ -9,15 +7,14 @@ import shared.GameState;
 import view.api.ViewForController;
 
 public class GameController implements ControllerForMain, ActionHandlerForView {
-        
+
 
     //------------------
     //COSTANTS
     //------------------
 
     private static final int FRAME_PER_SECONDS = 60;
-    private static final int MILLISECONDS_PER_FRAME = (int)(1000/FRAME_PER_SECONDS);
-    
+
 
     //------------------
     //STATIC VARIABLES
@@ -32,7 +29,6 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
     private ViewForController view;
     private ModelForController model;
-    private Timer timer;
     private int frameNumber; //number from 1 to FRAME_PER_SECOND
 
 
@@ -48,11 +44,8 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
         //ask view to manage imputs
         view.setupInputs(this);
 
-        //initialize timer
-        initTimer();
-
         frameNumber = 0;
-        
+
     } //end costructor
 
     public static void initController( ViewForController view, ModelForController model ){
@@ -73,12 +66,6 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //------------------------
     //PRIVATE METHODS
     //------------------------
-
-    private void initTimer(){
-        
-        //lambda espression for slimmer code, with also frame number update
-        this.timer = new Timer(MILLISECONDS_PER_FRAME,( e ) -> { updateFramenumber(); model.update( frameNumber ); view.refresh( frameNumber ); }); //can't use:: cause of multiple methods
-    }
 
     private void updateFramenumber(){
         if( this.frameNumber > FRAME_PER_SECONDS ) this.frameNumber = 0;
@@ -152,14 +139,12 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //PUBLIC METHODS FOR MAIN
     //------------------------------
 
+    /** Called once per frame by the platform-specific entry point (Swing timer or rAF). */
     @Override
-    public void startTimer(){
-        timer.start();
-    }
-
-    @Override
-    public void stopTimer(){
-        timer.stop();
+    public void tick(){
+        updateFramenumber();
+        model.update( frameNumber );
+        view.refresh( frameNumber );
     }
 
 

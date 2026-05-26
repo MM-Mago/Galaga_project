@@ -262,11 +262,20 @@ public abstract class Alien extends Entity {
             lastPoints.add( newP );
         }
         if( newP == null ){ //if no newP then just copy the points from the path
-            lastPoints = new LinkedList<PointOfPath>( pathArrayList.subList( Math.max(0, pointsCounter - RADIUS ), Math.min( pathArrayList.size()-1, pointsCounter + RADIUS  )) );
+            int safeCounter = Math.min( pointsCounter, pathArrayList.size() );
+            int fromIdx = Math.max( 0, safeCounter - RADIUS );
+            int toIdx   = Math.min( pathArrayList.size(), safeCounter + RADIUS );
+            if( fromIdx < toIdx ){
+                lastPoints = new LinkedList<PointOfPath>( pathArrayList.subList( fromIdx, toIdx ) );
+            }
+            // if range is empty, lastPoints keeps its previous value
         }
 
         //create temp list
         ArrayList<PointOfPath> tempList = new ArrayList<PointOfPath>( lastPoints );
+
+        // guard: need at least one point to compute angle
+        if( tempList.isEmpty() ) return;
 
         // calculate startI and endI checking for bounds
         int startI = 0;

@@ -1,6 +1,4 @@
 {
-    "java.project.referencedLibraries": [
-        "lib/**/*.jar",
-        "C:\\Galaga_project\\.vscode\\fond.jar"
-    ],
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.project.referencedLibraries": []
 }

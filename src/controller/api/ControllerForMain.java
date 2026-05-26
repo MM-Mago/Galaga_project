@@ -7,7 +7,7 @@ public interface ControllerForMain {
     //public methods for main
     //------------------------
 
-    public void startTimer();
-    public void stopTimer();
+    /** Execute one game loop step: update model + refresh view. Called by the platform timer. */
+    public void tick();
     
 }

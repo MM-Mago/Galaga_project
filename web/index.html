@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Galaga</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            max-height: 100vh;
+            max-width: 100vw;
+            width: auto;
+            height: auto;
+        }
+
+        /* ── D-Pad: fixed to the viewport, always at screen edges ── */
+        #dpad {
+            display: none;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;   /* transparent except on buttons */
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            #dpad { display: block; }
+        }
+
+        .dpad-btn {
+            pointer-events: all;
+            background: rgba(255, 255, 255, 0.10);
+            border: 2px solid rgba(255, 255, 255, 0.30);
+            border-radius: 14px;
+            color: #fff;
+            font-family: monospace;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.06s, border-color 0.06s;
+        }
+
+        .dpad-btn.active {
+            background: rgba(255, 255, 255, 0.30);
+            border-color: rgba(255, 255, 255, 0.80);
+        }
+
+        /* Bottom bar: always stuck to the bottom of the screen */
+        #dpad-bottom {
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        #dpad-move {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-left, .btn-right {
+            width: 72px;
+            height: 72px;
+            font-size: 28px;
+        }
+
+        .btn-fire {
+            width: 80px;
+            height: 80px;
+            font-size: 13px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border-radius: 50%;
+            background: rgba(220, 80, 80, 0.20);
+            border-color: rgba(220, 80, 80, 0.50);
+        }
+
+        .btn-fire.active {
+            background: rgba(220, 80, 80, 0.50);
+            border-color: rgba(255, 120, 120, 0.90);
+        }
+
+        /* COIN: small pill, always top-right of the screen */
+        #dpad-coin {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+        }
+
+        .btn-coin {
+            width: 68px;
+            height: 30px;
+            font-size: 11px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            border-radius: 8px;
+            opacity: 0.70;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="game-canvas" width="450" height="600"></canvas>
+
+    <!-- D-pad is a sibling of canvas, fixed to the viewport -->
+    <div id="dpad">
+        <div id="dpad-coin">
+            <button class="dpad-btn btn-coin" id="btn-coin">COIN</button>
+        </div>
+        <div id="dpad-bottom">
+            <div id="dpad-move">
+                <button class="dpad-btn btn-left"  id="btn-left">&#9664;</button>
+                <button class="dpad-btn btn-right" id="btn-right">&#9654;</button>
+            </div>
+            <button class="dpad-btn btn-fire" id="btn-fire">START</button>
+        </div>
+    </div>
+
+    <script src="js/galaga.js"></script>
+    <script>
+        // ── Java exception debug handler ──────────────────────────────────
+        window.addEventListener("error", function(e) {
+            if (e.error && e.error.javaException) {
+                try {
+                    var je = e.error.javaException;
+                    var msg = je.toString ? je.toString() : String(je);
+                    console.error("Java exception: " + msg);
+                    if (je.getStackTrace) {
+                        var frames = je.getStackTrace();
+                        for (var i = 0; i < frames.length; i++) {
+                            var f = frames[i];
+                            console.error("  at " + f.getClassName() + "." + f.getMethodName()
+                                + " (" + f.getFileName() + ":" + f.getLineNumber() + ")");
+                        }
+                    }
+                } catch(ex) { /* ignore */ }
+            }
+        });
+
+        // ── D-Pad wiring ──────────────────────────────────────────────────
+        function fireKey(type, code) {
+            document.dispatchEvent(new KeyboardEvent(type, { code: code, bubbles: true }));
+        }
+
+        function wireHold(id, downCode, upCode) {
+            var el = document.getElementById(id);
+            function press(e)   { e.preventDefault(); el.classList.add("active");    fireKey("keydown", downCode); }
+            function release(e) { e.preventDefault(); el.classList.remove("active"); if (upCode) fireKey("keyup", upCode); }
+            el.addEventListener("touchstart",  press,   { passive: false });
+            el.addEventListener("touchend",    release, { passive: false });
+            el.addEventListener("touchcancel", release, { passive: false });
+            el.addEventListener("mousedown",  press);
+            el.addEventListener("mouseup",    release);
+            el.addEventListener("mouseleave", release);
+        }
+
+        function wireTap(id, code) {
+            var el = document.getElementById(id);
+            function press(e) {
+                e.preventDefault();
+                el.classList.add("active");
+                fireKey("keydown", code);
+                setTimeout(function() { el.classList.remove("active"); }, 120);
+            }
+            el.addEventListener("touchstart", press, { passive: false });
+            el.addEventListener("mousedown",  press);
+        }
+
+        wireHold("btn-left",  "ArrowLeft",  "ArrowLeft");
+        wireHold("btn-right", "ArrowRight", "ArrowRight");
+        wireTap ("btn-fire",  "Space");
+        wireTap ("btn-coin",  "KeyC");
+
+        // ── Fire / Start label ────────────────────────────────────────────
+        var fireBtn = document.getElementById("btn-fire");
+        (function updateLabel() {
+            fireBtn.textContent = window.galagaPlaying ? "FIRE" : "START";
+            requestAnimationFrame(updateLabel);
+        })();
+
+        // ── Start ─────────────────────────────────────────────────────────
+        main();
+    </script>
+</body>
+</html>
