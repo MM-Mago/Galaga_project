@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mvn package *)",
+      "Bash(java -version)",
+      "Bash(mvn -version)",
+      "Bash(curl -s \"https://repo.maven.apache.org/maven2/org/teavm/teavm-classlib/0.14.0/teavm-classlib-0.14.0.pom\")",
+      "Read(//private/tmp/**)",
+      "Bash(jar xf *)"
+    ]
+  }
+}
