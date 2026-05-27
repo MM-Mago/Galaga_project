@@ -16,6 +16,7 @@ public class WebMain {
     private static ControllerForMain controller;
     private static ModelForView model;
     private static double lastTime = 0;
+    private static double accumulator = 0;
 
     @JSBody(params = "playing", script = "window.galagaPlaying = playing;")
     private static native void setPlayingFlag(boolean playing);
@@ -35,15 +36,32 @@ public class WebMain {
     }
 
     private static void loop(double timestamp) {
-        if (timestamp - lastTime >= MS_PER_FRAME) {
+        if (lastTime == 0) {
             lastTime = timestamp;
-            controller.tick();
-            GameState state = model.getState();
-            setPlayingFlag(state == GameState.PLAYING
-                        || state == GameState.LOADING_FIRST_STAGE
-                        || state == GameState.LOADING_NOT_FIRST_STAGE
-                        || state == GameState.LIFE_LOST);
         }
+
+        double delta = timestamp - lastTime;
+        lastTime = timestamp;
+        accumulator += delta;
+
+        // Run fixed-step updates; cap to avoid spiral of death
+        int maxUpdatesPerFrame = 5;
+        int updates = 0;
+        while (accumulator >= MS_PER_FRAME && updates < maxUpdatesPerFrame) {
+            controller.updateModelOnly();
+            accumulator -= MS_PER_FRAME;
+            updates++;
+        }
+
+        // Render once per rAF
+        controller.renderView();
+
+        GameState state = model.getState();
+        setPlayingFlag(state == GameState.PLAYING
+                    || state == GameState.LOADING_FIRST_STAGE
+                    || state == GameState.LOADING_NOT_FIRST_STAGE
+                    || state == GameState.LIFE_LOST);
+
         Window.requestAnimationFrame(WebMain::loop);
     }
 }

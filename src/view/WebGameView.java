@@ -67,6 +67,7 @@ public class WebGameView implements ViewForController {
 
     @Override
     public void refresh(int frameNumber) {
+        long t0 = System.currentTimeMillis();
         this.frameNumber = frameNumber;
 
         org.teavm.jso.canvas.CanvasRenderingContext2D ctx =
@@ -85,5 +86,11 @@ public class WebGameView implements ViewForController {
         WebInterfacePainter.paint(ctx, frameNumber, model);
 
         ctx.restore();
+
+        long t1 = System.currentTimeMillis();
+        reportRenderTime(t1 - t0);
     }
+
+    @org.teavm.jso.JSBody(params = "ms", script = "if(window.reportRenderTime) window.reportRenderTime(ms);")
+    private static native void reportRenderTime(double ms);
 }

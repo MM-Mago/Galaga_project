@@ -14987,9 +14987,11 @@ c_GameController_cmdAction = $this => {
 c_GameController_cmdNukeAll = $this => {
     $this.$model.$nukeAll();
 },
-c_GameController_tick = $this => {
+c_GameController_updateModelOnly = $this => {
     c_GameController_updateFramenumber($this);
     $this.$model.$update($this.$frameNumber);
+},
+c_GameController_renderView = $this => {
     $this.$view.$refresh($this.$frameNumber);
 },
 c_GameController_getFramePerSeconds = () => {
@@ -15878,6 +15880,7 @@ WebMain = $rt_classWithoutFields(),
 WebMain_controller = null,
 WebMain_model = null,
 WebMain_lastTime = 0.0,
+WebMain_accumulator = 0.0,
 WebMain_$callClinit = () => {
     WebMain_$callClinit = $rt_eraseClinit(WebMain);
     WebMain__clinit_();
@@ -15897,20 +15900,30 @@ WebMain_onImagesLoaded = () => {
     requestAnimationFrame(otji_JS_function(otji_JSWrapper_unwrap(var$1), "onAnimationFrame"));
 },
 WebMain_loop = $timestamp => {
-    let $state, var$3;
+    let $delta, $maxUpdatesPerFrame, $updates, $state, var$6;
     WebMain_$callClinit();
-    if ($timestamp - WebMain_lastTime >= 16.666666666666668) {
+    if (WebMain_lastTime === 0.0)
         WebMain_lastTime = $timestamp;
-        WebMain_controller.$tick();
-        $state = WebMain_model.$getState();
-        s_GameState_$callClinit();
-        window.galagaPlaying = !!($state !== s_GameState_PLAYING && $state !== s_GameState_LOADING_FIRST_STAGE && $state !== s_GameState_LOADING_NOT_FIRST_STAGE && $state !== s_GameState_LIFE_LOST ? 0 : 1);
+    $delta = $timestamp - WebMain_lastTime;
+    WebMain_lastTime = $timestamp;
+    WebMain_accumulator = WebMain_accumulator + $delta;
+    $maxUpdatesPerFrame = 5;
+    $updates = 0;
+    while (WebMain_accumulator >= 16.666666666666668 && $updates < $maxUpdatesPerFrame) {
+        WebMain_controller.$updateModelOnly();
+        WebMain_accumulator = WebMain_accumulator - 16.666666666666668;
+        $updates = $updates + 1 | 0;
     }
-    var$3 = WebMain$loop$lambda$_4_0__init_0();
-    requestAnimationFrame(otji_JS_function(otji_JSWrapper_unwrap(var$3), "onAnimationFrame"));
+    WebMain_controller.$renderView();
+    $state = WebMain_model.$getState();
+    s_GameState_$callClinit();
+    window.galagaPlaying = !!($state !== s_GameState_PLAYING && $state !== s_GameState_LOADING_FIRST_STAGE && $state !== s_GameState_LOADING_NOT_FIRST_STAGE && $state !== s_GameState_LIFE_LOST ? 0 : 1);
+    var$6 = WebMain$loop$lambda$_4_0__init_0();
+    requestAnimationFrame(otji_JS_function(otji_JSWrapper_unwrap(var$6), "onAnimationFrame"));
 },
 WebMain__clinit_ = () => {
     WebMain_lastTime = 0.0;
+    WebMain_accumulator = 0.0;
 },
 m_GameModel$1 = $rt_classWithoutFields(),
 m_GameModel$1_$SwitchMap$shared$Entities = null,
@@ -19077,7 +19090,8 @@ jur_AbstractCharClass$LazyUpper, 0, jur_AbstractCharClass$LazyCharClass, [], 0, 
 v_WebInterfacePainter, 0, jl_Object, [], 0, 0, 0, 0,
 otji_JSWrapper, 0, jl_Object, [], 17, 0, 0, 0,
 ca_ActionHandlerForView, 0, jl_Object, [], 1537, 0, 0, 0,
-c_GameController, 0, jl_Object, [ca_ControllerForMain, ca_ActionHandlerForView], 1, 0, 0, ["$cmdMovingLeft", $rt_wrapFunction1(c_GameController_cmdMovingLeft), "$cmdMovingRight", $rt_wrapFunction1(c_GameController_cmdMovingRight), "$cmdCoinInserted", $rt_wrapFunction0(c_GameController_cmdCoinInserted), "$cmdAction", $rt_wrapFunction0(c_GameController_cmdAction), "$cmdNukeAll", $rt_wrapFunction0(c_GameController_cmdNukeAll), "$tick", $rt_wrapFunction0(c_GameController_tick)],
+c_GameController, 0, jl_Object, [ca_ControllerForMain, ca_ActionHandlerForView], 1, 0, 0, ["$cmdMovingLeft", $rt_wrapFunction1(c_GameController_cmdMovingLeft), "$cmdMovingRight", $rt_wrapFunction1(c_GameController_cmdMovingRight), "$cmdCoinInserted", $rt_wrapFunction0(c_GameController_cmdCoinInserted), "$cmdAction", $rt_wrapFunction0(c_GameController_cmdAction), "$cmdNukeAll", $rt_wrapFunction0(c_GameController_cmdNukeAll), "$updateModelOnly", $rt_wrapFunction0(c_GameController_updateModelOnly), "$renderView",
+$rt_wrapFunction0(c_GameController_renderView)],
 jur_MultiLineSOLSet, "MultiLineSOLSet", 3, jur_AbstractSet, [], 0, 0, 0, ["$_init_68", $rt_wrapFunction1(jur_MultiLineSOLSet__init_), "$matches", $rt_wrapFunction3(jur_MultiLineSOLSet_matches), "$hasConsumed", $rt_wrapFunction1(jur_MultiLineSOLSet_hasConsumed), "$getName", $rt_wrapFunction0(jur_MultiLineSOLSet_getName)],
 ju_LinkedList, 0, ju_AbstractSequentialList, [ju_Deque, jl_Cloneable], 1, 0, 0, ["$removeIf", $rt_wrapFunction1(ju_Collection_removeIf), "$_init_", $rt_wrapFunction0(ju_LinkedList__init_2), "$_init_7", $rt_wrapFunction1(ju_LinkedList__init_1), "$size", $rt_wrapFunction0(ju_LinkedList_size), "$clear", $rt_wrapFunction0(ju_LinkedList_clear), "$listIterator0", $rt_wrapFunction0(ju_LinkedList_listIterator), "$listIterator", $rt_wrapFunction1(ju_LinkedList_listIterator0), "$poll", $rt_wrapFunction0(ju_LinkedList_poll)],
 otcic_JSStderrPrintStream, 0, otcic_JsConsolePrintStream, [], 1, 0, 0, ["$_init_", $rt_wrapFunction0(otcic_JSStderrPrintStream__init_), "$print", $rt_wrapFunction1(otcic_JSStderrPrintStream_print)],

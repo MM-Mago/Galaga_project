@@ -224,6 +224,19 @@
             }
         };
 
+        // Render timing collector (filled by WebGameView)
+        window._renderTimes = [];
+        window.reportRenderTime = function(ms) {
+            window._renderTimes.push(ms);
+            if (window._renderTimes.length > 120) window._renderTimes.shift();
+            // log average once per second roughly
+            if (window._renderTimes.length === 120) {
+                const sum = window._renderTimes.reduce((a,b) => a+b, 0);
+                const avg = sum / window._renderTimes.length;
+                window.galagaDebug.addLog(`Render avg ${avg.toFixed(1)} ms`);
+            }
+        };
+
         window.addEventListener("error", function(e) {
             window.galagaDebug.addLog(`ERROR: ${e.message}`);
             if (e.error && e.error.javaException) {

@@ -147,6 +147,17 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
         view.refresh( frameNumber );
     }
 
+    /** Update model only (no rendering). Useful when running multiple fixed-step updates per frame. */
+    public void updateModelOnly(){
+        updateFramenumber();
+        model.update(frameNumber);
+    }
+
+    /** Render the view once after model updates. */
+    public void renderView(){
+        view.refresh(frameNumber);
+    }
+
 
     //------------------------
     //PUBLIC METHODS
