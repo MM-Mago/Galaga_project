@@ -55,7 +55,7 @@
         }
 
         @media (hover: none) and (pointer: coarse) {
-            #dpad { display: flex; flex-direction: column; align-items: center; }
+            #dpad { display: flex; flex-direction: row; justify-content: space-between; align-items: center; padding: 0 16px; }
         }
 
         .dpad-btn {
@@ -72,7 +72,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background 0.06s, border-color 0.06s;
+            transition: background 0.06s, border-color 0.06s, opacity 0.2s;
         }
 
         .dpad-btn.active {
@@ -80,11 +80,15 @@
             border-color: rgba(255, 255, 255, 0.80);
         }
 
-        /* Movement buttons */
+        .dpad-btn.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Movement buttons on the left */
         #dpad-move {
             display: flex;
             gap: 8px;
-            margin-bottom: 16px;
         }
 
         .btn-left, .btn-right {
@@ -93,11 +97,11 @@
             font-size: 28px;
         }
 
-        /* Action buttons: Coin and Fire */
+        /* Action buttons on the right: Coin and Fire */
         #dpad-actions {
             display: flex;
             gap: 16px;
-            justify-content: center;
+            justify-content: flex-end;
             align-items: center;
         }
 
@@ -333,9 +337,25 @@
 
         // ── Fire / Start label ────────────────────────────────────────────
         var fireBtn = document.getElementById("btn-fire");
-        (function updateLabel() {
+        var coinBtn = document.getElementById("btn-coin");
+        var lastPlayingState = false;
+        
+        (function updateUIState() {
+            // Update fire button label
             fireBtn.textContent = window.galagaPlaying ? "FIRE" : "START";
-            requestAnimationFrame(updateLabel);
+            
+            // Hide/show coin button based on game state
+            const isPlaying = window.galagaPlaying || false;
+            if (isPlaying !== lastPlayingState) {
+                lastPlayingState = isPlaying;
+                if (isPlaying) {
+                    coinBtn.classList.add("hidden");
+                } else {
+                    coinBtn.classList.remove("hidden");
+                }
+            }
+            
+            requestAnimationFrame(updateUIState);
         })();
 
         // ── Start ─────────────────────────────────────────────────────────
