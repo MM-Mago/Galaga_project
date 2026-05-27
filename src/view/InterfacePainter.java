@@ -42,6 +42,7 @@ class InterfacePainter {
         final int SPRITE_MODEL_HEIGHT = 8;
 
         final GameState gameState = model.getState();
+        final int numStage = model.getNumStage();
         final int score = model.getScore();
         final int highScore = model.getHighScore();
         final int lives = model.getLives();
@@ -196,14 +197,22 @@ class InterfacePainter {
         }
 
         //STAGE N TEXT
-        if( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ){
+        if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 != 0 ) ){
             final int tempOffsetY = +2;
             final int tempOffsetX = -35;
             final int tempNumberOffsetX = 10;
             BufferedImage stageTempImg = SpriteLibrary.getSprite( "STAGE" );
             g.drawImage( stageTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
             paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ) );
-        }       
+        }    
+        //CHALLENGING STAGE TEXT
+        else if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 == 0 ) ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -70;
+            BufferedImage challengingStageIMG = SpriteLibrary.getSprite("CHALLENGING_STAGE" );
+            //draw with width scaled as height
+            g.drawImage( challengingStageIMG, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), ( challengingStageIMG.getWidth() / challengingStageIMG.getHeight() * SPRITE_MODEL_HEIGHT), SPRITE_MODEL_HEIGHT, null);
+        }  
 
         //MEDALS
         if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) ){

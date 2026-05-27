@@ -39,7 +39,7 @@ class AlienHandler {
         AlienFormationsLibrary.initFormations( model );
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
-        numStage = 2; //must be 1
+        numStage = 1; //must be 1
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;

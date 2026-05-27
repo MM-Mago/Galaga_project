@@ -31,11 +31,13 @@ class SpriteLibrary {
     private static final String COIN_INSERTED_SCREEN_RELATIVE_PATH = "src//view//galaga_png//coin_inserted_screen.png";
     private static final String NUMBERS_RELATIVE_PATH = "src//view//galaga_png//numbers.png";
     private static final String LOADING_SCREEN_SPRITES_RELATIVE_PATH = "src//view//galaga_png//loading_screen_sprites.png";
+    private static final String CHALLENGING_STAGE_RELATIVE_PATH = "src//view//galaga_png//challenging_stage.png";
     private static  BufferedImage spritesWholeImage;
     private static BufferedImage initialScreenSpritesWholeImage;
     private static BufferedImage coinInsertedScreenWholeImage;
     private static BufferedImage numbersWholeImage;
     private static BufferedImage loadingScreenSpritesWholeImage;
+    private static BufferedImage challengingStageSpritesWholeImage;
     private static Map<String, BufferedImage> spritesMap = new HashMap<>(); //key: ENTITY_NAME_DIRECTION, Value: Sprite immage
 
     private static final int INITIAL_SCREEN_SPRITES_MAX_WIDTH = 222;
@@ -106,6 +108,10 @@ class SpriteLibrary {
 
         try {
             loadingScreenSpritesWholeImage = ImageIO.read(new File(LOADING_SCREEN_SPRITES_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
+        try {
+            challengingStageSpritesWholeImage = ImageIO.read(new File(CHALLENGING_STAGE_RELATIVE_PATH) );
         } catch (IOException e) { e.printStackTrace(); }
 
         //-------------------------
@@ -270,9 +276,12 @@ class SpriteLibrary {
 
         //GET ALL LOADING SCREEN SPRITES
 
-        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, loadingScreenSpritesWholeImage.getWidth(), ( loadingScreenSpritesWholeImage.getHeight() / 2 ) ) );
-        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( loadingScreenSpritesWholeImage.getHeight() / 2 ), loadingScreenSpritesWholeImage.getWidth(), ( loadingScreenSpritesWholeImage.getHeight() / 2 ) ) );
+        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
+        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ), INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
 
+        //GET CHALLENGING STAGE SPRITE
+    
+        spritesMap.put( "CHALLENGING_STAGE", challengingStageSpritesWholeImage ); //width 394, height 21
 
         //GET NUMBERS
 
@@ -308,7 +317,7 @@ class SpriteLibrary {
         return spritesMap.get( name + "_" + value );
     }
 
-    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png
+    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png
     static BufferedImage getSprite( String name ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
         return spritesMap.get( name );
