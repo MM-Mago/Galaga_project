@@ -44,11 +44,11 @@ class WebSpriteLibrary {
         onAllLoaded = onLoaded;
         loadedCount = 0;
 
-        imgSprites       = loadImage("js/sprites/sprites.png");
-        imgInitialScreen = loadImage("js/sprites/initial_screen_sprites.png");
-        imgCoinInserted  = loadImage("js/sprites/coin_inserted_screen.png");
-        imgNumbers       = loadImage("js/sprites/numbers.png");
-        imgLoadingScreen = loadImage("js/sprites/loading_screen_sprites.png");
+        imgSprites       = loadImage("web/js/sprites/sprites.png");
+        imgInitialScreen = loadImage("web/js/sprites/initial_screen_sprites.png");
+        imgCoinInserted  = loadImage("web/js/sprites/coin_inserted_screen.png");
+        imgNumbers       = loadImage("web/js/sprites/numbers.png");
+        imgLoadingScreen = loadImage("web/js/sprites/loading_screen_sprites.png");
     }
 
     private static HTMLImageElement loadImage(String src) {

@@ -21,10 +21,10 @@ class WebBackgroundPainter {
 
     // background frame image paths (relative to index.html)
     private static final String[] FRAME_PATHS = {
-        "js/sprites/background-frame-0.png",
-        "js/sprites/background-frame-1.png",
-        "js/sprites/background-frame-2.png",
-        "js/sprites/background-frame-3.png"
+        "web/js/sprites/background-frame-0.png",
+        "web/js/sprites/background-frame-1.png",
+        "web/js/sprites/background-frame-2.png",
+        "web/js/sprites/background-frame-3.png"
     };
 
     private static org.teavm.jso.dom.html.HTMLImageElement[] frames;
