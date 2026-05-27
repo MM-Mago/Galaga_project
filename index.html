@@ -3,14 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <base href="/Galaga_project/">
-    <script>
-        // Adjust base href for local file:// access
-        if (window.location.protocol === 'file:') {
-            document.querySelector('base').href = '';
-        }
-    </script>
     <title>Galaga</title>
+    <script>
+        // Set base path for asset loading based on environment
+        (function() {
+            if (window.location.protocol === 'file:') {
+                // Local development: no base path needed
+                window.ASSET_BASE = '';
+            } else if (window.location.hostname.includes('github')) {
+                // GitHub Pages: use repository name as base
+                window.ASSET_BASE = '/Galaga_project';
+            } else {
+                // Other deployment: use the pathname up to the last directory
+                const path = window.location.pathname.split('/');
+                path.pop(); // remove index.html
+                window.ASSET_BASE = path.join('/');
+            }
+        })();
+    </script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -144,7 +154,42 @@
         </div>
     </div>
 
-    <script src="web/js/galaga.js"></script>
+    <script>
+        // Patch HTMLImageElement to prepend ASSET_BASE to relative paths
+        const imgProto = HTMLImageElement.prototype;
+        const origSetAttribute = imgProto.setAttribute;
+        imgProto.setAttribute = function(name, value) {
+            if (name === 'src' && value && !value.startsWith('data:') && !value.startsWith('http') && !value.startsWith('/')) {
+                const prefix = window.ASSET_BASE ? window.ASSET_BASE + '/' : '';
+                value = prefix + value;
+            }
+            return origSetAttribute.call(this, name, value);
+        };
+        
+        const origSrcDescriptor = Object.getOwnPropertyDescriptor(imgProto, 'src') || {
+            get() { return this.getAttribute('src'); },
+            set(v) { this.setAttribute('src', v); }
+        };
+        Object.defineProperty(imgProto, 'src', {
+            get() { return origSrcDescriptor.get?.call(this) || this.getAttribute('src'); },
+            set(value) {
+                if (value && !value.startsWith('data:') && !value.startsWith('http') && !value.startsWith('/')) {
+                    const prefix = window.ASSET_BASE ? window.ASSET_BASE + '/' : '';
+                    value = prefix + value;
+                }
+                origSrcDescriptor.set?.call(this, value) || this.setAttribute('src', value);
+            },
+            configurable: true
+        });
+    </script>
+
+    <script>
+        // Load galaga.js with the correct asset base path
+        const scriptEl = document.createElement('script');
+        const assetBase = window.ASSET_BASE ? window.ASSET_BASE + '/' : '';
+        scriptEl.src = assetBase + 'web/js/galaga.js';
+        document.head.appendChild(scriptEl);
+    </script>
     <script>
         // ── Debugging & Diagnostics ────────────────────────────────────
         window.galagaDebug = {
