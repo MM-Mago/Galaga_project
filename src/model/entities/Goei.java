@@ -22,15 +22,15 @@ public class Goei extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public Goei( int speed, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint ) {
-        super( Entities.GOEI.getWidth(), Entities.GOEI.getHeight(), speed, path, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
+    public Goei( int speed, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( Entities.GOEI.getWidth(), Entities.GOEI.getHeight(), speed, path, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.GOEI;
     }
 
     @Override
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
-        return new Goei( this.speed, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
+        return new Goei( this.speed, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }
 
     @Override

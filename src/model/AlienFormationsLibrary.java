@@ -42,7 +42,7 @@ class AlienFormationsLibrary {
     //PACKAGE-PRIVATE VARIABLES
     //--------------------------------
 
-    static final int DEFINED_STAGES_IN_FILE = 3;
+    static final int DEFINED_STAGES_IN_FILE = 4;
     static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
     static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
 
@@ -168,11 +168,11 @@ class AlienFormationsLibrary {
                     // 2. READ ALIEN DATA LINES
 
                     // we read all 4 lines
-                    // must add [] wich signals to consider {} as separate strings
-                    String startPosStr = buffRead.readLine().trim().replaceAll("[{}]", "");
-                    String finalPosStr = buffRead.readLine().trim().replaceAll("[{}]", "");
-                    String directionsStr = buffRead.readLine().trim().replaceAll("[{}]", "");
-                    String pixelsStr = buffRead.readLine().trim().replaceAll("[{}]", "");
+                    // must add [] wich signals to consider { } and space as separate strings to replace
+                    String startPosStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
+                    String finalPosStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
+                    String directionsStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
+                    String pixelsStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
 
 
                     // 3. DATA CONVERSION
@@ -258,15 +258,15 @@ class AlienFormationsLibrary {
                     PointOfPath formationPoint = new PointOfPath( finalX, finalY );
                     switch ( type ) {
                         case GOEI:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
                             break;
 
                         case ZAKO:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
                             break;
 
                         case BOSS_GALAGA:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint ) );
+                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
                             break;
 
                         default:
@@ -325,7 +325,6 @@ class AlienFormationsLibrary {
     }//end getFormationCopy
 
     static boolean isValidFormation( int numStage, int numFormation ){
-        // is valid number 
 
         //check formation number
         boolean isValidFormation = false;
@@ -333,26 +332,16 @@ class AlienFormationsLibrary {
         
         //check stage number
         boolean isValidStage = false;
-        if( numStage > 0 && numStage <= DEFINED_STAGES_IN_FILE && numStage < 3 ) isValidStage = true; // ex. 1,2
-        else if( DEFINED_STAGES_IN_FILE == 1 ){
-            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
-        }
-        else if( DEFINED_STAGES_IN_FILE == 2 ){
-            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
-            if( (numStage - 1) % 4 == 0 ) isValidStage = true; // ex 5
-        }
-        else if( DEFINED_STAGES_IN_FILE == 3 ){
-            if( (numStage - 2) % 4 == 0 ) isValidStage = true; // ex 6
-            if( (numStage - 4) % 4 == 0 ) isValidStage = true; // ex 4
-            if( (numStage - 1) % 4 == 0 ) isValidStage = true; // ex 5
-            if( numStage == 3 ) isValidStage = false; // only stage 3
-        }
-        else if( DEFINED_STAGES_IN_FILE >= 4 ){ isValidStage = true; }
+        if( numStage >= 1 ) isValidStage = true;
 
         return ( isValidFormation && isValidStage );
     }
 
-    
+    static boolean isStageChallenging( int numStage ){
+        boolean isChallenging = false;
+        if( ( numStage - 3 ) % 4  == 0 ) isChallenging = true; // stage 3 and then every 4 stages (7,11,15...)
+        return isChallenging;
+    }
     //--------------------------------
     //PRIVATE STATIC METHODS
     //--------------------------------

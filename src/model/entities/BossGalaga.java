@@ -22,15 +22,15 @@ public class BossGalaga extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public BossGalaga(int speed, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint ) {
-        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, path, false, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint);
+    public BossGalaga(int speed, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, path, false, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.BOSS_GALAGA;
     }
 
     @Override
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
-        return new BossGalaga(this.speed, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint );
+        return new BossGalaga(this.speed, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }
 
     @Override
