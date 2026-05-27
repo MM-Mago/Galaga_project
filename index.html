@@ -177,15 +177,24 @@
 
     <script>
         // Load galaga.js with the correct asset base path
-        // Use a timeout to ensure script loads on first visit (fixes GitHub Pages double-click issue)
+        // Use a timestamp to bust cache and ensure fresh loads on GitHub Pages
         const loadGameScript = () => {
             if (window.main) return; // Already loaded
             const scriptEl = document.createElement('script');
             const assetBase = window.ASSET_BASE ? window.ASSET_BASE + '/' : '';
-            scriptEl.src = assetBase + 'web/js/galaga.js';
+            // Add cache-buster timestamp to prevent browser caching issues
+            const timestamp = new Date().getTime();
+            scriptEl.src = assetBase + 'web/js/galaga.js?v=' + timestamp;
             scriptEl.onerror = () => {
-                console.error('Failed to load galaga.js, retrying...');
+                console.error('Failed to load galaga.js, retrying in 500ms...');
                 setTimeout(loadGameScript, 500);
+            };
+            scriptEl.onload = () => {
+                console.log('galaga.js loaded successfully');
+                // Trigger startGame in case it's already waiting
+                if (window.startGameWaitLoop) {
+                    window.startGameWaitLoop();
+                }
             };
             document.head.appendChild(scriptEl);
         };
@@ -194,6 +203,7 @@
         // Also try loading on visibility change (fixes hidden tab issue)
         document.addEventListener('visibilitychange', () => {
             if (!document.hidden && !window.main) {
+                console.log('Page became visible and main() not loaded, retrying...');
                 loadGameScript();
             }
         });
@@ -329,9 +339,26 @@
         })();
 
         // ── Start ─────────────────────────────────────────────────────────
+        let startGameAttempts = 0;
+        const MAX_START_ATTEMPTS = 100; // 10 seconds with 100ms delays
+        
         function startGame() {
+            startGameAttempts++;
+            
             if (typeof main !== 'function') {
-                window.galagaDebug.addLog("Waiting for main() to load...");
+                if (startGameAttempts % 10 === 0) { // Log every 10 attempts
+                    window.galagaDebug.addLog(`Waiting for main()... (attempt ${startGameAttempts})`);
+                }
+                
+                if (startGameAttempts >= MAX_START_ATTEMPTS) {
+                    window.galagaDebug.addLog("ERROR: main() failed to load after 10 seconds");
+                    // Try reloading the script
+                    loadGameScript();
+                    startGameAttempts = 0;
+                    setTimeout(startGame, 500);
+                    return;
+                }
+                
                 setTimeout(startGame, 100);
                 return;
             }
@@ -347,6 +374,9 @@
             window.galagaDebug.addLog("Starting main()...");
             main();
         }
+        
+        // Export function for script.onload to call
+        window.startGameWaitLoop = startGame;
         
         // Start after a brief delay to ensure DOM is ready
         setTimeout(startGame, 100);
