@@ -46,7 +46,7 @@ class AlienFormationsLibrary {
     static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
     static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
 
-    static final int TEST_SPEED = 2;
+    static final int TEST_SPEED = 1;
 
 
     //--------------------------------
