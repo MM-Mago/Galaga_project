@@ -2,11 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
-import controller.GameController;
 import model.api.ModelForController;
 import model.api.ModelForView;
-import model.data.Initials;
-import model.data.WorldBounds;
 import model.entities.Alien;
 import model.entities.AlienShot;
 import model.entities.Entity;
@@ -14,6 +11,7 @@ import model.entities.Player;
 import model.entities.PlayerShot;
 import shared.EntityInfo;
 import shared.GameState;
+import shared.SharedConstants;
 
 public class GameModel implements ModelForView, ModelForController{
 
@@ -24,7 +22,6 @@ public class GameModel implements ModelForView, ModelForController{
 
     private static final int MODEL_SCREEN_WIDTH = 224;
     private static final int MODEL_SCREEN_HEIGHT = 288;
-    private static final WorldBounds bounds = new WorldBounds( MODEL_SCREEN_WIDTH, MODEL_SCREEN_HEIGHT );
     private static final int SCORE_PER_LIFE = 70000;
     private static final int SCORE_FOR_FIRST_LIFE = 20000;
     
@@ -48,10 +45,6 @@ public class GameModel implements ModelForView, ModelForController{
     private ArrayList<AlienShot> alienShotsList;
     private ArrayList<PlayerShot> playerShotsList;
 
-    //records
-    private ArrayList<Record> recordList;
-    private Initials selectionInitials;
-
     //counters
     private int coins;
     private int lives;
@@ -68,7 +61,7 @@ public class GameModel implements ModelForView, ModelForController{
     private int secondsInState;
 
     //----------------------------------
-    //COSTRUCTOR + 2 SINGLETON METHODS
+    //COSTRUCTOR + 3 SINGLETON METHODS
     //----------------------------------
 
     private GameModel(){
@@ -83,10 +76,10 @@ public class GameModel implements ModelForView, ModelForController{
         state = GameState.INITIAL_SCREEN;
 
         //init alienHandler
-        alienHandler = new AlienHandler( this );
+        alienHandler = new AlienHandler();
 
         //init player
-        player = new Player( bounds );
+        player = new Player();
         addEntity(player);
 
         //counters
@@ -148,18 +141,10 @@ public class GameModel implements ModelForView, ModelForController{
     public int getSecondsInState() { return secondsInState; }
     @Override //all Overrides repetitive but needed
     public GameState getState(){ return this.state; } //get the present state of the game
-    @Override
-    public WorldBounds getBounds() {
-        return bounds;
-    }
 
-    //entities and records
+    //entities
     @Override
-    public ArrayList<Record> getRecordList(){ return this.recordList; } //get the best five records 
-    @Override
-    public Initials getSelectionInitials(){ return this.selectionInitials; } //get the present initials that are being chosen
-    @Override
-    public ArrayList<EntityInfo> getEntityListForView(){
+    public ArrayList<EntityInfo> getEntityInfoListForView(){
         
         ArrayList<EntityInfo> entityInfos = new ArrayList<EntityInfo>();
 
@@ -198,7 +183,7 @@ public class GameModel implements ModelForView, ModelForController{
 
             //update frameNumber
             this.frameNumber = frameNumber; 
-            if( frameNumber == GameController.getFramePerSeconds() ) secondsInState++;
+            if( frameNumber == SharedConstants.FRAMES_PER_SECOND ) secondsInState++;
 
 
             //--------------------------------------
@@ -345,22 +330,10 @@ public class GameModel implements ModelForView, ModelForController{
     @Override
     public void shoot(){
         if( this.activePlayerShotsCount < 2 ){
-        PlayerShot shot = new PlayerShot( bounds, this.player );
+        PlayerShot shot = new PlayerShot( this.player );
         addEntity(shot);
         activePlayerShotsCount++;
         }
-    }
-
-    //moves between 3 letters and change them, for example if we got ABC and present letter is the middle B, calling moveLetterSelection(3,-4) will result in firstly looping back to B, then changing it to X
-    @Override 
-    public void moveLetterSelection( int orizontalMovement, int verticalMovement){
-        //to do
-    }
-    
-    //confirm the 3 initials displayed for the new record
-    @Override
-    public void confirmInitials(){
-        //to do
     }
 
     @Override
@@ -377,7 +350,7 @@ public class GameModel implements ModelForView, ModelForController{
                     alienShotsList.remove(e);
                 default:
                     if( e instanceof Alien ){
-                        if( ((Alien)e).checkCollisionWith(bounds) ){
+                        if( ((Alien)e).checkCollisionWith() ){
                             aliensList.remove(e);
                             entitiesList.remove(e);
                         }

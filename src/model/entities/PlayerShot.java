@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.data.WorldBounds;
 import shared.Entities;
 import shared.RotationDirection;
 
@@ -16,9 +15,9 @@ public class PlayerShot extends Entity {
     private static final int BOUNDS_MARGIN = 10;
 
 
-    public PlayerShot(WorldBounds bounds, Player player ) {
+    public PlayerShot( Player player ) {
         //ceil approssimation for odd numbers
-        super( ( player.getCenterX()-( (int)Math.ceil( (double)Entities.PLAYER_SHOT.getWidth()/2) ) ), ( player.getCenterY() ), Entities.PLAYER_SHOT.getWidth(), Entities.PLAYER_SHOT.getHeight(), INIT_SPEED, bounds, RotationDirection.U );
+        super( ( player.getCenterX()-( (int)Math.ceil( (double)Entities.PLAYER_SHOT.getWidth()/2) ) ), ( player.getCenterY() ), Entities.PLAYER_SHOT.getWidth(), Entities.PLAYER_SHOT.getHeight(), INIT_SPEED, RotationDirection.U );
         entityName = Entities.PLAYER_SHOT;
     }
 

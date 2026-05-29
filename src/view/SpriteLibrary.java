@@ -31,11 +31,13 @@ class SpriteLibrary {
     private static final String COIN_INSERTED_SCREEN_RELATIVE_PATH = "src//view//galaga_png//coin_inserted_screen.png";
     private static final String NUMBERS_RELATIVE_PATH = "src//view//galaga_png//numbers.png";
     private static final String LOADING_SCREEN_SPRITES_RELATIVE_PATH = "src//view//galaga_png//loading_screen_sprites.png";
+    private static final String CHALLENGING_STAGE_RELATIVE_PATH = "src//view//galaga_png//challenging_stage.png";
     private static  BufferedImage spritesWholeImage;
     private static BufferedImage initialScreenSpritesWholeImage;
     private static BufferedImage coinInsertedScreenWholeImage;
     private static BufferedImage numbersWholeImage;
     private static BufferedImage loadingScreenSpritesWholeImage;
+    private static BufferedImage challengingStageSpritesWholeImage;
     private static Map<String, BufferedImage> spritesMap = new HashMap<>(); //key: ENTITY_NAME_DIRECTION, Value: Sprite immage
 
     private static final int INITIAL_SCREEN_SPRITES_MAX_WIDTH = 222;
@@ -106,6 +108,10 @@ class SpriteLibrary {
 
         try {
             loadingScreenSpritesWholeImage = ImageIO.read(new File(LOADING_SCREEN_SPRITES_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
+        try {
+            challengingStageSpritesWholeImage = ImageIO.read(new File(CHALLENGING_STAGE_RELATIVE_PATH) );
         } catch (IOException e) { e.printStackTrace(); }
 
         //-------------------------
@@ -230,6 +236,28 @@ class SpriteLibrary {
         spritesMap.put( Entities.ENEMY_SHOT.name() + "_" + "D" + "_" + 1 , enemyShot );
 
 
+        //GET MEDALS
+
+        BufferedImage medal;
+        final int xInitialOffsetForMedals = 17*(16 + 2) + 1;
+        final int yOffsetForMedals = 9*(16 + 2) + 1 + 9;
+        final int medalHeight = 16;
+        final int smallerMedalsWidth = 8;
+        final int largerMedalsWidth = 16;
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals, yOffsetForMedals, smallerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 1, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2), yOffsetForMedals, smallerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 5, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 10, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2), yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 20, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 30, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*3, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 50, medal );
+
+
         //GET ALL INITIAL SCREEN SPRITES
 
         spritesMap.put( "1UP", initialScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
@@ -240,14 +268,20 @@ class SpriteLibrary {
         spritesMap.put( "80_160", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*5, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
         spritesMap.put( "CREDIT", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*6, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
         
+
         //GET COIN_INSERTED_SCREEN
 
         spritesMap.put( "COIN_INSERTED_SCREEN", coinInsertedScreenWholeImage );
         
+
         //GET ALL LOADING SCREEN SPRITES
 
-        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, loadingScreenSpritesWholeImage.getWidth(), ( loadingScreenSpritesWholeImage.getHeight() / 2 ) ) );
-        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( loadingScreenSpritesWholeImage.getHeight() / 2 ), loadingScreenSpritesWholeImage.getWidth(), ( loadingScreenSpritesWholeImage.getHeight() / 2 ) ) );
+        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
+        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ), INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
+
+        //GET CHALLENGING STAGE SPRITE
+    
+        spritesMap.put( "CHALLENGING_STAGE", challengingStageSpritesWholeImage ); //width 394, height 21
 
         //GET NUMBERS
 
@@ -276,7 +310,14 @@ class SpriteLibrary {
         return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
     }
 
-    //used only for sprites in initial_screen_sprites.png and coin_inserted_screen.png
+    //used only for medals in sprites.png
+    static BufferedImage getMedal( String name, int value ) {
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( !( "1,5,10,20,30,50".contains( "" + value ) ) ) throw new IllegalArgumentException( "values for medals must be chosen from 1, 5, 10, 20, 30, 50" );
+        return spritesMap.get( name + "_" + value );
+    }
+
+    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png
     static BufferedImage getSprite( String name ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
         return spritesMap.get( name );

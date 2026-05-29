@@ -4,12 +4,11 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import controller.GameController;
 import model.GameModel;
-import model.data.PointOfPath;
-import model.data.WorldBounds;
+import model.PointOfPath;
 import shared.Entities;
 import shared.RotationDirection;
+import shared.SharedConstants;
 
 public abstract class Alien extends Entity {
 
@@ -35,6 +34,7 @@ public abstract class Alien extends Entity {
     protected boolean isDiving; //diving means that it extited formation to attack the player
     protected boolean isOffsetYChanging;
     protected int offset;
+    protected boolean isOfChallengingStage;
 
     protected final PointOfPath formationPoint;
     protected final int POINTS_TO_CALCULATE_WITH_OFFSET;
@@ -52,8 +52,8 @@ public abstract class Alien extends Entity {
     //PROTECTED COSTRUCTOR
     //----------------------
     
-    protected Alien(int width, int height, int speed/*points skipped per frame*/, WorldBounds bounds, Queue<PointOfPath> path, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint ) {
-        super( INIT_X, INIT_Y, width, height, speed, bounds, direction );
+    protected Alien(int width, int height, int speed/*points skipped per frame*/, Queue<PointOfPath> path, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( INIT_X, INIT_Y, width, height, speed, direction );
         this.path = path;
         pathArrayList = new ArrayList<PointOfPath>(path);
         this.isOneShot = isOneShot;
@@ -65,6 +65,7 @@ public abstract class Alien extends Entity {
         offset = 0;
         this.formationPoint = formationPoint;
         isOffsetYChanging = false;
+        this.isOfChallengingStage = isOfChallengingStage;
         
     }// end costructor
 
@@ -84,6 +85,8 @@ public abstract class Alien extends Entity {
     @Override
     public void update( int frameNumber ) {
 
+        //init variables
+        final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
         //init offsets
         int formationOffsetX = offset;
         int formationOffsetY = 0;
@@ -91,7 +94,7 @@ public abstract class Alien extends Entity {
 
 
         //if in formation
-        if( !isAttacking ){
+        if( !isAttacking && ( ! isOfChallengingStage ) ){
 
             //calculate distance from center
             double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
@@ -111,7 +114,7 @@ public abstract class Alien extends Entity {
                 formationOffsetY = (int)Math.abs( offset*scaleFactorY );
 
                 //check for alien on the left of the screen and put x offset negative
-                if( formationPoint.x() < ( bounds.width()/2 ) ){
+                if( formationPoint.x() < ( SharedConstants.MODEL_SCREEN_WIDTH/2 ) ){
                     formationOffsetX = -Math.abs( formationOffsetX ); 
                 }
                 //fix also aliens on the right
@@ -124,8 +127,8 @@ public abstract class Alien extends Entity {
 
 
             //state in formation changer
-            if( frameNumber <= GameController.getFramePerSeconds()/2 ) animationFrame = 1;
-            else if( frameNumber > GameController.getFramePerSeconds()/2 ) animationFrame = 2;
+            if( frameNumber <= FRAMES_PER_SECOND/2 ) animationFrame = 1;
+            else if( frameNumber > FRAMES_PER_SECOND/2 ) animationFrame = 2;
 
             //offset change 
             x = (int)formationPoint.x() + formationOffsetX;
@@ -149,8 +152,8 @@ public abstract class Alien extends Entity {
 
                 int dx = 0;
 
-                //CHECK IF NEXT POINT MUST ME OFFSETTED
-                if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) ){
+                //CHECK IF NEXT POINT MUST ME OFFSETTED TO REACH FORMATION WHEN MOVING
+                if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
                     dx = (int)( (double)formationOffsetX / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                 }
 
@@ -183,6 +186,9 @@ public abstract class Alien extends Entity {
                 //TO IMPLEMENT ATTACK MOVEMENT
                 direction = RotationDirection.D;
             }
+
+            //if completed challenging stage path
+            if( isOfChallengingStage && path.isEmpty() ){ this.isToRemove = true; }
 
         }
                 
@@ -237,8 +243,8 @@ public abstract class Alien extends Entity {
     }
 
     //method for tests
-    public boolean checkCollisionWith( WorldBounds bounds ){
-        if( x > 0 && x < bounds.width() && y > 0 && y < bounds.height() ){
+    public boolean checkCollisionWith( ){
+        if( x > 0 && x < SharedConstants.MODEL_SCREEN_WIDTH && y > 0 && y < SharedConstants.MODEL_SCREEN_HEIGHT ){
             isToRemove = true;
             return true;
         }

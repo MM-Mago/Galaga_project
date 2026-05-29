@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.api.ModelForView;
+import shared.SharedConstants;
 import view.api.ViewForController;
 import controller.api.ActionHandlerForView;
 
@@ -21,8 +22,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
     //PRIVATE STATIC FINAL COSTANTS
     //--------------------------------
 
-    private static final int GAME_PANEL_WIDTH = 450;
-    private static final int GAME_PANEL_HEIGHT = 600;
+    private static final int GAME_PANEL_WIDTH = 448;
+    private static final int GAME_PANEL_HEIGHT = 576;
 
     
     //------------------
@@ -60,8 +61,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
         //init frame and panel
         initGameFrame();
-        final int X_OFFSET_CORRECTION = -3;
-        final int Y_OFFSET_CORRECTION = -24;
+        final int X_OFFSET_CORRECTION = 0;
+        final int Y_OFFSET_CORRECTION = 0;
         this.setPreferredSize( new Dimension(GAME_PANEL_WIDTH + X_OFFSET_CORRECTION, GAME_PANEL_HEIGHT + Y_OFFSET_CORRECTION ) ); //numbers to fix offset
 
         //compose window
@@ -76,7 +77,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         return view;
     } //end initView
 
-    public static ViewForController getInstance(){
+    public static ViewForController getInstanceForController(){
         if(view == null ) throw new IllegalStateException("view not initialized! first call getInstance(model) ");
         return view;
     } //end getInstance
@@ -98,15 +99,15 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         BackgroundPainter.paintBackrgound( (Graphics2D)g, frameNumber, model );
 
         //paint all entities
-        EntityPainter.paintEntities((Graphics2D)g, model.getEntityListForView(), model );
+        EntityPainter.paintEntities((Graphics2D)g, model.getEntityInfoListForView(), model );
 
         //paint interface
         InterfacePainter.paintInterface((Graphics2D)g, frameNumber, model );
 
         //paint external overlay
         int margin = 20;
-        g.fillRect( model.getBounds().width() , 0, this.getWidth() - model.getBounds().width() + margin, this.getHeight() + margin );
-        g.fillRect( 0 , model.getBounds().height(), this.getWidth() + margin, this.getHeight() - model.getBounds().height() + margin );
+        g.fillRect( SharedConstants.MODEL_SCREEN_WIDTH , 0, this.getWidth() - SharedConstants.MODEL_SCREEN_WIDTH + margin, this.getHeight() + margin );
+        g.fillRect( 0 , SharedConstants.MODEL_SCREEN_HEIGHT, this.getWidth() + margin, this.getHeight() - SharedConstants.MODEL_SCREEN_HEIGHT + margin );
 
 
         g.setColor(oldColor);
@@ -132,8 +133,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
     private void updateScale( Graphics2D g2d ){
 
-        this.scaleX = GAME_PANEL_WIDTH/model.getBounds().width();
-        this.scaleY = GAME_PANEL_HEIGHT/model.getBounds().height();
+        this.scaleX = GAME_PANEL_WIDTH/SharedConstants.MODEL_SCREEN_WIDTH;
+        this.scaleY = GAME_PANEL_HEIGHT/SharedConstants.MODEL_SCREEN_HEIGHT;
         double scale = Math.min( this.scaleX, this.scaleY );
         g2d.scale(scale, scale);
         

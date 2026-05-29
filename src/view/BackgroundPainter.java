@@ -10,9 +10,9 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
-import model.GameModel;
 import model.api.ModelForView;
 import shared.GameState;
+import shared.SharedConstants;
 
 
 //TO DO STOP AT LOADING
@@ -34,7 +34,6 @@ public class BackgroundPainter {
     private static int presentFrame;
     private static int presentDY;
     private final static int MAX_FRAME_INDEX = 3;
-    private final static int MAX_BACKGROUND_DY = GameModel.getSreenHeight();
     private final static String FRAME_0_PATH = "src//view//galaga_png//background-frame-0.png" ;
     private final static String FRAME_1_PATH = "src//view//galaga_png//background-frame-1.png" ;
     private final static String FRAME_2_PATH = "src//view//galaga_png//background-frame-2.png" ;
@@ -57,7 +56,6 @@ public class BackgroundPainter {
     //--------------------------------
 
     static void initBackgroundPainter(){
-        
 
         //load images
             try {
@@ -80,9 +78,11 @@ public class BackgroundPainter {
     }// end initBackgroundPainter
 
     static void paintBackrgound( Graphics g, int frameOfview, ModelForView model ){
+
         g = (Graphics2D)g;
         Color oldColor = g.getColor();
 
+        final int MAX_BACKGROUND_DY = SharedConstants.MODEL_SCREEN_WIDTH;
         GameState gameState = model.getState();
         int secondsInState = model.getSecondsInState();
 

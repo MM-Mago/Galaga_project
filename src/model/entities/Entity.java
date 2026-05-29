@@ -1,6 +1,5 @@
 package model.entities;
 
-import model.data.WorldBounds;
 import shared.Entities;
 import shared.RotationDirection;
 
@@ -10,34 +9,26 @@ public abstract class Entity {
     //PROTECTED ENTITY VARIABLES
     //-----------------------------
 
-    //WorldBounds Record
-    protected final WorldBounds bounds;
-
     protected Entities entityName;
     protected int x;
     protected int y;
-    protected int dx;
-    protected int dy;
     protected int width;
     protected int height;
-    protected int speed;
-    protected boolean isToRemove;
-    protected RotationDirection direction;
-    protected int animationFrame;
+    protected int speed; //number of pixels or points skipped per frame
+    protected boolean isToRemove; //is entity set for removal
+    protected RotationDirection direction; // present direction
+    protected int animationFrame; // present animation frame
 
     //----------------------
     //PROTECTED COSTRUCTOR
     //----------------------
 
-    protected Entity( int x, int y, int width, int height, int speed, WorldBounds bounds, RotationDirection direction ){
+    protected Entity( int x, int y, int width, int height, int speed, RotationDirection direction ){
         this.x = x;
         this.y = y;
-        this.dx = 0;
-        this.dy = 0;
         this.width = width;
         this.height = height;
         this.speed = speed;
-        this.bounds = bounds;
         this.direction = direction;
         isToRemove = false;
         animationFrame = 1;
@@ -74,8 +65,6 @@ public abstract class Entity {
     public int getY(){ return this.y; }
     public int getCenterX() { return (int)Math.ceil( (double) this.x + (this.width / 2) ); } //ceil approssimation for odd numbers
     public int getCenterY() { return (int)Math.ceil( (double) this.y + (this.height / 2) ); } //ceil approssimation for odd numbers
-    public int getDX(){ return this.dx; }
-    public int getDY(){ return this.dy; }
     public int getWidth(){ return this.width; }
     public int getHeight(){ return this.height; }
     public int getSpeed(){ return this.speed; }

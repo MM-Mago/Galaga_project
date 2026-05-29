@@ -4,6 +4,7 @@ import controller.api.ActionHandlerForView;
 import controller.api.ControllerForMain;
 import model.api.ModelForController;
 import shared.GameState;
+import shared.SharedConstants;
 import view.api.ViewForController;
 
 public class GameController implements ControllerForMain, ActionHandlerForView {
@@ -13,7 +14,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //COSTANTS
     //------------------
 
-    private static final int FRAME_PER_SECONDS = 60;
+    private static final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
 
 
     //------------------
@@ -33,7 +34,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
 
     //-----------------------------------
-    //COSTRUCTOR + 2 SINGLETON METHODS
+    //COSTRUCTOR + 3 SINGLETON METHODS
     //-----------------------------------
 
     private GameController( ViewForController view, ModelForController model ){
@@ -55,20 +56,14 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public static ControllerForMain getInstanceForMain(){
         if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
         return controller;
-    } //end getInstance
-
-    public static ActionHandlerForView getIstanceForView(){
-        if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
-        return controller;
-    }
-
+    } //end getInstanceForMain
 
     //------------------------
     //PRIVATE METHODS
     //------------------------
 
     private void updateFramenumber(){
-        if( this.frameNumber > FRAME_PER_SECONDS ) this.frameNumber = 0;
+        if( this.frameNumber > FRAMES_PER_SECOND ) this.frameNumber = 0;
         this.frameNumber++;
     }
 
@@ -106,7 +101,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     @Override
     public void cmdCoinInserted(){
         model.insertCoin();
-    }//end cmdCoingInserted
+    }//end cmdCoinInserted
 
     @Override
     public void cmdAction(){
@@ -156,14 +151,5 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     /** Render the view once after model updates. */
     public void renderView(){
         view.refresh(frameNumber);
-    }
-
-
-    //------------------------
-    //PUBLIC METHODS
-    //------------------------
-
-    public static int getFramePerSeconds() {
-        return FRAME_PER_SECONDS;
     }
 }
