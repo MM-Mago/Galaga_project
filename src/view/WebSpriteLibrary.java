@@ -115,6 +115,17 @@ class WebSpriteLibrary {
         return cache.get(key);
     }
 
+    static HTMLCanvasElement getMedalSprite(int value) {
+        if (!(value == 1 || value == 5 || value == 10 || value == 20 || value == 30 || value == 50)) {
+            throw new IllegalArgumentException("Medal value must be one of: 1, 5, 10, 20, 30, 50");
+        }
+        String key = "MEDAL_" + value;
+        if (!cache.containsKey(key)) {
+            cache.put(key, buildMedalSprite(value));
+        }
+        return cache.get(key);
+    }
+
     // -----------------------------------------------------------------------
     // Sprite-sheet source Y offsets (mirrors SpriteLibrary exactly)
     // -----------------------------------------------------------------------
@@ -199,6 +210,7 @@ class WebSpriteLibrary {
             case "COIN_INSERTED_SCREEN": return clipFull(imgCoinInserted);
             case "PLAYER":               return clipHalf(imgLoadingScreen, false);
             case "STAGE":                return clipHalf(imgLoadingScreen, true);
+            case "CHALLENGING_STAGE":    return buildChallenggingStageSprite();
             default:                     return makeBlank(8, 8);
         }
     }
@@ -207,6 +219,47 @@ class WebSpriteLibrary {
         final int W = 24, H = 24, OFFX = 25, OFFY = 26;
         int colorRow = color.equals("BLUE") ? 0 : color.equals("YELLOW") ? 1 : 2;
         return clip(imgNumbers, OFFX * digit, OFFY * colorRow, W, H, false, false);
+    }
+
+    private static HTMLCanvasElement buildMedalSprite(int value) {
+        // Mirrors SpriteLibrary.java medal coordinates
+        final int xInitialOffsetForMedals = 17 * (16 + 2) + 1; // 307
+        final int yOffsetForMedals = 9 * (16 + 2) + 1 + 9;     // 171
+        final int medalHeight = 16;
+        final int smallerMedalsWidth = 8;
+        final int largerMedalsWidth = 16;
+
+        int x = xInitialOffsetForMedals;
+        int w = smallerMedalsWidth;
+
+        switch (value) {
+            case 1:
+                x = xInitialOffsetForMedals;
+                w = smallerMedalsWidth;
+                break;
+            case 5:
+                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2);
+                w = smallerMedalsWidth;
+                break;
+            case 10:
+                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2;
+                w = largerMedalsWidth;
+                break;
+            case 20:
+                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2);
+                w = largerMedalsWidth;
+                break;
+            case 30:
+                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2) * 2;
+                w = largerMedalsWidth;
+                break;
+            case 50:
+                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2) * 3;
+                w = largerMedalsWidth;
+                break;
+        }
+
+        return clip(imgSprites, x, yOffsetForMedals, w, medalHeight, false, false);
     }
 
     // -----------------------------------------------------------------------
@@ -283,5 +336,13 @@ class WebSpriteLibrary {
 
     private static HTMLCanvasElement makeBlank(int w, int h) {
         return makeCanvas(w, h);
+    }
+
+    private static HTMLCanvasElement buildChallenggingStageSprite() {
+        // CHALLENGING_STAGE sprite from sprites.png (394x21)
+        // Located after other sprites in sprite sheet
+        final int W = 394, H = 21;
+        final int X = 0, Y = 154; // Approximate Y position in sprite sheet
+        return clip(imgSprites, X, Y, W, H, false, false);
     }
 }

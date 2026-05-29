@@ -101,8 +101,8 @@ final class AlienFormationsLibrary {
         
         BufferedReader buffRead = null;
         try{
-            InputStream is = AlienFormationsLibrary.class.getClassLoader().getResourceAsStream( "model/data/formations.txt" );
-            if( is == null ) throw new IOException( "Resource not found: model/data/formations.txt" );
+            InputStream is = AlienFormationsLibrary.class.getClassLoader().getResourceAsStream( "model/formations.txt" );
+            if( is == null ) throw new IOException( "Resource not found: model/formations.txt" );
             buffRead = new BufferedReader( new InputStreamReader( is, "utf-8" ) );
             String line = null;
             int nStage = -1;

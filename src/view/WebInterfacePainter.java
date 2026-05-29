@@ -138,13 +138,55 @@ class WebInterfacePainter {
             }
         }
 
-        // --- STAGE N text ---
+        // --- STAGE N text OR CHALLENGING STAGE (non-challenging vs challenging stages) ---
         if ((state == GameState.LOADING_FIRST_STAGE && secondsInState > 3)
                 || (state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1)) {
-            HTMLCanvasElement stageImg = WebSpriteLibrary.getSprite("STAGE");
             int cx = bounds.width() / 2;
-            drawSprite(ctx, stageImg, cx - 35, bounds.height() / 2 + 2, SPRITE_W, SPRITE_H);
-            paintNumberLTR(ctx, model.getNumStage(), "BLUE", cx + 10, bounds.height() / 2 + 2);
+            if ((numStage - 3) % 4 != 0) {
+                // Regular stage - show "STAGE N"
+                HTMLCanvasElement stageImg = WebSpriteLibrary.getSprite("STAGE");
+                drawSprite(ctx, stageImg, cx - 35, bounds.height() / 2 + 2, SPRITE_W, SPRITE_H);
+                paintNumberLTR(ctx, numStage, "BLUE", cx + 10, bounds.height() / 2 + 2);
+            } else {
+                // Challenging stage (3, 7, 11, 15...) - show "CHALLENGING STAGE"
+                HTMLCanvasElement challengingImg = WebSpriteLibrary.getSprite("CHALLENGING_STAGE");
+                int scaledW = challengingImg.getWidth() / challengingImg.getHeight() * SPRITE_H;
+                ctx.drawImage(challengingImg, cx - 70, bounds.height() / 2 + 2, scaledW, SPRITE_H);
+            }
+        }
+
+        // --- MEDALS ---
+        if ((state == GameState.LOADING_FIRST_STAGE && secondsInState > 3)
+                || (state != GameState.INITIAL_SCREEN && state != GameState.COIN_INSERTED
+                        && state != GameState.LOADING_FIRST_STAGE)) {
+            paintMedals(ctx, model.getNumStage(), bounds);
+        }
+    }
+
+    private static void paintMedals(CanvasRenderingContext2D ctx, int numStage, WorldBounds bounds) {
+        ArrayList<Integer> medalValues = new ArrayList<>();
+        if (numStage == 0) {
+            medalValues.add(1);
+        } else {
+            int[] medalOrder = {50, 30, 20, 10, 5, 1};
+            int temp = numStage;
+            for (int medalVal : medalOrder) {
+                while (temp >= medalVal) {
+                    medalValues.add(medalVal);
+                    temp -= medalVal;
+                }
+            }
+        }
+
+        // Draw medals from right to left
+        int xOffset = 0;
+        for (int i = medalValues.size() - 1; i >= 0; i--) {
+            HTMLCanvasElement medal = WebSpriteLibrary.getMedalSprite(medalValues.get(i));
+            if (i < medalValues.size() - 1) {
+                xOffset += medal.getWidth();
+            }
+            ctx.drawImage(medal, bounds.width() - xOffset - medal.getWidth(),
+                    bounds.height() - medal.getHeight());
         }
     }
 
