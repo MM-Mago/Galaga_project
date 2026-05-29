@@ -99,7 +99,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         BackgroundPainter.paintBackrgound( (Graphics2D)g, frameNumber, model );
 
         //paint all entities
-        EntityPainter.paintEntities((Graphics2D)g, model.getEntityListForView(), model );
+        EntityPainter.paintEntities((Graphics2D)g, model.getEntityInfoListForView(), model );
 
         //paint interface
         InterfacePainter.paintInterface((Graphics2D)g, frameNumber, model );

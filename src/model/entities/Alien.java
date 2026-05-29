@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 import model.GameModel;
-import model.data.PointOfPath;
+import model.PointOfPath;
 import shared.Entities;
 import shared.RotationDirection;
 import shared.SharedConstants;

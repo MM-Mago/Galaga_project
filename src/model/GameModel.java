@@ -76,7 +76,7 @@ public class GameModel implements ModelForView, ModelForController{
         state = GameState.INITIAL_SCREEN;
 
         //init alienHandler
-        alienHandler = new AlienHandler( this );
+        alienHandler = new AlienHandler();
 
         //init player
         player = new Player();
@@ -144,7 +144,7 @@ public class GameModel implements ModelForView, ModelForController{
 
     //entities
     @Override
-    public ArrayList<EntityInfo> getEntityListForView(){
+    public ArrayList<EntityInfo> getEntityInfoListForView(){
         
         ArrayList<EntityInfo> entityInfos = new ArrayList<EntityInfo>();
 

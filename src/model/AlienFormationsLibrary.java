@@ -1,6 +1,5 @@
 package model;
 
-import model.data.PointOfPath;
 import model.entities.Alien;
 import model.entities.BossGalaga;
 import model.entities.Goei;
@@ -25,14 +24,15 @@ import java.util.Queue;
 //----------------------------------------------------------------------------------
 
 //EVERYTHING PACKAGE-PROTECTED OR PRIVATE
-class AlienFormationsLibrary {
+//utility final class
+final class AlienFormationsLibrary {
         
 
     //--------------------------------
     //PRIVATE VARIABLES
     //--------------------------------
 
-    private final static String FORMATIONS_FILE_PATH = "src//model//data//formations.txt";
+    private final static String FORMATIONS_FILE_PATH = "src//model//formations.txt";
     private final static String CHARSET = "utf-8"; //o UTF-8
 
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
@@ -98,7 +98,7 @@ class AlienFormationsLibrary {
     //PACKAGE-PROTECTED STATIC METHODS
     //--------------------------------
 
-    static void initFormations( GameModel model){
+    static void initFormations(){
 
         //initialize ALL formations
         
