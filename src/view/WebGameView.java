@@ -73,8 +73,8 @@ public class WebGameView implements ViewForController {
         org.teavm.jso.canvas.CanvasRenderingContext2D ctx =
             (org.teavm.jso.canvas.CanvasRenderingContext2D) canvas.getContext("2d");
 
-        double scaleX = (double) canvas.getWidth()  / model.getBounds().width();
-        double scaleY = (double) canvas.getHeight() / model.getBounds().height();
+        double scaleX = (double) canvas.getWidth()  / shared.SharedConstants.MODEL_SCREEN_WIDTH;
+        double scaleY = (double) canvas.getHeight() / shared.SharedConstants.MODEL_SCREEN_HEIGHT;
         double scale  = Math.min(scaleX, scaleY);
 
         ctx.save();
@@ -82,7 +82,7 @@ public class WebGameView implements ViewForController {
         ctx.scale(scale, scale);
 
         WebBackgroundPainter.paint(ctx, frameNumber, model);
-        WebEntityPainter.paint(ctx, model.getEntityListForView(), model);
+        WebEntityPainter.paint(ctx, model.getEntityInfoListForView(), model);
         WebInterfacePainter.paint(ctx, frameNumber, model);
 
         ctx.restore();
