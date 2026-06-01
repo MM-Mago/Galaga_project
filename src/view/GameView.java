@@ -6,11 +6,14 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import model.api.ModelForView;
+import shared.Events;
 import shared.SharedConstants;
 import view.api.ViewForController;
 import controller.api.ActionHandlerForView;
@@ -58,6 +61,9 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
 
         //init spriteLibrary
         SpriteLibrary.initSprites();
+
+        //init soundManager
+        SoundManager.initSoundManager();
 
         //init frame and panel
         initGameFrame();
@@ -162,6 +168,10 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         //paint everything again
         this.repaint();
         
+        //play a sound if needed
+        LinkedList<Events> eventsList = model.getEventsQueue();
+        SoundManager.playSounds( eventsList );
+
         //to do...........
     }
 

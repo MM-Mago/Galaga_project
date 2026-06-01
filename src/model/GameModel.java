@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import model.api.ModelForController;
 import model.api.ModelForView;
@@ -10,6 +11,7 @@ import model.entities.Entity;
 import model.entities.Player;
 import model.entities.PlayerShot;
 import shared.EntityInfo;
+import shared.Events;
 import shared.GameState;
 import shared.SharedConstants;
 
@@ -39,11 +41,14 @@ public class GameModel implements ModelForView, ModelForController{
     //alien handler
     private static AlienHandler alienHandler;
 
-    //four separate lists to better manage collisions
+    //four separate Entity lists to better manage collisions
     private ArrayList<Entity> entitiesList;
     private ArrayList<Alien> aliensList; 
     private ArrayList<AlienShot> alienShotsList;
     private ArrayList<PlayerShot> playerShotsList;
+
+    //Event
+    private LinkedList<Events> EventsQueue;
 
     //counters
     private int coins;
@@ -71,6 +76,9 @@ public class GameModel implements ModelForView, ModelForController{
         aliensList = new ArrayList<Alien>();
         alienShotsList = new ArrayList<AlienShot>();
         playerShotsList = new ArrayList<PlayerShot>();
+
+        //event
+        EventsQueue = new LinkedList<Events>();
 
         //gameState
         state = GameState.INITIAL_SCREEN;
@@ -167,7 +175,8 @@ public class GameModel implements ModelForView, ModelForController{
     public int getCoins(){ return this.coins; }
     @Override
     public int getNumStage(){ return this.numStage; }
-
+    @Override
+    public LinkedList<Events> getEventsQueue() { return EventsQueue; }
 
     //------------------------------
     //PUBLIC METHODS FOR CONTROLLER
@@ -179,7 +188,6 @@ public class GameModel implements ModelForView, ModelForController{
 
             //save initial frame score
             int initialScore = score;
-
 
             //update frameNumber
             this.frameNumber = frameNumber; 
@@ -211,14 +219,39 @@ public class GameModel implements ModelForView, ModelForController{
 
 
                 //--------------------------------------
-                //TO DO CHECK COLLISIONS
+                //CHECK COLLISIONS
                 //--------------------------------------
                 //use radius = half max dimension
                 for( PlayerShot pShot: playerShotsList ){
                     for( Alien a: aliensList ){
-                        if( a.checkCollisionWithPlayerShot(pShot) && a.isToRemove() ){
-                            score += a.getScoreValue();
+                        if( a.checkCollisionWithPlayerShot(pShot) ){
+
+                            //get points if killed
+                            if( a.isToRemove()){ score += a.getScoreValue(); }
+                            
+                            //add events
+                            switch (a.getEntityName()) {
+
+                                case ZAKO:
+                                    EventsQueue.add( Events.ZAKO_EXPLODED );
+                                    break;
+                                case GOEI:
+                                    EventsQueue.add( Events.GOEI_EXPLODED );
+                                    break;
+                                case BOSS_GALAGA:
+                                    EventsQueue.add( Events.BOSS_GALAGA_NOW_ONESHOT );
+                                    break;
+                                case BOSS_GALAGA_ONE_SHOT:
+                                    //boss galaga not killed
+                                    if( ! a.isToRemove() ){ EventsQueue.add( Events.BOSS_GALAGA_NOW_ONESHOT );}
+                                    //boss galaga killed
+                                    else{ EventsQueue.add( Events.BOSS_GALAGA_EXPLODED );}
+                                    break;
+                                default:
+                                    break;
+                            }
                             break; // without break would kill more than one
+
                         }
                     }
                 }
@@ -249,8 +282,6 @@ public class GameModel implements ModelForView, ModelForController{
             }); 
 
             
-
-            
             //--------------------------------------
             //CHECK IF STAGE CHANGED
             //--------------------------------------
@@ -259,6 +290,8 @@ public class GameModel implements ModelForView, ModelForController{
                 state = GameState.LOADING_NOT_FIRST_STAGE;
                 secondsInState = 0;
                 this.numStage = alienHandler.getNumStage(); 
+                if( AlienFormationsLibrary.isStageChallenging(numStage) ){ EventsQueue.add( Events.CHALLENGING_STAGE ); }
+                else{ EventsQueue.add( Events.NEXT_STAGE ); }
             }
 
 
@@ -292,14 +325,17 @@ public class GameModel implements ModelForView, ModelForController{
                     lives++;
                 }
             }
-
         }// end update 
 
     //add coin number +1
     @Override
     public void insertCoin(){
         this.coins ++;
-        if( state == GameState.INITIAL_SCREEN){ state = GameState.COIN_INSERTED; secondsInState = 0; }
+        if( state == GameState.INITIAL_SCREEN){
+            state = GameState.COIN_INSERTED;
+            secondsInState = 0;
+            EventsQueue.add( Events.COIN_SCREEN_OPENED );;
+        }
     }
 
     //remove coin -1
@@ -315,6 +351,7 @@ public class GameModel implements ModelForView, ModelForController{
             state = GameState.LOADING_FIRST_STAGE;
             secondsInState = 0;  //TO CHANGE LATER
             spendCoin();
+            EventsQueue.add( Events.GAME_STARTED );
         }
     }
     
@@ -330,9 +367,10 @@ public class GameModel implements ModelForView, ModelForController{
     @Override
     public void shoot(){
         if( this.activePlayerShotsCount < 2 ){
-        PlayerShot shot = new PlayerShot( this.player );
-        addEntity(shot);
-        activePlayerShotsCount++;
+            PlayerShot shot = new PlayerShot( this.player );
+            addEntity(shot);
+            activePlayerShotsCount++;
+            if( state == GameState.PLAYING){ EventsQueue.add( Events.PLAYER_SHOOTING ); }
         }
     }
 

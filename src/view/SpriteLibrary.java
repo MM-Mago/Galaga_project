@@ -228,6 +228,16 @@ class SpriteLibrary {
         }// end get aliens and player
 
 
+        //GET ALIEN EXPLOSION SPRITE
+
+        BufferedImage explosionSprite;
+        for( int i = 0; i < 4; i ++ ){
+            final int EXPLOSION_SPRITE_DIMENSIONS = 32;
+            explosionSprite = spritesWholeImage.getSubimage( 18 * ( 16 + 2*i ) + 1 , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
+            spritesMap.put( "ALIEN_EXPLOSION" + "_" + (i+1), explosionSprite );
+        }
+
+
         //GET SHOTS
 
         BufferedImage playerShot = spritesWholeImage.getSubimage( 313, 123, 3, 8 );
@@ -310,6 +320,12 @@ class SpriteLibrary {
         return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
     }
 
+    //used only for sprites in sprites.png without directions ( like ALIEN_EXPLOSION )
+    static BufferedImage getSprite( Entities name, int animationFrame ) {
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        return spritesMap.get( name.name() + "_" + animationFrame );
+    }
+
     //used only for medals in sprites.png
     static BufferedImage getMedal( String name, int value ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
@@ -331,5 +347,4 @@ class SpriteLibrary {
         if( !( color == "BLUE" || color == "YELLOW" || color == "WHITE") ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
         return spritesMap.get( i + "_" + color );
     }
-
 }

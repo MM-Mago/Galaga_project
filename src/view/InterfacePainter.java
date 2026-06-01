@@ -206,7 +206,7 @@ class InterfacePainter {
             paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ) );
         }    
         //CHALLENGING STAGE TEXT
-        else if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 == 0 ) ){
+        else if( ( gameState == GameState.LOADING_NOT_FIRST_STAGE ) && ( ( numStage - 3 ) % 4 == 0 ) ){
             final int tempOffsetY = +2;
             final int tempOffsetX = -70;
             BufferedImage challengingStageIMG = SpriteLibrary.getSprite("CHALLENGING_STAGE" );

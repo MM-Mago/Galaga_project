@@ -1,8 +1,10 @@
 package model.api;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import shared.EntityInfo;
+import shared.Events;
 import shared.GameState;
 
 public interface ModelForView {
@@ -25,5 +27,8 @@ public interface ModelForView {
     public int getLives();
     public int getCoins();
     public int getNumStage();
+
+    //event
+    public LinkedList<Events> getEventsQueue();
 
 }
