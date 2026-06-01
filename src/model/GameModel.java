@@ -6,10 +6,12 @@ import java.util.LinkedList;
 import model.api.ModelForController;
 import model.api.ModelForView;
 import model.entities.Alien;
+import model.entities.AlienExplosion;
 import model.entities.AlienShot;
 import model.entities.Entity;
 import model.entities.Player;
 import model.entities.PlayerShot;
+import shared.Entities;
 import shared.EntityInfo;
 import shared.Events;
 import shared.GameState;
@@ -226,8 +228,14 @@ public class GameModel implements ModelForView, ModelForController{
                     for( Alien a: aliensList ){
                         if( a.checkCollisionWithPlayerShot(pShot) ){
 
-                            //get points if killed
-                            if( a.isToRemove()){ score += a.getScoreValue(); }
+                            //get points and create explosion if killed
+                            if( a.isToRemove()){
+                                score += a.getScoreValue();
+                                final int explosionX = a.getCenterX() - ( Entities.ALIEN_EXPLOSION.getWidth() / 2 );
+                                final int explosionY = a.getCenterY() - ( Entities.ALIEN_EXPLOSION.getHeight() / 2 );
+                                AlienExplosion explosion = new AlienExplosion( explosionX, explosionY );
+                                addEntity(explosion);
+                            }
                             
                             //add events
                             switch (a.getEntityName()) {

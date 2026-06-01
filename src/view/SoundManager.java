@@ -69,32 +69,32 @@ public class SoundManager {
                         file = new File(zakoDestroy);
                         break;
                     case BOSS_GALAGA_EXPLODED:
-                            file = new File(bossDestroy);
-                            break;
+                        file = new File(bossDestroy);
+                        break;
                     case GOEI_EXPLODED:
-                            file = new File(goeiDestroy);
-                            break;
+                        file = new File(goeiDestroy);
+                        break;
                     case NEXT_STAGE:
-                            file = new File(stageCount);
-                            break;
+                        file = new File(stageCount);
+                        break;
                     case CHALLENGING_STAGE:
-                            file = new File(challengingStageStart);
-                            break;
+                        file = new File(challengingStageStart);
+                        break;
                     case PLAYER_SHOOTING:
-                            file = new File(fire);
-                            break;
+                        file = new File(fire);
+                        break;
                     case COIN_SCREEN_OPENED:
-                            file = new File(credit);
-                            break;
+                        file = new File(credit);
+                        break;
                     case GAME_STARTED:
-                            file = new File(start);
-                            break;
+                        file = new File(start);
+                        break;
                     case BOSS_GALAGA_NOW_ONESHOT:
-                            file = new File(bossDamage);
-                            break;
+                        file = new File(bossDamage);
+                        break;
                     case ALIEN_DIVING:
-                            file = new File(dive);
-                            break;
+                        file = new File(dive);
+                        break;
                     case LIFE_LOST:
                         file = new File(explosion);
                         break;
@@ -110,6 +110,7 @@ public class SoundManager {
         //play sound to init hardware
         forceHardwareInitialization(null);
     }
+    
 
     //play sound from event
     public static void playSounds( LinkedList<Events> eventsQueue ) {

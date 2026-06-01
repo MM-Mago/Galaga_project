@@ -9,7 +9,8 @@ public enum Entities {
     ZAKO(13,10),
     PLAYER_SHOT(3,8),
     ENEMY_SHOT(3,8),
-    ALIEN_SHOT(3,8);
+    ALIEN_SHOT(3,8),
+    ALIEN_EXPLOSION( 32, 32 );
 
     private final int width, height;
     Entities(int w, int h) { this.width = w; this.height = h; }

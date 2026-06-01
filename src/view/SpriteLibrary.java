@@ -231,10 +231,10 @@ class SpriteLibrary {
         //GET ALIEN EXPLOSION SPRITE
 
         BufferedImage explosionSprite;
-        for( int i = 0; i < 4; i ++ ){
+        for( int i = 0; i < 5; i ++ ){
             final int EXPLOSION_SPRITE_DIMENSIONS = 32;
-            explosionSprite = spritesWholeImage.getSubimage( 18 * ( 16 + 2*i ) + 1 , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
-            spritesMap.put( "ALIEN_EXPLOSION" + "_" + (i+1), explosionSprite );
+            explosionSprite = spritesWholeImage.getSubimage( ( 18 * 16 ) + 1 + ( ( EXPLOSION_SPRITE_DIMENSIONS + 2 ) * i ) , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
+            spritesMap.put( "ALIEN_EXPLOSION" + "_"  + "U" + "_" + (i+1), explosionSprite );
         }
 
 
@@ -318,12 +318,6 @@ class SpriteLibrary {
     static BufferedImage getSprite( Entities name, RotationDirection dir, int animationFrame ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
         return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
-    }
-
-    //used only for sprites in sprites.png without directions ( like ALIEN_EXPLOSION )
-    static BufferedImage getSprite( Entities name, int animationFrame ) {
-        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
-        return spritesMap.get( name.name() + "_" + animationFrame );
     }
 
     //used only for medals in sprites.png
