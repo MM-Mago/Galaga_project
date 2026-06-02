@@ -28,19 +28,21 @@ public class SoundManager {
     // PRIVATE VARIABLES
     //-------------------------
 
-    private static Map<Events, File> fileMap;
+    private static Map<Events, Clip[]> clipArrayMap;
 
-    private static String bossDamage = "src//view//galaga_wov//boss_damage.wav";
-    private static String bossDestroy = "src//view//galaga_wov//boss_destroy.wav";
-    private static String challengingStageStart = "src//view//galaga_wov//challenging_stage_start.wav";
-    private static String credit = "src//view//galaga_wov//credit.wav";
-    private static String dive = "src//view//galaga_wov//dive.wav";
-    private static String explosion = "src//view//galaga_wov//explosion.wav";
-    private static String fire = "src//view//galaga_wov//fire.wav";
-    private static String goeiDestroy = "src//view//galaga_wov//goei_destroy.wav";
-    private static String stageCount = "src//view//galaga_wov//stage_count.wav";
-    private static String start = "src//view//galaga_wov//start.wav";
-    private static String zakoDestroy = "src//view//galaga_wov//zako_destroy.wav";
+    private static final int CLIP_PER_ARRAY = 10;
+
+    private static final String BOSS_DAMAGE_PATH = "src//view//galaga_wov//boss_damage.wav";
+    private static final String BOSS_DESTROY_PATH = "src//view//galaga_wov//boss_destroy.wav";
+    private static final String CHALLENGING_STAGE_START_PATH = "src//view//galaga_wov//challenging_stage_start.wav";
+    private static final String CREDIT_PATH = "src//view//galaga_wov//credit.wav";
+    private static final String DIVE_PATH = "src//view//galaga_wov//dive.wav";
+    private static final String EXPLOSION_PATH = "src//view//galaga_wov//explosion.wav";
+    private static final String FIRE_PATH = "src//view//galaga_wov//fire.wav";
+    private static final String GOEI_DESTROY_PATH = "src//view//galaga_wov//goei_destroy.wav";
+    private static final String STAGE_COUNT_PATH = "src//view//galaga_wov//stage_count.wav";
+    private static final String START_PATH = "src//view//galaga_wov//start.wav";
+    private static final String ZAKO_DESTROY_PATH = "src//view//galaga_wov//zako_destroy.wav";
 
     //-------------------------
     // PRIVATE COSTRUCTOR
@@ -59,63 +61,108 @@ public class SoundManager {
         //init map
         try{
             
-            //populate map
-            fileMap = new HashMap<Events, File>();
+            //populate map for audioPooling
+            clipArrayMap = new HashMap<Events, Clip[]>();
+
+
             for( Events e : Events.values() ){
                 
-                File file = null;
+                Clip[] clipArray = new Clip[CLIP_PER_ARRAY];
+
+                File soundFile = null;
+
                 switch (e) {
                     case ZAKO_EXPLODED:
-                        file = new File(zakoDestroy);
+                        soundFile = new File(ZAKO_DESTROY_PATH);
                         break;
                     case BOSS_GALAGA_EXPLODED:
-                        file = new File(bossDestroy);
+                        soundFile = new File(BOSS_DESTROY_PATH);
                         break;
                     case GOEI_EXPLODED:
-                        file = new File(goeiDestroy);
+                        soundFile = new File(GOEI_DESTROY_PATH);
                         break;
                     case NEXT_STAGE:
-                        file = new File(stageCount);
+                        soundFile = new File(STAGE_COUNT_PATH);
                         break;
                     case CHALLENGING_STAGE:
-                        file = new File(challengingStageStart);
+                        soundFile = new File(CHALLENGING_STAGE_START_PATH);
                         break;
                     case PLAYER_SHOOTING:
-                        file = new File(fire);
+                        soundFile = new File(FIRE_PATH);
                         break;
                     case COIN_SCREEN_OPENED:
-                        file = new File(credit);
+                        soundFile = new File(CREDIT_PATH);
                         break;
                     case GAME_STARTED:
-                        file = new File(start);
+                        soundFile = new File(START_PATH);
                         break;
                     case BOSS_GALAGA_NOW_ONESHOT:
-                        file = new File(bossDamage);
+                        soundFile = new File(BOSS_DAMAGE_PATH);
                         break;
                     case ALIEN_DIVING:
-                        file = new File(dive);
+                        soundFile = new File(DIVE_PATH);
                         break;
                     case LIFE_LOST:
-                        file = new File(explosion);
+                        soundFile = new File(EXPLOSION_PATH);
                         break;
                     default:
                         break;
-                }
-                fileMap.put(e, file );
+                }// end switch
 
-            }
-        }
+                //continue in case of not used events
+                if (soundFile == null || ( ! soundFile.exists() ) ) { continue; }
+
+                //create n clips
+                for( int i = 0; i < CLIP_PER_ARRAY; i ++ ){
+
+                    // 1. Init clip
+                    Clip audioClip = null;
+
+                    try {
+
+                        // 2. open stream
+                        try (AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile)) {
+                            
+                            AudioFormat af = ais.getFormat();
+                            int bufferSize = (int) ais.getFrameLength() * af.getFrameSize();
+                            DataLine.Info dataLineInfo = new DataLine.Info(Clip.class, af, bufferSize);
+
+                            if (!AudioSystem.isLineSupported(dataLineInfo)) {
+                                throw new IOException("Error: AudioSystem does not support this DataLine");
+                            }
+
+                            audioClip = (Clip) AudioSystem.getLine(dataLineInfo);
+                            audioClip.open(ais);
+                        }
+                        
+                    } catch (Exception exc) {
+                        exc.printStackTrace();
+                    }
+
+                    // 3. add clip to array
+                    clipArray[i] = audioClip;
+
+                }// end fill array
+
+            //populate clipArrayMap
+            clipArrayMap.put( e, clipArray );
+
+            }// end cicle events
+
+        }// end try
+
         catch( Exception e ){ e.printStackTrace(); }
 
         //play sound to init hardware
         forceHardwareInitialization(null);
-    }
+
+    }//end init sound manager
     
 
     //play sound from event
     public static void playSounds( LinkedList<Events> eventsQueue ) {
 
-        if (fileMap == null) { throw new IllegalStateException("First Initialize SoundManager"); }
+        if (clipArrayMap == null) { throw new IllegalStateException("First Initialize SoundManager"); }
         if( eventsQueue == null) return; 
         if ( eventsQueue.isEmpty() ) return;
 
@@ -123,78 +170,64 @@ public class SoundManager {
         
             Events e = eventsQueue.poll();
 
-            // 1. Init clip
-            Clip audioClip = null;
-
-            try {
-                File soundFile = fileMap.get(e);
-
-                // 2. open stream and automatically close it at the end of the try block
-                try (AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile)) {
-                    
-                    AudioFormat af = ais.getFormat();
-                    int bufferSize = (int) ais.getFrameLength() * af.getFrameSize();
-                    DataLine.Info dataLineInfo = new DataLine.Info(Clip.class, af, bufferSize);
-
-                    if (!AudioSystem.isLineSupported(dataLineInfo)) {
-                        throw new IOException("Error: AudioSystem does not support this DataLine");
-                    }
-
-                    audioClip = (Clip) AudioSystem.getLine(dataLineInfo);
-                    audioClip.open(ais);
-                }
-                
-            } catch (Exception exc) {
-                exc.printStackTrace();
+            //use audioPooling method
+            Clip[] pool = clipArrayMap.get(e);
+            if (pool != null) {
+                playSoundFromClipArray(pool);
             }
-
-            // 3. Play the sound if the clip was created
-            if (audioClip != null) {
-
-                // 4. convert to final variable to use lambda
-                final Clip clipToPlay = audioClip;
-
-                // Garbage Collection Audio: free memory when the sound ends
-                clipToPlay.addLineListener(event -> {
-                    if (event.getType() == javax.sound.sampled.LineEvent.Type.STOP) {
-                        clipToPlay.close();
-                    }
-                });
-
-                // Start the sound inside the if statement to prevent NullPointerException
-                clipToPlay.start();
-            }
+            
         }
     }
+
+    //audioPooling method
+    private static void playSoundFromClipArray( Clip[] clipArray ){
+
+        //search for free clip
+        for( Clip c: clipArray ){
+
+            //free clip found
+            if( ! c.isRunning() ){
+                c.setFramePosition(0);
+                c.start();
+                return;
+            }
+        }
+
+        //free clip not found
+        clipArray[0].stop();
+        clipArray[0].setFramePosition(0);
+        clipArray[0].start();
+
+    }// end playSoundFromClipArray
 
     //sound hardware warmup to fix first sound freeze
     private static void forceHardwareInitialization(File sampleFile) {
 
-    try {
+        try {
 
-        // open stream and line in the game thread
-        try (AudioInputStream ais = AudioSystem.getAudioInputStream( new File(start))) {
-            AudioFormat af = ais.getFormat();
-            DataLine.Info info = new DataLine.Info(Clip.class, af);
-            
-            if (AudioSystem.isLineSupported(info)) {
-                Clip warmupClip = (Clip) AudioSystem.getLine(info);
-                warmupClip.open(ais);
+            // open stream and line in the game thread
+            try (AudioInputStream ais = AudioSystem.getAudioInputStream( new File(START_PATH))) {
+                AudioFormat af = ais.getFormat();
+                DataLine.Info info = new DataLine.Info(Clip.class, af);
                 
-                // Set clip volume to 0
-                if (warmupClip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                    FloatControl gain = (FloatControl) warmupClip.getControl(FloatControl.Type.MASTER_GAIN);
-                    gain.setValue(gain.getMinimum());
+                if (AudioSystem.isLineSupported(info)) {
+                    Clip warmupClip = (Clip) AudioSystem.getLine(info);
+                    warmupClip.open(ais);
+                    
+                    // Set clip volume to 0
+                    if (warmupClip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+                        FloatControl gain = (FloatControl)warmupClip.getControl(FloatControl.Type.MASTER_GAIN);
+                        gain.setValue(gain.getMinimum());
+                    }
+                    
+                    // start and stop to let the system import actual audio drivers.
+                    warmupClip.start();
+                    warmupClip.stop();
+                    warmupClip.close();
                 }
-                
-                // start and stop to let the system import actual audio drivers.
-                warmupClip.start();
-                warmupClip.stop();
-                warmupClip.close();
             }
+        } catch (Exception e) {
+            System.err.println("Audio hardware warmup skipped or failed: " + e.getMessage());
         }
-    } catch (Exception e) {
-        System.err.println("Audio hardware warmup skipped or failed: " + e.getMessage());
-    }
-}
+    }// end forceHardwaareInitialization
 }
