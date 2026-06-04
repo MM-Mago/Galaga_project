@@ -1,11 +1,11 @@
 # a list of all the enemy paths in the game, structured like this:
 
-# | for new stage, (for new formation, [ for new zako,
+# | for new stage, (for new formation, [ for new alien,
 # { for initial center coordinates, in formation center coordinates, list directions OR side of other zako to follow, number of pixels in stated direction OR zako of formation to follow
 # # for comments
 # empty lines ignored
 # ! to stop reading
-# indentation ignored
+# spaces ignored
 
 
 

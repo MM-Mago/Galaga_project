@@ -197,7 +197,7 @@ class InterfacePainter {
         }
 
         //STAGE N TEXT
-        if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 != 0 ) ){
+        if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 0 ) ) && ( ( numStage - 3 ) % 4 != 0 ) ){
             final int tempOffsetY = +2;
             final int tempOffsetX = -35;
             final int tempNumberOffsetX = 10;

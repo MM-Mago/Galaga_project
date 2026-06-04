@@ -31,6 +31,8 @@ class AlienHandler {
     private static final int MAX_FORMATION_OFFSET = 30;
     private static final int PIXELS_OFFSET_PER_SECOND = 15;
 
+    private boolean areAliensDiving;
+
     //--------------------------------
     //PUBLIC COSTRUCTOR
     //--------------------------------
@@ -43,6 +45,7 @@ class AlienHandler {
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;
+        areAliensDiving = false;
     }
 
     
@@ -55,6 +58,7 @@ class AlienHandler {
         numFormation = 0;
         presentStageAliens = new ArrayList<Alien>();
         presentFormationAliens = new ArrayList<Alien>();
+        areAliensDiving = false;
     }
 
 
@@ -62,7 +66,7 @@ class AlienHandler {
     //PACKAGE-PROTECTED METHODS
     //--------------------------------
 
-    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber ){
+    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber, final int secondsInState ){
 
         ArrayList<Alien> newAliens = new ArrayList<Alien>();
 
@@ -83,7 +87,22 @@ class AlienHandler {
             a.updateOffset( formationOffset );
         }
 
+        //--------------------------------
+        //CHECK FOR ALL PATH COMPLETED
+        //--------------------------------
+        if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
+        if( areAliensDiving && frameNumber == SharedConstants.FRAMES_PER_SECOND && secondsInState % 4 == 0 ){
+            int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
+            if( ! presentStageAliens.get( alienToDive ).isToRemove() ){
+                presentStageAliens.get( alienToDive ).setDiving();
+            }
+            
+        }
 
+
+        //--------------------------------
+        //CHECK FOR NEXT STAGE/FORMATION
+        //--------------------------------
 
         //case first formation
         if( numFormation == 0 ){
@@ -95,7 +114,6 @@ class AlienHandler {
                 presentStageAliens.addAll(newAliens);
             }
         }
-        
         else if( isFormationCompleted() ){
             if( isStageCompleted() ){
 
@@ -105,7 +123,7 @@ class AlienHandler {
             else{
                 
                 //only formation completed
-                    numFormation++;
+                numFormation++;
                 if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
                     presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
                     newAliens = presentFormationAliens;
@@ -113,6 +131,10 @@ class AlienHandler {
                 }
             }
         }
+
+
+
+
 
         return newAliens;
     }
@@ -144,7 +166,8 @@ class AlienHandler {
     }
 
     boolean isStageFull(){ return ( presentStageAliens.size() == ALIENS_PER_STAGE ); }
-    boolean AreAllStageAlienPathsEmpty(){
+
+    boolean areAllStageAlienPathsEmpty(){
         boolean temp = true;
         for( Alien a : presentStageAliens ){
             //check if omne of them is not to remove and has not and an empty path
@@ -152,6 +175,8 @@ class AlienHandler {
             }
         return temp;
     }
+
+    boolean areAliensDiving(){ return areAliensDiving; }
 
     int getNumStage(){ return numStage; }
     int getNumFormation(){ return numFormation; }

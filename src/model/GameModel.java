@@ -65,7 +65,7 @@ public class GameModel implements ModelForView, ModelForController{
 
     //frame number
     private int frameNumber;
-    private int secondsInState;
+    int secondsInState;
 
     //----------------------------------
     //COSTRUCTOR + 3 SINGLETON METHODS
@@ -126,8 +126,8 @@ public class GameModel implements ModelForView, ModelForController{
     public static int getSreenWidth(){ return MODEL_SCREEN_WIDTH; }
     public static int getSreenHeight(){ return MODEL_SCREEN_HEIGHT; }
     public static boolean isStageFull(){ return alienHandler.isStageFull(); }
-    public static boolean AreAllStageAlienPathsEmpty(){ return alienHandler.AreAllStageAlienPathsEmpty(); }
-    
+    public static boolean areAllStageAlienPathsEmpty(){ return alienHandler.areAllStageAlienPathsEmpty(); }
+    public static boolean areAliensDiving(){ return alienHandler.areAliensDiving(); }
 
     //------------------
     //PRIVATE METHODS
@@ -216,7 +216,7 @@ public class GameModel implements ModelForView, ModelForController{
                 //GET NEW ALIENS AND ADD THEM
                 //--------------------------------------
 
-                ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens( frameNumber );
+                ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens( frameNumber, secondsInState );
                 for( Alien a: aliensToAdd){ addEntity(a); }
 
 
@@ -260,10 +260,10 @@ public class GameModel implements ModelForView, ModelForController{
                             }
                             break; // without break would kill more than one
 
-                        }
-                    }
-                }
-            }
+                        }// end cycle aliens
+                    }// end cycle player shots
+                }// end check collisions
+            }// end if playing
             
 
             //--------------------------------------
@@ -315,7 +315,7 @@ public class GameModel implements ModelForView, ModelForController{
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }
-            if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 4 ){
+            if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 3 ){
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }

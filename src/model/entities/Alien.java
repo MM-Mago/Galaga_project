@@ -29,6 +29,7 @@ public abstract class Alien extends Entity {
     //----------------------------
 
     protected Queue<PointOfPath> path;
+    protected Queue<PointOfPath> divingPath;
     protected boolean isOneShot; //one shot to kill
     protected boolean isAttacking; //attacking means going to formation or already exited it
     protected boolean isDiving; //diving means that it extited formation to attack the player
@@ -38,11 +39,18 @@ public abstract class Alien extends Entity {
 
     protected final PointOfPath formationPoint;
     protected final int POINTS_TO_CALCULATE_WITH_OFFSET;
+    protected final int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET;
 
     //----------------------------
     //PRIVATE ALIEN VARIABLES
     //----------------------------
 
+    private final int DIVING_SPEED = 1;
+    private int formationOffsetX;
+    private int formationOffsetY;
+    private int offsetXStartingDiving;
+    private int offsetYStartingDiving;
+    private ArrayList<PointOfPath> divingPathArrayList;
     private ArrayList<PointOfPath> pathArrayList;
     private LinkedList<PointOfPath> lastPoints;
     private int pointsCounter;
@@ -52,10 +60,11 @@ public abstract class Alien extends Entity {
     //PROTECTED COSTRUCTOR
     //----------------------
     
-    protected Alien(int width, int height, int speed/*points skipped per frame*/, Queue<PointOfPath> path, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+    protected Alien(int width, int height, int speed/*points skipped per frame*/, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET , PointOfPath formationPoint, boolean isOfChallengingStage ) {
         super( INIT_X, INIT_Y, width, height, speed, direction );
         this.path = path;
         pathArrayList = new ArrayList<PointOfPath>(path);
+        divingPathArrayList = new ArrayList<PointOfPath>(divingPath);
         this.isOneShot = isOneShot;
         this.isAttacking = true;
         pointsCounter = 0;
@@ -66,6 +75,12 @@ public abstract class Alien extends Entity {
         this.formationPoint = formationPoint;
         isOffsetYChanging = false;
         this.isOfChallengingStage = isOfChallengingStage;
+        this.divingPath = divingPath;
+        this.DIVING_POINTS_TO_CALCULATE_WITH_OFFSET = DIVING_POINTS_TO_CALCULATE_WITH_OFFSET;
+        formationOffsetX = 0;
+        formationOffsetY = 0;
+        offsetXStartingDiving = 0;
+        offsetYStartingDiving = 0;
         
     }// end costructor
 
@@ -87,44 +102,43 @@ public abstract class Alien extends Entity {
 
         //init variables
         final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
+        
         //init offsets
-        int formationOffsetX = offset;
-        int formationOffsetY = 0;
+        formationOffsetX = offset;
+        formationOffsetY = 0;
         int formationOffsetXWhenYChanging = offset / 2;
 
 
-        //if in formation
-        if( !isAttacking && ( ! isOfChallengingStage ) ){
 
-            //calculate distance from center
-            double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
-            double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + ( (double)this.height / 2 ) );
-            //double distanceFromCenter = Math.sqrt(distanceFromCenterX*distanceFromCenterX + distanceFromCenterY*distanceFromCenterY); //didnt use MAth.pow because expensive
-            double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
-            double scaleFactorY = distanceFromCenterY / MAX_DISTANCE_FROM_CENTERY;
+        //calculate distance from center
+        double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
+        double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + ( (double)this.height / 2 ) );
+        double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
+        double scaleFactorY = distanceFromCenterY / MAX_DISTANCE_FROM_CENTERY;
         
-            //check if formationOffsetY should start changing
-            if( GameModel.AreAllStageAlienPathsEmpty() && offset == 0 ){
-                isOffsetYChanging = true;
+        //check if formationOffsetY should start changing
+        if( GameModel.areAliensDiving() && offset == 0 ){
+            isOffsetYChanging = true;
+        }
+
+        //change formationOffsetY  if needed and scale both
+        if( isOffsetYChanging ){
+
+            formationOffsetX = (int)(formationOffsetXWhenYChanging*scaleFactorX);
+            formationOffsetY = (int)Math.abs( offset*scaleFactorY );
+
+            //check for alien on the left of the screen and put x offset negative
+            if( formationPoint.x() < ( SharedConstants.MODEL_SCREEN_WIDTH/2 ) ){
+                formationOffsetX = -Math.abs( formationOffsetX ); 
             }
-            //change formationOffsetY  if needed and scale both
-            if( isOffsetYChanging ){
-
-                formationOffsetX = (int)(formationOffsetXWhenYChanging*scaleFactorX);
-                formationOffsetY = (int)Math.abs( offset*scaleFactorY );
-
-                //check for alien on the left of the screen and put x offset negative
-                if( formationPoint.x() < ( SharedConstants.MODEL_SCREEN_WIDTH/2 ) ){
-                    formationOffsetX = -Math.abs( formationOffsetX ); 
-                }
-                //fix also aliens on the right
-                else{
-                    formationOffsetX = Math.abs( formationOffsetX ); 
-                }
+            //fix also aliens on the right
+            else{
+                formationOffsetX = Math.abs( formationOffsetX ); 
             }
+        }
 
-
-
+        //if in formation and not of challenging stage
+        if( !isAttacking && ( ! isOfChallengingStage ) ){
 
             //state in formation changer
             if( frameNumber <= FRAMES_PER_SECOND/2 ) animationFrame = 1;
@@ -142,31 +156,48 @@ public abstract class Alien extends Entity {
         //if not in formation
         else{
 
-
-            //if reaching formation
             //skip as many points of the path as the speed indicate, also update angle
             int pointsSkipped = 0;
-            while( ( pointsSkipped < speed ) ){
+
+            int presentSpeed = speed;
+            if( isDiving ) presentSpeed = DIVING_SPEED;
+            while( ( pointsSkipped < presentSpeed ) ){
 
                 PointOfPath nextPoint = path.poll();
 
                 int dx = 0;
+                int dy = 0;
+                
 
                 //CHECK IF NEXT POINT MUST ME OFFSETTED TO REACH FORMATION WHEN MOVING
-                if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
-                    dx = (int)( (double)formationOffsetX / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
+                if( isDiving ){
+                    dx = offsetXStartingDiving;
+                    dy = offsetYStartingDiving;
+                    if( path.size() <= DIVING_POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
+                        dx = offsetXStartingDiving + (int)( (double)(formationOffsetX - offsetXStartingDiving ) / DIVING_POINTS_TO_CALCULATE_WITH_OFFSET * ( DIVING_POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
+                        dy = offsetYStartingDiving + (int)( (double)(formationOffsetY - offsetYStartingDiving ) / DIVING_POINTS_TO_CALCULATE_WITH_OFFSET * ( DIVING_POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
+                    }
+                }
+                else {
+                    if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
+                        dx = (int)( (double)formationOffsetX / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
+                        dy = (int)( (double)formationOffsetY / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
+                    }
                 }
 
+                
 
                 //if going for formation
                 if( nextPoint != null ){
 
                     this.x = (int)nextPoint.x() + dx;
-                    this.y = (int)nextPoint.y();
+                    this.y = (int)nextPoint.y() + dy;
                 }
-                //if not just break, set not attacking and clear lastPoints
+
+                //if not just break, set not attacking and not diving, and clear lastPoints
                 else { 
                     isAttacking = false;
+                    isDiving = false;
                     lastPoints.clear();
                     break;
                 }
@@ -176,16 +207,9 @@ public abstract class Alien extends Entity {
                 pointsSkipped++;
                 pointsCounter++;
             }
-                        
-            //update angle if reaching formation
-            if( ! isDiving ) updateAngleWhileInPath();
-            
-            //if attacking after formation
-            if( isDiving ){
                 
-                //TO IMPLEMENT ATTACK MOVEMENT
-                direction = RotationDirection.D;
-            }
+            //update angle
+            updateAngleWhileInPath();
 
             //if completed challenging stage path
             if( isOfChallengingStage && path.isEmpty() ){ this.isToRemove = true; }
@@ -203,6 +227,25 @@ public abstract class Alien extends Entity {
     public int getYFromCenterY( int centerY ){ return( centerY - ( this.height/2 )); }
     public int getPointsToCalculateWithOffset(){ return POINTS_TO_CALCULATE_WITH_OFFSET; };
     public void updateOffset( int offset ) { this.offset = offset; }
+
+    
+    //-----------------
+    //DIVE METHOD
+    //-----------------
+
+    public void setDiving(){
+
+        if( isDiving == false ){
+            pointsCounter = 0;
+            isDiving = true;
+            isAttacking = true;
+            path = new LinkedList<PointOfPath>( divingPathArrayList );
+
+            offsetXStartingDiving = formationOffsetX;
+            offsetYStartingDiving = formationOffsetY;
+        }
+
+    }// end setDiving
 
     
     //-----------------
@@ -268,7 +311,16 @@ public abstract class Alien extends Entity {
             lastPoints.add( newP );
         }
         if( newP == null ){ //if no newP then just copy the points from the path
-            lastPoints = new LinkedList<PointOfPath>( pathArrayList.subList( Math.max(0, pointsCounter - RADIUS ), Math.min( pathArrayList.size()-1, pointsCounter + RADIUS  )) );
+            int size;
+            if( ! isDiving ) size = pathArrayList.size();
+            else size = divingPathArrayList.size();
+            int minIndex = Math.max(0, pointsCounter - RADIUS);
+            int maxIndex = Math.min(size, pointsCounter + RADIUS);
+            //check for empty list
+            if (minIndex > maxIndex) { minIndex = maxIndex; }   
+
+            if( ! isDiving ) lastPoints = new LinkedList<PointOfPath>( pathArrayList.subList( minIndex, maxIndex ) );
+            else lastPoints = new LinkedList<PointOfPath>( divingPathArrayList.subList( minIndex, maxIndex ) );
         }
 
         //create temp list
@@ -278,19 +330,25 @@ public abstract class Alien extends Entity {
         int startI = 0;
         int endI   = tempList.size() - 1;
 
-        //calculate dx and dy
-        double dx = tempList.get( endI ).x() - tempList.get( startI ).x();
-        double dy = tempList.get( endI ).y() - tempList.get( startI ).y();
-
-        // calculate angle
-        double angle = Math.toDegrees(Math.atan2(dy, dx)) + 90; //90 to get the tangent instead of perpendicular
-
-        //check for all same points (formation case)
-        boolean areAllSame = true;
-        for( PointOfPath p: tempList ){
-            if( ! tempList.get(0).equals( p ) ) areAllSame = false;
+        double angle;
+        if( endI == -1 ){
+            angle = direction.getAngle();
         }
-        if( areAllSame ) angle = 0;
+        else{
+            //calculate dx and dy
+            double dx = tempList.get( endI ).x() - tempList.get( startI ).x();
+            double dy = tempList.get( endI ).y() - tempList.get( startI ).y();
+
+            // calculate angle
+            angle = Math.toDegrees(Math.atan2(dy, dx)) + 90; //90 to get the tangent instead of perpendicular
+
+            //check for all same points (formation case)
+            boolean areAllSame = true;
+            for( PointOfPath p: tempList ){
+                if( ! tempList.get(0).equals( p ) ) areAllSame = false;
+            }
+            if( areAllSame ) angle = 0;
+        }
 
         // set new RotationDirection
         direction = RotationDirection.fromAngle( angle );

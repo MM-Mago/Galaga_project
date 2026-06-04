@@ -6,7 +6,7 @@ import shared.RotationDirection;
 public class AlienExplosion extends Entity{
 
     private int initialFrameNumber;
-    private final static int FRAMES_PER_SPRITE = 4;
+    private final static int FRAMES_PER_SPRITE = 3;
 
     public AlienExplosion(int x, int y ) {
         super(x, y, Entities.ALIEN_EXPLOSION.getWidth(), Entities.ALIEN_EXPLOSION.getHeight(), 0, RotationDirection.U );
