@@ -1,6 +1,7 @@
 package model.entities;
 
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 
 public class AlienExplosion extends Entity{
@@ -15,7 +16,7 @@ public class AlienExplosion extends Entity{
     }
 
     @Override
-    public void update(int frameNumber) {
+    public void update(int frameNumber, int secondsInState, GameState state ) {
         if( initialFrameNumber == -1 ) initialFrameNumber = frameNumber - 1 ;
         if( ( frameNumber - initialFrameNumber ) % FRAMES_PER_SPRITE == 0 ){
             animationFrame ++;

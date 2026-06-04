@@ -1,6 +1,7 @@
 package model.entities;
 
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 
 public class AlienShot extends Entity {
@@ -11,7 +12,7 @@ public class AlienShot extends Entity {
     }
 
     @Override
-    public void update( int frameNumber ) {
+    public void update( int frameNumber, int secondsInState, GameState state ) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }

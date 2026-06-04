@@ -227,6 +227,13 @@ class SpriteLibrary {
 
         }// end get aliens and player
 
+        //GET PLAYER EXPLOSION SPRITES
+
+        for( int i = 0; i < 4; i ++ ){
+            final int PLAYER_EXPLOSION_SPRITE_DIMENSION = 32;
+            BufferedImage tempPlayerExplosionImage = spritesWholeImage.getSubimage( ( 1 + (16 + 2)*8 + ( 32 + 2)*i ), 1, PLAYER_EXPLOSION_SPRITE_DIMENSION, PLAYER_EXPLOSION_SPRITE_DIMENSION );
+            spritesMap.put( Entities.PLAYER.name() + "_" + "U" + "_" + (i+2), tempPlayerExplosionImage );
+        }
 
         //GET ALIEN EXPLOSION SPRITE
 
@@ -317,6 +324,7 @@ class SpriteLibrary {
     //used only for sprites in sprites.png
     static BufferedImage getSprite( Entities name, RotationDirection dir, int animationFrame ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( animationFrame == 0 ) return null;
         return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
     }
 

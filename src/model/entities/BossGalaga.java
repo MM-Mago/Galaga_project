@@ -5,6 +5,7 @@ import java.util.Queue;
 
 import model.PointOfPath;
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 
 public class BossGalaga extends Alien {
@@ -35,9 +36,9 @@ public class BossGalaga extends Alien {
     }
 
     @Override
-    public void update(int frameNumber) {
+    public void update(int frameNumber, int secondsInState, GameState state ) {
     
-        super.update(frameNumber);
+        super.update(frameNumber, secondsInState, state );
 
         if( isOneShot ) this.entityName = Entities.BOSS_GALAGA_ONE_SHOT;
     }

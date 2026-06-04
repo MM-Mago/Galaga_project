@@ -7,6 +7,7 @@ import java.util.Queue;
 import model.GameModel;
 import model.PointOfPath;
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 import shared.SharedConstants;
 
@@ -98,7 +99,7 @@ public abstract class Alien extends Entity {
     //----------------------------
 
     @Override
-    public void update( int frameNumber ) {
+    public void update( int frameNumber, int secondsInState, GameState state ) {
 
         //init variables
         final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
@@ -254,44 +255,50 @@ public abstract class Alien extends Entity {
 
     //check collision with entity e, set to remove if true
     //not used pow nor sqrt cause thei're expensive
-    public boolean checkCollisionWithPlayerShot( PlayerShot pShot ){
+    public boolean checkCollisionWith( Entity entity ){
+
 
         boolean didCollide = false;
 
-        //for aliens uses radius big as the max dimension
-
-        //calculate radius squared
-        double radius = Math.max( this.width, this.height)/2;
-        double radiusSquared = radius*radius;
-        //calculate closest point of pShot to the alien circle
-        double pShotXMin = pShot.getX();
-        double pShotXMax = pShot.getX() + pShot.getWidth();
-        double pShotYMin = pShot.getY();
-        double pShotYMax = pShot.getY() + pShot.getHeight();
-        double pShotClosestPointToTheCircleX = ( Math.min( pShotXMax, Math.max(this.getCenterX(), pShotXMin)));
-        double pShotClosestPointToTheCircleY = ( Math.min( pShotYMax, Math.max(this.getCenterY(), pShotYMin)));
-        double pShotDistanceToCircleCenterSquared = ( this.getCenterX() - pShotClosestPointToTheCircleX )*( this.getCenterX() - pShotClosestPointToTheCircleX ) + 
-                                                    ( this.getCenterY() - pShotClosestPointToTheCircleY )*( this.getCenterY() - pShotClosestPointToTheCircleY ) ;
-
-        //check if closest point is less than radius of alien circle
-        if( pShotDistanceToCircleCenterSquared < radiusSquared ){
+        if( entity instanceof EntityKiller ){
             didCollide = true;
-            pShot.isToRemove = true;
-            //check if it wasn't oneShot
-            if( !this.isOneShot ) this.isOneShot = true;
-            else this.isToRemove = true;
+            isToRemove = true;
+        }
+        else{
+
+            //for aliens uses radius big as the max dimension
+
+            //calculate radius squared
+            double radius = Math.max( this.width, this.height)/2;
+            double radiusSquared = radius*radius;
+            //calculate closest point of entity to the alien circle
+            double entityXMin = entity.getX();
+            double entityXMax = entity.getX() + entity.getWidth();
+            double entityYMin = entity.getY();
+            double entityYMax = entity.getY() + entity.getHeight();
+            double entityClosestPointToTheCircleX = ( Math.min( entityXMax, Math.max(this.getCenterX(), entityXMin)));
+            double entityClosestPointToTheCircleY = ( Math.min( entityYMax, Math.max(this.getCenterY(), entityYMin)));
+            double entityDistanceToCircleCenterSquared = ( this.getCenterX() - entityClosestPointToTheCircleX )*( this.getCenterX() - entityClosestPointToTheCircleX ) + 
+                                                        ( this.getCenterY() - entityClosestPointToTheCircleY )*( this.getCenterY() - entityClosestPointToTheCircleY ) ;
+
+            //check if closest point is less than radius of alien circle
+            if( entityDistanceToCircleCenterSquared < radiusSquared ){
+                
+                didCollide = true;
+                entity.isToRemove = true;
+
+                //check if it wasn't oneShot
+                if( !this.isOneShot ) this.isOneShot = true;
+                else this.isToRemove = true;
+
+                //if collided with player always remove
+                if( entity instanceof Player ){
+                    this.isToRemove = true;
+                }
+            }
         }
 
         return didCollide;
-    }
-
-    //method for tests
-    public boolean checkCollisionWith( ){
-        if( x > 0 && x < SharedConstants.MODEL_SCREEN_WIDTH && y > 0 && y < SharedConstants.MODEL_SCREEN_HEIGHT ){
-            isToRemove = true;
-            return true;
-        }
-        else return false;
     }
 
     

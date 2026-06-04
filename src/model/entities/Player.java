@@ -1,6 +1,7 @@
 package model.entities;
 
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 import shared.SharedConstants;
 
@@ -24,6 +25,7 @@ public class Player extends Entity {
     
     private boolean isPlayerMovingRight; //utilizzate così per avere un movimento fluido
     private boolean isPlayerMovingLeft;
+    private int dyingFrameNumber;
 
 
     //------------------
@@ -33,6 +35,7 @@ public class Player extends Entity {
     public Player(){
         super( INIT_X, INIT_Y, Entities.PLAYER.getWidth(), Entities.PLAYER.getHeight(), INIT_SPEED, RotationDirection.U );
         entityName = Entities.PLAYER;
+        dyingFrameNumber = -1;
     }
 
 
@@ -41,14 +44,44 @@ public class Player extends Entity {
     //------------------------
 
     @Override
-    public void update( int frameNumber ){
+    public void update( int frameNumber, int secondsInState, GameState state ){
 
-        //update position
-        if(isPlayerMovingRight) this.x = ( this.x + this.speed );
-        if(isPlayerMovingLeft) this.x = ( this.x - this.speed );
+        //update position if playing
+        if( state != GameState.LIFE_LOST  ){
+            if(isPlayerMovingRight) this.x = ( this.x + this.speed );
+            if(isPlayerMovingLeft) this.x = ( this.x - this.speed );
+        }
 
         //fix if out of bounds
         fixCoordIfPlayerOutOfBounds();
+
+        //check if killed and start dying animation
+        if( isToRemove == true ){
+
+            //stop movement
+            isPlayerMovingLeft = false;
+            isPlayerMovingRight = false;
+
+            //set initial frameNumber
+            if( dyingFrameNumber == -1 ) dyingFrameNumber = frameNumber;
+            final int FRAMES_PER_SPRITE = 12;
+            //update sprites every n frames
+            if( ( frameNumber - dyingFrameNumber) % FRAMES_PER_SPRITE == 0 ) animationFrame ++;
+            //check for animation ending
+            if( animationFrame > 5 ){
+                animationFrame = 0;
+                dyingFrameNumber = -1;
+                isToRemove = false;
+                x = INIT_X;
+                y = INIT_Y;
+            }
+        }
+        //if state back to playing
+        if( state == GameState.PLAYING ){
+            isToRemove = false;
+            animationFrame = 1;
+        }
+
 
     }//end player update method
 

@@ -82,7 +82,9 @@ class InterfacePainter {
 
         //LIVES SPRITES
         if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 3 ) || gameState == GameState.PLAYING ||  gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
-            for( int i = 0; i < ( lives - 1 ) && ( i < 8 ); i++ ){
+            int livesToShow = lives;
+            if( gameState == GameState.LIFE_LOST ) livesToShow ++;
+            for( int i = 0; i < ( livesToShow - 1 ) && ( i < 8 ); i++ ){
                 final int pWidth = Entities.PLAYER.getWidth();
                 final int pHeight = Entities.PLAYER.getHeight();
                 final int margin = 2;

@@ -1,8 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import model.entities.Alien;
+import shared.Events;
+import shared.GameState;
 import shared.SharedConstants;
 
 
@@ -66,7 +69,7 @@ class AlienHandler {
     //PACKAGE-PROTECTED METHODS
     //--------------------------------
 
-    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber, final int secondsInState ){
+    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber, final int secondsInState, final GameState state, LinkedList<Events> eventsQueue  ){
 
         ArrayList<Alien> newAliens = new ArrayList<Alien>();
 
@@ -90,14 +93,22 @@ class AlienHandler {
         //--------------------------------
         //CHECK FOR ALL PATH COMPLETED
         //--------------------------------
+        
         if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
-        if( areAliensDiving && frameNumber == SharedConstants.FRAMES_PER_SECOND && secondsInState % 4 == 0 ){
-            int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
-            if( ! presentStageAliens.get( alienToDive ).isToRemove() ){
-                presentStageAliens.get( alienToDive ).setDiving();
+        if( areAliensDiving && frameNumber == SharedConstants.FRAMES_PER_SECOND && secondsInState % 4 == 0 && state == GameState.PLAYING ){
+
+            boolean didAlienDiveThisFrame = false;
+            while( ! didAlienDiveThisFrame ){
+                int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
+                if( ! presentStageAliens.get( alienToDive ).isToRemove() ){
+                    presentStageAliens.get( alienToDive ).setDiving();
+                    didAlienDiveThisFrame = true;
+                    eventsQueue.add( Events.ALIEN_DIVING );
+                }
             }
             
         }
+    
 
 
         //--------------------------------

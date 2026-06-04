@@ -202,11 +202,9 @@ public class SoundManager {
 
     //sound hardware warmup to fix first sound freeze
     private static void forceHardwareInitialization(File sampleFile) {
-
         try {
-
-            // open stream and line in the game thread
-            try (AudioInputStream ais = AudioSystem.getAudioInputStream( new File(START_PATH))) {
+            // open stream with random file
+            try (AudioInputStream ais = AudioSystem.getAudioInputStream(new File(START_PATH))) {
                 AudioFormat af = ais.getFormat();
                 DataLine.Info info = new DataLine.Info(Clip.class, af);
                 
@@ -214,14 +212,24 @@ public class SoundManager {
                     Clip warmupClip = (Clip) AudioSystem.getLine(info);
                     warmupClip.open(ais);
                     
-                    // Set clip volume to 0
+                    // set volume to 0
                     if (warmupClip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
-                        FloatControl gain = (FloatControl)warmupClip.getControl(FloatControl.Type.MASTER_GAIN);
+                        FloatControl gain = (FloatControl) warmupClip.getControl(FloatControl.Type.MASTER_GAIN);
                         gain.setValue(gain.getMinimum());
                     }
                     
-                    // start and stop to let the system import actual audio drivers.
+                    // start clip
                     warmupClip.start();
+                    
+                    // give time to native hardware to wake up and  load drivers.
+                    // just 50 milliseconds so that player cant feel them but audio warms ups
+                    try {
+                        Thread.sleep(50); 
+                    } catch (InterruptedException e) {
+                        Thread.currentThread().interrupt();
+                    }
+                    
+                    // clean clip
                     warmupClip.stop();
                     warmupClip.close();
                 }
@@ -229,5 +237,5 @@ public class SoundManager {
         } catch (Exception e) {
             System.err.println("Audio hardware warmup skipped or failed: " + e.getMessage());
         }
-    }// end forceHardwaareInitialization
+    }// end force hardware initialization
 }
