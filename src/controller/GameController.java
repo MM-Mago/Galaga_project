@@ -17,7 +17,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //------------------
 
     private static final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
-    private static final int MILLISECONDS_PER_FRAME = (int)(1000/FRAMES_PER_SECOND);
+    private static final int MILLISECONDS_PER_FRAME = (int)Math.round(1000.0/FRAMES_PER_SECOND);
     
 
     //------------------
@@ -76,7 +76,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     }
 
     private void updateFramenumber(){
-        if( this.frameNumber > FRAMES_PER_SECOND ) this.frameNumber = 0;
+        if( this.frameNumber >= FRAMES_PER_SECOND ) this.frameNumber = 0;
         this.frameNumber++;
     }
 

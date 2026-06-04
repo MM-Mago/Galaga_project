@@ -380,7 +380,7 @@ public class GameModel implements ModelForView, ModelForController{
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }
-            if( state == GameState.LIFE_LOST && secondsInState > 3 && ( alienHandler.areSomeAliensDiving() ) ){
+            if( state == GameState.LIFE_LOST && secondsInState > 4 ){
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }

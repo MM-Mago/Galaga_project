@@ -23,7 +23,7 @@ public class Goei extends Alien {
     //------------------
 
     public Goei(int speed, int stageSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
-        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, stageSpeed, path, divingPath, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
+        super( Entities.GOEI.getWidth(), Entities.GOEI.getHeight(), speed, stageSpeed, path, divingPath, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.GOEI;
     }
 

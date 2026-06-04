@@ -37,9 +37,10 @@ final class AlienFormationsLibrary {
     private final static String FORMATIONS_FILE_PATH = "src//model//formations.txt";
     private final static String DIVING_PATHS_FILE_PATH = "src//model//divingPaths.txt";
     private final static String CHARSET = "utf-8"; //o UTF-8
-
+    private static boolean isLibraryInitialized = false;
     private static ArrayList<StagePaths> stageList = new ArrayList<StagePaths>();
 
+    
 
     //--------------------------------
     //PACKAGE-PRIVATE VARIABLES
@@ -105,9 +106,12 @@ final class AlienFormationsLibrary {
     //initialize ALL formations
     static void initFormations(){
 
-            //------------------------
-            //INIT FILE READER
-            //------------------------
+        if( isLibraryInitialized ) return;
+        else isLibraryInitialized = true;
+
+        //------------------------
+        //INIT FILE READER
+        //------------------------
         
         BufferedReader formationsFileReader = null;
         BufferedReader divingPathsFileReader = null;

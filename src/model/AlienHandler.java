@@ -130,30 +130,14 @@ class AlienHandler {
         }//end if areAliensDiving
     
 
+        //-------------------------------------------------------
+        //CHECK FOR NEXT STAGE/FORMATION WHEN NOT IN LIFE_LOST
+        //-------------------------------------------------------
 
-        //--------------------------------
-        //CHECK FOR NEXT STAGE/FORMATION
-        //--------------------------------
+        if( state != GameState.LIFE_LOST ){
+            //case first formation
+            if( numFormation == 0 ){
 
-        //case first formation
-        if( numFormation == 0 ){
-
-            numFormation++;
-            if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
-                presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
-                newAliens = presentFormationAliens;
-                presentStageAliens.addAll(newAliens);
-            }
-        }
-        else if( isFormationCompleted() ){
-            if( isStageCompleted() ){
-
-                //stage and formation both completed
-                nextStage();
-            }
-            else{
-                
-                //only formation completed
                 numFormation++;
                 if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
                     presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
@@ -161,11 +145,24 @@ class AlienHandler {
                     presentStageAliens.addAll(newAliens);
                 }
             }
+            else if( isFormationCompleted() ){
+                if( isStageCompleted() ){
+
+                    //stage and formation both completed
+                    nextStage();
+                }
+                else{
+                    
+                    //only formation completed
+                    numFormation++;
+                    if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
+                        presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
+                        newAliens = presentFormationAliens;
+                        presentStageAliens.addAll(newAliens);
+                    }
+                }
+            }
         }
-
-
-
-
 
         return newAliens;
     }
@@ -216,7 +213,10 @@ class AlienHandler {
 
     boolean areSomeAliensDiving(){
         if( divingAliens.isEmpty() ) return false;
-        else return true;
+        for( Alien a: divingAliens ){ //used in case of game blocked for lost life
+            if( a.isDiving() ) return true;
+        }
+        return false;
     }
 
     boolean areAliensDiving(){ return areAliensDiving; }

@@ -48,7 +48,6 @@ public abstract class Alien extends Entity {
     //PRIVATE ALIEN VARIABLES
     //----------------------------
 
-    private final int DIVING_SPEED = 1;
     private int formationOffsetX;
     private int formationOffsetY;
     private int offsetXStartingDiving;
@@ -166,7 +165,7 @@ public abstract class Alien extends Entity {
 
             int presentSpeed = speed;
             if( pointsCounter > POINTS_AT_MAIN_SPEED ) presentSpeed = stageSpeed;
-            if( isDiving ) presentSpeed = ( speed-1 );
+            if( isDiving ) presentSpeed = ( /*speed-*/ 1 );
 
             while( ( pointsSkipped < presentSpeed ) ){
 
