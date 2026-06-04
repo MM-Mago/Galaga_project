@@ -99,24 +99,30 @@ class AlienHandler {
         //-----------------------------------------------
         
         if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
-        if( areAliensDiving && state == GameState.PLAYING ){ //do it every frame
+        if( areAliensDiving && state == GameState.PLAYING && ( ( frameNumber % ( SharedConstants.FRAMES_PER_SECOND / 4 ) ) == 0 ) ){ //do it 4 times per second
 
             int maxDivingAliens = 2;
             if( numStage > 6 ) maxDivingAliens = 3;
+            if( numStage > 10 ) maxDivingAliens = 4;
+            if( numStage > 14 ) maxDivingAliens = 5;
+            if( numStage > 18 ) maxDivingAliens = 6;
+
 
             //remove aliens wich stopped diving
             if( ! divingAliens.isEmpty() ){
                 divingAliens.removeIf(a -> ( !a.isDiving() || a.isToRemove() ) ); //lambda with sole argument Alien a
             }
 
-            //add aliens to dive if there are available aliens
-            while( divingAliens.size() < maxDivingAliens && ! areAllAliensDiving() ){
+            //add aliens to dive if there are available aliens, just 1
+            boolean didAlienDive = false;
+            while( divingAliens.size() < maxDivingAliens && ! areAllAliensDiving() && !didAlienDive ){
 
                 int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
                 if( ( ! presentStageAliens.get( alienToDive ).isToRemove() && ! presentStageAliens.get( alienToDive ).isDiving() ) ){
                     presentStageAliens.get( alienToDive ).setDiving();
                     eventsQueue.add( Events.ALIEN_DIVING );
                     divingAliens.add( presentStageAliens.get( alienToDive ));
+                    didAlienDive = true;
                 }
 
             }// end diving cycle
@@ -206,6 +212,11 @@ class AlienHandler {
             if( ! a.isDiving() && ! a.isToRemove() ) return false;
         }
         return true;
+    }
+
+    boolean areSomeAliensDiving(){
+        if( divingAliens.isEmpty() ) return false;
+        else return true;
     }
 
     boolean areAliensDiving(){ return areAliensDiving; }

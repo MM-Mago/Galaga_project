@@ -14,9 +14,9 @@ import shared.Entities;
 import shared.RotationDirection;
 
 
-    //------------------------------------------------------------------------------------------------
-    // THIS CLASS IS ONLY USED TO GET ANY ENTITY SPRITE GIVEN NAME AND ROTATIONDIRECTION
-    //------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+// THIS CLASS IS ONLY USED TO GET ANY ENTITY SPRITE GIVEN NAME AND ROTATIONDIRECTION
+//------------------------------------------------------------------------------------------------
 
 // EVERYTHING PACKAGE-PROTECTED OR PRIVATE
 class SpriteLibrary {

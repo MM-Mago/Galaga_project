@@ -16,9 +16,9 @@ import javax.sound.sampled.FloatControl;
 import shared.Events;
 
 
-    //------------------------------------------------------------------------------------------------
-    // THIS CLASS IS ONLY USED TO PLAY SOUNDS
-    //------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+// THIS CLASS IS ONLY USED TO PLAY AND STORE SOUNDS
+//------------------------------------------------------------------------------------------------
 
 // EVERYTHING PACKAGE-PROTECTED OR PRIVATE
 public class SoundManager {
@@ -103,6 +103,7 @@ public class SoundManager {
                         break;
                     case ALIEN_DIVING:
                         soundFile = new File(DIVE_PATH);
+                        tempClipPerArray = 1;
                         break;
                     case LIFE_LOST:
                         soundFile = new File(EXPLOSION_PATH);
@@ -184,11 +185,17 @@ public class SoundManager {
         }
     }
 
+    
+    //------------------------------------
+    // PRIVATE STATIC METHODS
+    //------------------------------------
+
     //audioPooling method
     private static void playSoundFromClipArray( Clip[] clipArray ){
 
+    
         //search for free clip
-        for( Clip c: clipArray ){
+        for( Clip c: clipArray ){  
 
             //free clip found
             if( ! c.isRunning() ){
@@ -201,6 +208,7 @@ public class SoundManager {
 
         //free clip not found
         clipArray[0].stop();
+        clipArray[0].flush(); //necessary to fix sometimesNotPlaying bug
         clipArray[0].setFramePosition(0);
         clipArray[0].start();
 

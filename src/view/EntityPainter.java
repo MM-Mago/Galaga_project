@@ -51,7 +51,7 @@ class EntityPainter {
             switch( entityInfo.entity() ) {
                 
                 case Entities.PLAYER:
-                    if( gameState == GameState.PLAYING || gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE || ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 5 ) ){
+                    if( gameState == GameState.PLAYING || gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE || ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 5 ) || gameState == GameState.GAME_OVER ){
                         paintEntity(g, entityInfo);
                     }
                     break;

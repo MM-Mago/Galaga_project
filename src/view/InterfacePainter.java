@@ -217,7 +217,7 @@ class InterfacePainter {
         }  
 
         //MEDALS
-        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) ){
+        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) || gameState == GameState.GAME_OVER ){
             final int margin = 1;
             paintMedals(g, model.getNumStage(), UNSCALED_MAX_WIDTH - margin, UNSCALED_MAX_HEIGHT );
         }
