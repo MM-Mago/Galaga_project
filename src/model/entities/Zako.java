@@ -22,8 +22,8 @@ public class Zako extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public Zako(int speed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
-        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, path, divingPath, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
+    public Zako(int speed, int stageSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, stageSpeed, path, divingPath, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.ZAKO;
     }
 
@@ -31,8 +31,15 @@ public class Zako extends Alien {
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
         Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
-        return new Zako(this.speed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+        return new Zako(this.speed, this.stageSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }  
+
+    @Override
+    public Alien copyAlienWithNewSpeed( int newSpeed, int newStageSpeed) {
+        Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
+        Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
+        return new Zako( newSpeed, newStageSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+    }
 
     @Override
     public int getScoreValue() {

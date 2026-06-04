@@ -49,7 +49,7 @@ final class AlienFormationsLibrary {
     static final int DEFINED_FORMATIONS_PER_STAGE_IN_FILE = 5;
     static final int DEFINED_ALIENS_PER_FORMATION_IN_FILE = 8;
 
-    static final int TEST_SPEED = 2;
+    static final int MAIN_SPEED = 2;
 
 
     //--------------------------------
@@ -166,11 +166,17 @@ final class AlienFormationsLibrary {
     //return null in case of invalid numbers
     static ArrayList<Alien> getFormationCopy( int numStage, int numFormation ){
 
+
         ArrayList<Alien> formationCopy = new ArrayList<Alien>();
 
         //check for invalid numbers
         if( ! isValidFormation(numStage, numFormation)){ throw new IllegalStateException( "check for valid numbers first" ); };
 
+        int newStageSpeed = MAIN_SPEED;
+        int newSpeed = MAIN_SPEED;
+        if( numStage > 2 && ( ! isStageChallenging(numStage) ) ) { newStageSpeed = 3; }
+        if( numStage > 6 && ( ! isStageChallenging(numStage) ) ) { newSpeed = 3; newStageSpeed = 4; }
+        if( numStage > 6 && ( isStageChallenging(numStage) ) ) { newSpeed = 3; newStageSpeed = 3; }
 
 
         //all num start from 1
@@ -189,7 +195,7 @@ final class AlienFormationsLibrary {
         numFormation--;
 
         for( Alien a: stageList.get(numStage).formationsList().get(numFormation).alienList()  ){
-            formationCopy.add( a.copyAlien() );
+            formationCopy.add( a.copyAlienWithNewSpeed( newSpeed, newStageSpeed ) );
         }
 
         return formationCopy;
@@ -500,15 +506,15 @@ final class AlienFormationsLibrary {
                 PointOfPath formationPoint = new PointOfPath( finalX, finalY );
                 switch ( type ) {
                     case GOEI:
-                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
+                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( MAIN_SPEED, MAIN_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
                         break;
 
                     case ZAKO:
-                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
+                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( MAIN_SPEED, MAIN_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
                         break;
 
                     case BOSS_GALAGA:
-                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
+                        stageListToFill.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( MAIN_SPEED, MAIN_SPEED, pointsList, divingPathPointsList, points_to_calculate_with_offset, diving_points_to_calculate_with_offset, formationPoint, isStageChallenging(nStage) ) );
                         break;
 
                     default:

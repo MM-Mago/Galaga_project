@@ -23,12 +23,14 @@ public abstract class Alien extends Entity {
     protected static final PointOfPath CENTER_POINT_FOR_OFFSET = new PointOfPath( 112 - ( Entities.BOSS_GALAGA.getWidth()/2 ), 40 );
     protected static final int MAX_DISTANCE_FROM_CENTERX = 50;
     protected static final int MAX_DISTANCE_FROM_CENTERY = 100;
+    protected static final int POINTS_AT_MAIN_SPEED = 150;
 
 
     //----------------------------
     //PROTECTED ALIEN VARIABLES
     //----------------------------
 
+    protected int stageSpeed;
     protected Queue<PointOfPath> path;
     protected Queue<PointOfPath> divingPath;
     protected boolean isOneShot; //one shot to kill
@@ -61,7 +63,7 @@ public abstract class Alien extends Entity {
     //PROTECTED COSTRUCTOR
     //----------------------
     
-    protected Alien(int width, int height, int speed/*points skipped per frame*/, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET , PointOfPath formationPoint, boolean isOfChallengingStage ) {
+    protected Alien(int width, int height, int speed/*points skipped per frame*/, int newStageSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET , PointOfPath formationPoint, boolean isOfChallengingStage ) {
         super( INIT_X, INIT_Y, width, height, speed, direction );
         this.path = path;
         pathArrayList = new ArrayList<PointOfPath>(path);
@@ -82,6 +84,7 @@ public abstract class Alien extends Entity {
         formationOffsetY = 0;
         offsetXStartingDiving = 0;
         offsetYStartingDiving = 0;
+        stageSpeed = newStageSpeed;
         
     }// end costructor
 
@@ -91,6 +94,7 @@ public abstract class Alien extends Entity {
     //--------------------------------
 
     public abstract Alien copyAlien();//alien copy method to implement in concrete class
+    public abstract Alien copyAlienWithNewSpeed( int newSpeed, int newStageSpeed );//alien copy method to implement in concrete class 
     public abstract int getScoreValue();// get SCORE_VALUE
 
 
@@ -161,7 +165,9 @@ public abstract class Alien extends Entity {
             int pointsSkipped = 0;
 
             int presentSpeed = speed;
-            if( isDiving ) presentSpeed = DIVING_SPEED;
+            if( pointsCounter > POINTS_AT_MAIN_SPEED ) presentSpeed = stageSpeed;
+            if( isDiving ) presentSpeed = ( speed-1 );
+
             while( ( pointsSkipped < presentSpeed ) ){
 
                 PointOfPath nextPoint = path.poll();

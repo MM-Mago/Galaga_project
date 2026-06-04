@@ -64,10 +64,10 @@ public class SoundManager {
             //populate map for audioPooling
             clipArrayMap = new HashMap<Events, Clip[]>();
 
+            int tempClipPerArray = CLIP_PER_ARRAY;
 
             for( Events e : Events.values() ){
                 
-                Clip[] clipArray = new Clip[CLIP_PER_ARRAY];
 
                 File soundFile = null;
 
@@ -86,15 +86,18 @@ public class SoundManager {
                         break;
                     case CHALLENGING_STAGE:
                         soundFile = new File(CHALLENGING_STAGE_START_PATH);
+                        tempClipPerArray = 1;
                         break;
                     case PLAYER_SHOOTING:
                         soundFile = new File(FIRE_PATH);
                         break;
                     case COIN_SCREEN_OPENED:
                         soundFile = new File(CREDIT_PATH);
+                        tempClipPerArray = 1;
                         break;
                     case GAME_STARTED:
                         soundFile = new File(START_PATH);
+                        tempClipPerArray = 1;
                         break;
                     case BOSS_GALAGA_NOW_ONESHOT:
                         soundFile = new File(BOSS_DAMAGE_PATH);
@@ -104,16 +107,19 @@ public class SoundManager {
                         break;
                     case LIFE_LOST:
                         soundFile = new File(EXPLOSION_PATH);
+                        tempClipPerArray = 1;
                         break;
                     default:
                         break;
                 }// end switch
 
+                Clip[] clipArray = new Clip[tempClipPerArray];
+
                 //continue in case of not used events
                 if (soundFile == null || ( ! soundFile.exists() ) ) { continue; }
 
                 //create n clips
-                for( int i = 0; i < CLIP_PER_ARRAY; i ++ ){
+                for( int i = 0; i < tempClipPerArray; i ++ ){
 
                     // 1. Init clip
                     Clip audioClip = null;
@@ -191,6 +197,7 @@ public class SoundManager {
                 c.start();
                 return;
             }
+            
         }
 
         //free clip not found
