@@ -30,7 +30,7 @@ public class SoundManager {
 
     private static Map<Events, Clip[]> clipArrayMap;
 
-    private static final int CLIP_PER_ARRAY = 10;
+    private static final int CLIP_PER_ARRAY = 5;
 
     private static final String BOSS_DAMAGE_PATH = "src//view//galaga_wov//boss_damage.wav";
     private static final String BOSS_DESTROY_PATH = "src//view//galaga_wov//boss_destroy.wav";
@@ -64,10 +64,9 @@ public class SoundManager {
             //populate map for audioPooling
             clipArrayMap = new HashMap<Events, Clip[]>();
 
-            int tempClipPerArray = CLIP_PER_ARRAY;
-
             for( Events e : Events.values() ){
-                
+
+                int tempClipPerArray = CLIP_PER_ARRAY;
 
                 File soundFile = null;
 

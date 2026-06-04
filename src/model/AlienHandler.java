@@ -35,6 +35,7 @@ class AlienHandler {
     private static final int PIXELS_OFFSET_PER_SECOND = 15;
 
     private boolean areAliensDiving;
+    private ArrayList<Alien> divingAliens;
 
     //--------------------------------
     //PUBLIC COSTRUCTOR
@@ -49,6 +50,7 @@ class AlienHandler {
         formationOffset = 0;
         isFormationOffsetGrowing = true;
         areAliensDiving = false;
+        divingAliens = new ArrayList<Alien>();
     }
 
     
@@ -62,6 +64,7 @@ class AlienHandler {
         presentStageAliens = new ArrayList<Alien>();
         presentFormationAliens = new ArrayList<Alien>();
         areAliensDiving = false;
+        divingAliens.clear();
     }
 
 
@@ -90,24 +93,35 @@ class AlienHandler {
             a.updateOffset( formationOffset );
         }
 
-        //--------------------------------
-        //CHECK FOR ALL PATH COMPLETED
-        //--------------------------------
+
+        //-----------------------------------------------
+        //CHECK FOR ALL PATH COMPLETED TO START DIVING
+        //-----------------------------------------------
         
         if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
-        if( areAliensDiving && frameNumber == SharedConstants.FRAMES_PER_SECOND && secondsInState % 4 == 0 && state == GameState.PLAYING ){
+        if( areAliensDiving && state == GameState.PLAYING ){ //do it every frame
 
-            boolean didAlienDiveThisFrame = false;
-            while( ! didAlienDiveThisFrame ){
-                int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
-                if( ! presentStageAliens.get( alienToDive ).isToRemove() ){
-                    presentStageAliens.get( alienToDive ).setDiving();
-                    didAlienDiveThisFrame = true;
-                    eventsQueue.add( Events.ALIEN_DIVING );
-                }
+            int maxDivingAliens = 2;
+            if( numStage > 6 ) maxDivingAliens = 3;
+
+            //remove aliens wich stopped diving
+            if( ! divingAliens.isEmpty() ){
+                divingAliens.removeIf(a -> ( !a.isDiving() || a.isToRemove() ) ); //lambda with sole argument Alien a
             }
-            
-        }
+
+            //add aliens to dive if there are available aliens
+            while( divingAliens.size() < maxDivingAliens && ! areAllAliensDiving() ){
+
+                int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
+                if( ( ! presentStageAliens.get( alienToDive ).isToRemove() && ! presentStageAliens.get( alienToDive ).isDiving() ) ){
+                    presentStageAliens.get( alienToDive ).setDiving();
+                    eventsQueue.add( Events.ALIEN_DIVING );
+                    divingAliens.add( presentStageAliens.get( alienToDive ));
+                }
+
+            }// end diving cycle
+
+        }//end if areAliensDiving
     
 
 
@@ -185,6 +199,13 @@ class AlienHandler {
             if ( !( a.isPathEmpty() || a.isToRemove() ) )  temp = false;
             }
         return temp;
+    }
+
+    boolean areAllAliensDiving(){
+        for( Alien a: presentStageAliens ){
+            if( ! a.isDiving() && ! a.isToRemove() ) return false;
+        }
+        return true;
     }
 
     boolean areAliensDiving(){ return areAliensDiving; }
