@@ -173,9 +173,7 @@ public class GameModel implements ModelForView, ModelForController{
         //counters
         activePlayerShotsCount = 0;
         numStage = 1;
-        frameNumber = 0;
         secondsInState = 0;
-        coins = 0;
         lives = 3;
         score = 0;
 
