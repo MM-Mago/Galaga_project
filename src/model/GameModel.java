@@ -227,6 +227,14 @@ public class GameModel implements ModelForView, ModelForController{
         for(Alien a: aliensList){
             if( ! a.isToRemove() ) if( a.checkCollisionWith(player) ){
                 killPlayer();
+                return; // exit method in case of player hit
+            }
+        }
+
+        for(AlienShot aShot: alienShotsList ){
+            if( ! aShot.isToRemove() ) if( aShot.checkCollisionWith(player) ){
+                killPlayer();
+                return; // exit method in case of player hit
             }
         }
 
@@ -350,7 +358,19 @@ public class GameModel implements ModelForView, ModelForController{
                 return true; 
             }); 
 
+
+            //--------------------------------------
+            //MAKE ALIENS SHOOT
+            //--------------------------------------
             
+            //only at 2 points of diving path
+            for( Alien a: aliensList ){
+                if( a.isDiving() && ( ! a.isOfChallengingStage() ) && ( a.getPointOfPathCounter() == 25 || a.getPointOfPathCounter() == 35 ) ){
+                    addEntity( new AlienShot( a, player ) );
+                }
+            }
+
+
             //--------------------------------------
             //CHECK IF STAGE CHANGED
             //--------------------------------------
@@ -405,6 +425,7 @@ public class GameModel implements ModelForView, ModelForController{
             //--------------------------------------
             //CHECK FOR GAMEOVER
             //--------------------------------------
+
             if( lives == 0 && state != GameState.GAME_OVER ){
                 state = GameState.GAME_OVER;
                 secondsInState = 0;

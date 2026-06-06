@@ -249,8 +249,9 @@ class SpriteLibrary {
 
         BufferedImage playerShot = spritesWholeImage.getSubimage( 313, 123, 3, 8 );
         spritesMap.put( Entities.PLAYER_SHOT.name() + "_" + "U" + "_" + 1 , playerShot);
-        BufferedImage enemyShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
-        spritesMap.put( Entities.ENEMY_SHOT.name() + "_" + "D" + "_" + 1 , enemyShot );
+        BufferedImage alienShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
+        spritesMap.put( Entities.ALIEN_SHOT.name() + "_" + "D" + "_" + 1 , alienShot );
+        
 
 
         //GET MEDALS
