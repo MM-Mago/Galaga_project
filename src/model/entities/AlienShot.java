@@ -14,7 +14,7 @@ public class AlienShot extends Entity {
 
     private static final int BOUNDS_MARGIN = 10;
     private static final int DY = 2;
-    private static final double MAX_DX = 1.5;
+    private static final double MAX_DX = 1.3;
 
 
     //-------------------------------------------
