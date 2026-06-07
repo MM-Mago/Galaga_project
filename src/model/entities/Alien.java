@@ -179,13 +179,13 @@ public abstract class Alien extends Entity {
                 if( isDiving ){
                     dx = offsetXStartingDiving;
                     dy = offsetYStartingDiving;
-                    if( path.size() <= DIVING_POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
+                    if( path.size() <= DIVING_POINTS_TO_CALCULATE_WITH_OFFSET && ( ! isOfChallengingStage ) ){
                         dx = offsetXStartingDiving + (int)( (double)(formationOffsetX - offsetXStartingDiving ) / DIVING_POINTS_TO_CALCULATE_WITH_OFFSET * ( DIVING_POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                         dy = offsetYStartingDiving + (int)( (double)(formationOffsetY - offsetYStartingDiving ) / DIVING_POINTS_TO_CALCULATE_WITH_OFFSET * ( DIVING_POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                     }
                 }
                 else {
-                    if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && (formationOffsetX != 0) && ( ! isOfChallengingStage ) ){
+                    if( path.size() <= POINTS_TO_CALCULATE_WITH_OFFSET && ( ! isOfChallengingStage ) ){
                         dx = (int)( (double)formationOffsetX / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                         dy = (int)( (double)formationOffsetY / POINTS_TO_CALCULATE_WITH_OFFSET * ( POINTS_TO_CALCULATE_WITH_OFFSET - path.size() ) );
                     }
