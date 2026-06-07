@@ -30,7 +30,7 @@ public abstract class Alien extends Entity {
     //PROTECTED ALIEN VARIABLES
     //----------------------------
 
-    protected int stageSpeed;
+    protected int lateSpeed;
     protected Queue<PointOfPath> path;
     protected Queue<PointOfPath> divingPath;
     protected boolean isOneShot; //one shot to kill
@@ -62,7 +62,7 @@ public abstract class Alien extends Entity {
     //PROTECTED COSTRUCTOR
     //----------------------
     
-    protected Alien(int width, int height, int speed/*points skipped per frame*/, int newStageSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET , PointOfPath formationPoint, boolean isOfChallengingStage ) {
+    protected Alien(int width, int height, int speed/*points skipped per frame*/, int newLateSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, boolean isOneShot, RotationDirection direction, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET , PointOfPath formationPoint, boolean isOfChallengingStage ) {
         super( INIT_X, INIT_Y, width, height, speed, direction );
         this.path = path;
         pathArrayList = new ArrayList<PointOfPath>(path);
@@ -83,7 +83,7 @@ public abstract class Alien extends Entity {
         formationOffsetY = 0;
         offsetXStartingDiving = 0;
         offsetYStartingDiving = 0;
-        stageSpeed = newStageSpeed;
+        lateSpeed = newLateSpeed;
         
     }// end costructor
 
@@ -93,7 +93,7 @@ public abstract class Alien extends Entity {
     //--------------------------------
 
     public abstract Alien copyAlien();//alien copy method to implement in concrete class
-    public abstract Alien copyAlienWithNewSpeed( int newSpeed, int newStageSpeed );//alien copy method to implement in concrete class 
+    public abstract Alien copyAlienWithNewSpeed( int newSpeed, int newLateSpeed );//alien copy method to implement in concrete class 
     public abstract int getScoreValue();// get SCORE_VALUE
 
 
@@ -164,7 +164,7 @@ public abstract class Alien extends Entity {
             int pointsSkipped = 0;
 
             int presentSpeed = speed;
-            if( pointsCounter > POINTS_AT_MAIN_SPEED ) presentSpeed = stageSpeed;
+            if( pointsCounter > POINTS_AT_MAIN_SPEED ) presentSpeed = lateSpeed;
             if( isDiving ) presentSpeed = ( /*speed-*/ 1 );
 
             while( ( pointsSkipped < presentSpeed ) ){

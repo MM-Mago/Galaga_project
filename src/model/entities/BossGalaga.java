@@ -23,8 +23,8 @@ public class BossGalaga extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public BossGalaga(int speed, int stageSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
-        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, stageSpeed, path, divingPath, false, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
+    public BossGalaga(int speed, int lateSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( Entities.BOSS_GALAGA.getWidth(), Entities.BOSS_GALAGA.getHeight(), speed, lateSpeed, path, divingPath, false, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.BOSS_GALAGA;
     }
 
@@ -32,14 +32,14 @@ public class BossGalaga extends Alien {
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
         Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
-        return new BossGalaga(this.speed, this.stageSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+        return new BossGalaga(this.speed, this.lateSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }
 
     @Override
-    public Alien copyAlienWithNewSpeed( int newSpeed, int newStageSpeed ) {
+    public Alien copyAlienWithNewSpeed( int newSpeed, int newlateSpeed ) {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
         Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
-        return new BossGalaga( newSpeed, newStageSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+        return new BossGalaga( newSpeed, newlateSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }
 
     @Override

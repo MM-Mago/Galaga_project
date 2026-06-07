@@ -176,11 +176,11 @@ final class AlienFormationsLibrary {
         //check for invalid numbers
         if( ! isValidFormation(numStage, numFormation)){ throw new IllegalStateException( "check for valid numbers first" ); };
 
-        int newStageSpeed = MAIN_SPEED;
+        int newLateSpeet = MAIN_SPEED;
         int newSpeed = MAIN_SPEED;
-        if( numStage > 2 && ( ! isStageChallenging(numStage) ) ) { newStageSpeed = 3; }
-        if( numStage > 6 && ( ! isStageChallenging(numStage) ) ) { newSpeed = 3; newStageSpeed = 4; }
-        if( numStage > 6 && ( isStageChallenging(numStage) ) ) { newSpeed = 3; newStageSpeed = 3; }
+        if( numStage > 2 && ( ! isStageChallenging(numStage) ) ) { newLateSpeet = 3; }
+        if( numStage > 6 && ( ! isStageChallenging(numStage) ) ) { newSpeed = 3; newLateSpeet = 4; }
+        if( numStage > 6 && ( isStageChallenging(numStage) ) ) { newSpeed = 3; newLateSpeet = 3; }
 
 
         //all num start from 1
@@ -199,7 +199,7 @@ final class AlienFormationsLibrary {
         numFormation--;
 
         for( Alien a: stageList.get(numStage).formationsList().get(numFormation).alienList()  ){
-            formationCopy.add( a.copyAlienWithNewSpeed( newSpeed, newStageSpeed ) );
+            formationCopy.add( a.copyAlienWithNewSpeed( newSpeed, newLateSpeet ) );
         }
 
         return formationCopy;
