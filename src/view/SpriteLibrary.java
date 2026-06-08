@@ -32,12 +32,16 @@ class SpriteLibrary {
     private static final String NUMBERS_RELATIVE_PATH = "src//view//galaga_png//numbers.png";
     private static final String LOADING_SCREEN_SPRITES_RELATIVE_PATH = "src//view//galaga_png//loading_screen_sprites.png";
     private static final String CHALLENGING_STAGE_RELATIVE_PATH = "src//view//galaga_png//challenging_stage.png";
+    private static final String READY_TEXT_RELATIVE_PATH = "src//view//galaga_png//ready_text.png";
+    private static final String GAME_OVER_TEXT_RELATIVE_PATH = "src//view//galaga_png//game_over_text.png";
     private static  BufferedImage spritesWholeImage;
     private static BufferedImage initialScreenSpritesWholeImage;
     private static BufferedImage coinInsertedScreenWholeImage;
     private static BufferedImage numbersWholeImage;
     private static BufferedImage loadingScreenSpritesWholeImage;
     private static BufferedImage challengingStageSpritesWholeImage;
+    private static BufferedImage startTextImage;
+    private static BufferedImage gameOverTextImage;
     private static Map<String, BufferedImage> spritesMap = new HashMap<>(); //key: ENTITY_NAME_DIRECTION, Value: Sprite immage
 
     private static final int INITIAL_SCREEN_SPRITES_MAX_WIDTH = 222;
@@ -113,6 +117,15 @@ class SpriteLibrary {
         try {
             challengingStageSpritesWholeImage = ImageIO.read(new File(CHALLENGING_STAGE_RELATIVE_PATH) );
         } catch (IOException e) { e.printStackTrace(); }
+        
+        try {
+            startTextImage = ImageIO.read(new File(READY_TEXT_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
+        try {
+            gameOverTextImage = ImageIO.read(new File(GAME_OVER_TEXT_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
 
         //-------------------------
         // POPULATE SPRITESMAP
@@ -320,6 +333,14 @@ class SpriteLibrary {
             }
         }// end get numbers
 
+        //READY TEXT
+
+        spritesMap.put( "READY", startTextImage );
+
+        //GAME OVER TEXT
+
+        spritesMap.put( "GAME_OVER", gameOverTextImage );
+
     }// end init sprites
 
     //used only for sprites in sprites.png
@@ -336,7 +357,7 @@ class SpriteLibrary {
         return spritesMap.get( name + "_" + value );
     }
 
-    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png
+    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png, start_text.png
     static BufferedImage getSprite( String name ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
         return spritesMap.get( name );

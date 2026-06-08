@@ -47,7 +47,7 @@ public class Player extends Entity {
     public void update( int frameNumber, int secondsInState, GameState state ){
 
         //update position if playing
-        if( state != GameState.LIFE_LOST  ){
+        if( state != GameState.LIFE_LOST || secondsInState > 3  ){
             if(isPlayerMovingRight) this.x = ( this.x + this.speed );
             if(isPlayerMovingLeft) this.x = ( this.x - this.speed );
         }
@@ -77,7 +77,7 @@ public class Player extends Entity {
             }
         }
         //if state back to playing
-        if( state == GameState.PLAYING ){
+        if( state == GameState.LIFE_LOST && secondsInState > 3 ){
             isToRemove = false;
             animationFrame = 1;
         }

@@ -305,11 +305,11 @@ public class GameModel implements ModelForView, ModelForController{
             }
 
 
-            //--------------------------------------
-            //DO ONLY IF PLAYING OR LIFE_LOST
-            //--------------------------------------
+            //------------------------------------------------
+            //DO ONLY IF PLAYING OR LIFE_LOST OR GAME_OVER
+            //------------------------------------------------
 
-            if( state == GameState.PLAYING || state == GameState.LIFE_LOST ){
+            if( state == GameState.PLAYING || state == GameState.LIFE_LOST || state == GameState.GAME_OVER ){
 
 
                 //get new aliens and add them
@@ -404,7 +404,7 @@ public class GameModel implements ModelForView, ModelForController{
                 state = GameState.PLAYING;
                 secondsInState = 0;
             }
-            if( state == GameState.GAME_OVER && secondsInState > 5 ){
+            if( state == GameState.GAME_OVER && secondsInState > 6 ){
                 startNewGame();
             }
 

@@ -193,7 +193,7 @@ class InterfacePainter {
             }
             else{
                 tempOffsetY = -2;
-               g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
                 paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
             }
         }
@@ -220,6 +220,20 @@ class InterfacePainter {
         if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) || gameState == GameState.GAME_OVER ){
             final int margin = 1;
             paintMedals(g, model.getNumStage(), UNSCALED_MAX_WIDTH - margin, UNSCALED_MAX_HEIGHT );
+        }
+
+        //READY TEXT
+        if( gameState == GameState.LIFE_LOST && secondsInState > 1 ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -25;
+            g.drawImage(SpriteLibrary.getSprite( "READY" ), ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+        }
+
+        //GAME OVER TEXT
+        if( gameState == GameState.GAME_OVER && secondsInState > 1 ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -35;
+            g.drawImage(SpriteLibrary.getSprite( "GAME_OVER" ), ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
 
         g.setColor(oldColor);

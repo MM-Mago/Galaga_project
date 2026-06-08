@@ -130,11 +130,11 @@ class AlienHandler {
         }//end if areAliensDiving
     
 
-        //-------------------------------------------------------
-        //CHECK FOR NEXT STAGE/FORMATION WHEN NOT IN LIFE_LOST
-        //-------------------------------------------------------
+        //----------------------------------------------------------------------
+        //CHECK FOR NEXT STAGE/FORMATION WHEN NOT IN LIFE_LOST OR GAME_OVER
+        //----------------------------------------------------------------------
 
-        if( state != GameState.LIFE_LOST ){
+        if( state != GameState.LIFE_LOST && state != GameState.GAME_OVER ){
             //case first formation
             if( numFormation == 0 ){
 

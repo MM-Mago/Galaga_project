@@ -227,6 +227,7 @@ public abstract class Alien extends Entity {
     
     public Queue<PointOfPath> getPathCopy(){ return new LinkedList<PointOfPath>( path ); }
     public boolean isAttacking(){ return isAttacking; }
+    public boolean isReachingFormation(){ return isAttacking && isDiving; }
     public boolean isDiving(){ return isDiving; }
     public boolean isPathEmpty(){ return path.isEmpty(); }
     public boolean isOneShot(){ return isOneShot; }

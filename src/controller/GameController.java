@@ -89,7 +89,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public void cmdMovingLeft( boolean active ){
         GameState state = model.getState();
         switch( state ) {
-            case PLAYING, LOADING_NOT_FIRST_STAGE:
+            case PLAYING, LOADING_NOT_FIRST_STAGE, LIFE_LOST:
                 model.setPlayerMovingLeft(active);
                 break;
 
@@ -102,7 +102,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public void cmdMovingRight( boolean active){
         GameState state = model.getState();
         switch( state )  {
-            case PLAYING, LOADING_NOT_FIRST_STAGE:
+            case PLAYING, LOADING_NOT_FIRST_STAGE, LIFE_LOST:
                 model.setPlayerMovingRight(active);
                 break;
 
