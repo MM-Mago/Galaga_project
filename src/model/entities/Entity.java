@@ -1,6 +1,7 @@
 package model.entities;
 
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 
 public abstract class Entity {
@@ -39,7 +40,7 @@ public abstract class Entity {
     //ABSTRACT PUBLIC ENTITY METHODS
     //----------------------------------
 
-    public abstract void update( int frameNumber );
+    public abstract void update( int frameNumber, int secondsInState, GameState state );
 
 
     //not used cause incapsulated in entity 

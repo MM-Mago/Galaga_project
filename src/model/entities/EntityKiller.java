@@ -1,26 +1,18 @@
 package model.entities;
 
+import shared.GameState;
 import shared.SharedConstants;
 
 public class EntityKiller extends Entity {
 
-    private EntityKiller entityKiller;
+    final static int margin = 0;
 
-    private EntityKiller() {
-        super(0, 0, SharedConstants.MODEL_SCREEN_WIDTH, SharedConstants.MODEL_SCREEN_HEIGHT, 0, null );
-    }
-
-    public void initEntityKiller(){
-        this.entityKiller = new EntityKiller();
-    }
-
-    public EntityKiller getEntityKiller(){ 
-        if( entityKiller == null ) throw new IllegalStateException( "first init EntityKiller" );
-        return this.entityKiller; 
+    public EntityKiller() {
+        super(-margin, -margin, SharedConstants.MODEL_SCREEN_WIDTH + margin, SharedConstants.MODEL_SCREEN_HEIGHT + margin, 0, null );
     }
 
     @Override
-    public void update(int frameNumber) {
+    public void update(int frameNumber, int secondsInState, GameState state ) {
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
     

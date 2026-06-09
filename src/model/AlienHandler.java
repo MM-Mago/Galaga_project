@@ -1,8 +1,11 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import model.entities.Alien;
+import shared.Events;
+import shared.GameState;
 import shared.SharedConstants;
 
 
@@ -31,6 +34,9 @@ class AlienHandler {
     private static final int MAX_FORMATION_OFFSET = 30;
     private static final int PIXELS_OFFSET_PER_SECOND = 15;
 
+    private boolean areAliensDiving;
+    private ArrayList<Alien> divingAliens;
+
     //--------------------------------
     //PUBLIC COSTRUCTOR
     //--------------------------------
@@ -43,6 +49,8 @@ class AlienHandler {
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;
+        areAliensDiving = false;
+        divingAliens = new ArrayList<Alien>();
     }
 
     
@@ -55,6 +63,8 @@ class AlienHandler {
         numFormation = 0;
         presentStageAliens = new ArrayList<Alien>();
         presentFormationAliens = new ArrayList<Alien>();
+        areAliensDiving = false;
+        divingAliens.clear();
     }
 
 
@@ -62,7 +72,7 @@ class AlienHandler {
     //PACKAGE-PROTECTED METHODS
     //--------------------------------
 
-    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber ){
+    ArrayList<Alien> updateHandlerAndGetNewAliens( final int frameNumber, final int secondsInState, final GameState state, LinkedList<Events> eventsQueue  ){
 
         ArrayList<Alien> newAliens = new ArrayList<Alien>();
 
@@ -84,32 +94,72 @@ class AlienHandler {
         }
 
 
-
-        //case first formation
-        if( numFormation == 0 ){
-
-            numFormation++;
-            if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
-                presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
-                newAliens = presentFormationAliens;
-                presentStageAliens.addAll(newAliens);
-            }
-        }
+        //-----------------------------------------------
+        //CHECK FOR ALL PATH COMPLETED TO START DIVING
+        //-----------------------------------------------
         
-        else if( isFormationCompleted() ){
-            if( isStageCompleted() ){
+        if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
+        if( areAliensDiving && state == GameState.PLAYING && ( ( frameNumber % ( SharedConstants.FRAMES_PER_SECOND / 4 ) ) == 0 ) ){ //do it 4 times per second
 
-                //stage and formation both completed
-                nextStage();
+            int maxDivingAliens = 2;
+            if( numStage > 6 ) maxDivingAliens = 3;
+            if( numStage > 10 ) maxDivingAliens = 4;
+            if( numStage > 14 ) maxDivingAliens = 5;
+            if( numStage > 18 ) maxDivingAliens = 6;
+
+
+            //remove aliens wich stopped diving
+            if( ! divingAliens.isEmpty() ){
+                divingAliens.removeIf(a -> ( !a.isDiving() || a.isToRemove() ) ); //lambda with sole argument Alien a
             }
-            else{
-                
-                //only formation completed
-                    numFormation++;
+
+            //add aliens to dive if there are available aliens, just 1
+            boolean didAlienDive = false;
+            while( divingAliens.size() < maxDivingAliens && ! areAllAliensDiving() && !didAlienDive ){
+
+                int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
+                if( ( ! presentStageAliens.get( alienToDive ).isToRemove() && ! presentStageAliens.get( alienToDive ).isDiving() ) ){
+                    presentStageAliens.get( alienToDive ).setDiving();
+                    eventsQueue.add( Events.ALIEN_DIVING );
+                    divingAliens.add( presentStageAliens.get( alienToDive ));
+                    didAlienDive = true;
+                }
+
+            }// end diving cycle
+
+        }//end if areAliensDiving
+    
+
+        //----------------------------------------------------------------------
+        //CHECK FOR NEXT STAGE/FORMATION WHEN NOT IN LIFE_LOST OR GAME_OVER
+        //----------------------------------------------------------------------
+
+        if( state != GameState.LIFE_LOST && state != GameState.GAME_OVER ){
+            //case first formation
+            if( numFormation == 0 ){
+
+                numFormation++;
                 if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
                     presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
                     newAliens = presentFormationAliens;
                     presentStageAliens.addAll(newAliens);
+                }
+            }
+            else if( isFormationCompleted() ){
+                if( isStageCompleted() ){
+
+                    //stage and formation both completed
+                    nextStage();
+                }
+                else{
+                    
+                    //only formation completed
+                    numFormation++;
+                    if( AlienFormationsLibrary.isValidFormation(numStage, numFormation) ){ // checked for valid formation
+                        presentFormationAliens = AlienFormationsLibrary.getFormationCopy(numStage, numFormation);
+                        newAliens = presentFormationAliens;
+                        presentStageAliens.addAll(newAliens);
+                    }
                 }
             }
         }
@@ -144,7 +194,8 @@ class AlienHandler {
     }
 
     boolean isStageFull(){ return ( presentStageAliens.size() == ALIENS_PER_STAGE ); }
-    boolean AreAllStageAlienPathsEmpty(){
+
+    boolean areAllStageAlienPathsEmpty(){
         boolean temp = true;
         for( Alien a : presentStageAliens ){
             //check if omne of them is not to remove and has not and an empty path
@@ -152,6 +203,23 @@ class AlienHandler {
             }
         return temp;
     }
+
+    boolean areAllAliensDiving(){
+        for( Alien a: presentStageAliens ){
+            if( ! a.isDiving() && ! a.isToRemove() ) return false;
+        }
+        return true;
+    }
+
+    boolean areSomeAliensDiving(){
+        if( divingAliens.isEmpty() ) return false;
+        for( Alien a: divingAliens ){ //used in case of game blocked for lost life
+            if( a.isDiving() ) return true;
+        }
+        return false;
+    }
+
+    boolean areAliensDiving(){ return areAliensDiving; }
 
     int getNumStage(){ return numStage; }
     int getNumFormation(){ return numFormation; }

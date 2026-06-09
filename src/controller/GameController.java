@@ -15,7 +15,8 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //------------------
 
     private static final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
-
+    private static final int MILLISECONDS_PER_FRAME = (int)Math.round(1000.0/FRAMES_PER_SECOND);
+    
 
     //------------------
     //STATIC VARIABLES
@@ -63,7 +64,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     //------------------------
 
     private void updateFramenumber(){
-        if( this.frameNumber > FRAMES_PER_SECOND ) this.frameNumber = 0;
+        if( this.frameNumber >= FRAMES_PER_SECOND ) this.frameNumber = 0;
         this.frameNumber++;
     }
 
@@ -76,7 +77,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public void cmdMovingLeft( boolean active ){
         GameState state = model.getState();
         switch( state ) {
-            case PLAYING, LOADING_NOT_FIRST_STAGE:
+            case PLAYING, LOADING_NOT_FIRST_STAGE, LIFE_LOST:
                 model.setPlayerMovingLeft(active);
                 break;
 
@@ -89,7 +90,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     public void cmdMovingRight( boolean active){
         GameState state = model.getState();
         switch( state )  {
-            case PLAYING, LOADING_NOT_FIRST_STAGE:
+            case PLAYING, LOADING_NOT_FIRST_STAGE, LIFE_LOST:
                 model.setPlayerMovingRight(active);
                 break;
 

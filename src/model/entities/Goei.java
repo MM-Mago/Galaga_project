@@ -22,15 +22,23 @@ public class Goei extends Alien {
     //COSTRUCTOR
     //------------------
 
-    public Goei( int speed, Queue<PointOfPath> path, int POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
-        super( Entities.GOEI.getWidth(), Entities.GOEI.getHeight(), speed, path, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
+    public Goei(int speed, int lateSpeed, Queue<PointOfPath> path, Queue<PointOfPath> divingPath, int POINTS_TO_CALCULATE_WITH_OFFSET, int DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, PointOfPath formationPoint, boolean isOfChallengingStage ) {
+        super( Entities.GOEI.getWidth(), Entities.GOEI.getHeight(), speed, lateSpeed, path, divingPath, true, RotationDirection.D, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isOfChallengingStage );
         entityName = Entities.GOEI;
     }
 
     @Override
     public Alien copyAlien() {
         Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
-        return new Goei( this.speed, newPath, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+        Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
+        return new Goei(this.speed, this.lateSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
+    }
+
+    @Override
+    public Alien copyAlienWithNewSpeed( int newSpeed, int newlateSpeed) {
+        Queue<PointOfPath> newPath = new LinkedList<PointOfPath>(this.path);
+        Queue<PointOfPath> divingPath = new LinkedList<PointOfPath>(this.divingPath);
+        return new Goei( newSpeed, newlateSpeed, newPath, divingPath, POINTS_TO_CALCULATE_WITH_OFFSET, DIVING_POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, this.isOfChallengingStage );
     }
 
     @Override

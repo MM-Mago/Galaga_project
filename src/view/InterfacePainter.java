@@ -82,7 +82,9 @@ class InterfacePainter {
 
         //LIVES SPRITES
         if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 3 ) || gameState == GameState.PLAYING ||  gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
-            for( int i = 0; i < ( lives - 1 ) && ( i < 8 ); i++ ){
+            int livesToShow = lives;
+            if( gameState == GameState.LIFE_LOST ) livesToShow ++;
+            for( int i = 0; i < ( livesToShow - 1 ) && ( i < 8 ); i++ ){
                 final int pWidth = Entities.PLAYER.getWidth();
                 final int pHeight = Entities.PLAYER.getHeight();
                 final int margin = 2;
@@ -191,13 +193,13 @@ class InterfacePainter {
             }
             else{
                 tempOffsetY = -2;
-               g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+                g.drawImage( playerTempImg, ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
                 paintNumberFromLeftToRight(g, tempPlayerNumber, "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) - ( playerTempImg.getHeight() / 2 ) + tempOffsetY ) );
             }
         }
 
         //STAGE N TEXT
-        if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 != 0 ) ){
+        if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 0 ) ) && ( ( numStage - 3 ) % 4 != 0 ) ){
             final int tempOffsetY = +2;
             final int tempOffsetX = -35;
             final int tempNumberOffsetX = 10;
@@ -206,7 +208,7 @@ class InterfacePainter {
             paintNumberFromLeftToRight(g, model.getNumStage(), "BLUE", ( UNSCALED_MAX_WIDTH / 2 + tempNumberOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ) );
         }    
         //CHALLENGING STAGE TEXT
-        else if( ( ( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) ) || ( gameState == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1 ) ) && ( ( numStage - 3 ) % 4 == 0 ) ){
+        else if( ( gameState == GameState.LOADING_NOT_FIRST_STAGE ) && ( ( numStage - 3 ) % 4 == 0 ) ){
             final int tempOffsetY = +2;
             final int tempOffsetX = -70;
             BufferedImage challengingStageIMG = SpriteLibrary.getSprite("CHALLENGING_STAGE" );
@@ -215,9 +217,23 @@ class InterfacePainter {
         }  
 
         //MEDALS
-        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) ){
+        if( gameState == GameState.LOADING_FIRST_STAGE && ( secondsInState > 3 ) || ( gameState != GameState.INITIAL_SCREEN && gameState != GameState.COIN_INSERTED && gameState != GameState.LOADING_FIRST_STAGE ) || gameState == GameState.GAME_OVER ){
             final int margin = 1;
             paintMedals(g, model.getNumStage(), UNSCALED_MAX_WIDTH - margin, UNSCALED_MAX_HEIGHT );
+        }
+
+        //READY TEXT
+        if( gameState == GameState.LIFE_LOST && secondsInState > 1 ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -25;
+            g.drawImage(SpriteLibrary.getSprite( "READY" ), ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
+        }
+
+        //GAME OVER TEXT
+        if( gameState == GameState.GAME_OVER && secondsInState > 1 ){
+            final int tempOffsetY = +2;
+            final int tempOffsetX = -35;
+            g.drawImage(SpriteLibrary.getSprite( "GAME_OVER" ), ( UNSCALED_MAX_WIDTH / 2 + tempOffsetX ), ( ( UNSCALED_MAX_HEIGHT / 2 ) + tempOffsetY ), SPRITE_MODEL_WIDTH, SPRITE_MODEL_HEIGHT, null);
         }
 
         g.setColor(oldColor);

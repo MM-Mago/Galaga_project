@@ -14,9 +14,9 @@ import shared.Entities;
 import shared.RotationDirection;
 
 
-    //------------------------------------------------------------------------------------------------
-    // THIS CLASS IS ONLY USED TO GET ANY ENTITY SPRITE GIVEN NAME AND ROTATIONDIRECTION
-    //------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------
+// THIS CLASS IS ONLY USED TO GET ANY ENTITY SPRITE GIVEN NAME AND ROTATIONDIRECTION
+//------------------------------------------------------------------------------------------------
 
 // EVERYTHING PACKAGE-PROTECTED OR PRIVATE
 class SpriteLibrary {
@@ -32,12 +32,16 @@ class SpriteLibrary {
     private static final String NUMBERS_RELATIVE_PATH = "src//view//galaga_png//numbers.png";
     private static final String LOADING_SCREEN_SPRITES_RELATIVE_PATH = "src//view//galaga_png//loading_screen_sprites.png";
     private static final String CHALLENGING_STAGE_RELATIVE_PATH = "src//view//galaga_png//challenging_stage.png";
+    private static final String READY_TEXT_RELATIVE_PATH = "src//view//galaga_png//ready_text.png";
+    private static final String GAME_OVER_TEXT_RELATIVE_PATH = "src//view//galaga_png//game_over_text.png";
     private static  BufferedImage spritesWholeImage;
     private static BufferedImage initialScreenSpritesWholeImage;
     private static BufferedImage coinInsertedScreenWholeImage;
     private static BufferedImage numbersWholeImage;
     private static BufferedImage loadingScreenSpritesWholeImage;
     private static BufferedImage challengingStageSpritesWholeImage;
+    private static BufferedImage startTextImage;
+    private static BufferedImage gameOverTextImage;
     private static Map<String, BufferedImage> spritesMap = new HashMap<>(); //key: ENTITY_NAME_DIRECTION, Value: Sprite immage
 
     private static final int INITIAL_SCREEN_SPRITES_MAX_WIDTH = 222;
@@ -113,6 +117,15 @@ class SpriteLibrary {
         try {
             challengingStageSpritesWholeImage = ImageIO.read(new File(CHALLENGING_STAGE_RELATIVE_PATH) );
         } catch (IOException e) { e.printStackTrace(); }
+        
+        try {
+            startTextImage = ImageIO.read(new File(READY_TEXT_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
+        try {
+            gameOverTextImage = ImageIO.read(new File(GAME_OVER_TEXT_RELATIVE_PATH) );
+        } catch (IOException e) { e.printStackTrace(); }
+
 
         //-------------------------
         // POPULATE SPRITESMAP
@@ -227,13 +240,31 @@ class SpriteLibrary {
 
         }// end get aliens and player
 
+        //GET PLAYER EXPLOSION SPRITES
+
+        for( int i = 0; i < 4; i ++ ){
+            final int PLAYER_EXPLOSION_SPRITE_DIMENSION = 32;
+            BufferedImage tempPlayerExplosionImage = spritesWholeImage.getSubimage( ( 1 + (16 + 2)*8 + ( 32 + 2)*i ), 1, PLAYER_EXPLOSION_SPRITE_DIMENSION, PLAYER_EXPLOSION_SPRITE_DIMENSION );
+            spritesMap.put( Entities.PLAYER.name() + "_" + "U" + "_" + (i+2), tempPlayerExplosionImage );
+        }
+
+        //GET ALIEN EXPLOSION SPRITE
+
+        BufferedImage explosionSprite;
+        for( int i = 0; i < 5; i ++ ){
+            final int EXPLOSION_SPRITE_DIMENSIONS = 32;
+            explosionSprite = spritesWholeImage.getSubimage( ( 18 * 16 ) + 1 + ( ( EXPLOSION_SPRITE_DIMENSIONS + 2 ) * i ) , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
+            spritesMap.put( "ALIEN_EXPLOSION" + "_"  + "U" + "_" + (i+1), explosionSprite );
+        }
+
 
         //GET SHOTS
 
         BufferedImage playerShot = spritesWholeImage.getSubimage( 313, 123, 3, 8 );
         spritesMap.put( Entities.PLAYER_SHOT.name() + "_" + "U" + "_" + 1 , playerShot);
-        BufferedImage enemyShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
-        spritesMap.put( Entities.ENEMY_SHOT.name() + "_" + "D" + "_" + 1 , enemyShot );
+        BufferedImage alienShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
+        spritesMap.put( Entities.ALIEN_SHOT.name() + "_" + "D" + "_" + 1 , alienShot );
+        
 
 
         //GET MEDALS
@@ -302,11 +333,20 @@ class SpriteLibrary {
             }
         }// end get numbers
 
+        //READY TEXT
+
+        spritesMap.put( "READY", startTextImage );
+
+        //GAME OVER TEXT
+
+        spritesMap.put( "GAME_OVER", gameOverTextImage );
+
     }// end init sprites
 
     //used only for sprites in sprites.png
     static BufferedImage getSprite( Entities name, RotationDirection dir, int animationFrame ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( animationFrame == 0 ) return null;
         return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
     }
 
@@ -317,7 +357,7 @@ class SpriteLibrary {
         return spritesMap.get( name + "_" + value );
     }
 
-    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png
+    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png, start_text.png
     static BufferedImage getSprite( String name ) {
         if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
         return spritesMap.get( name );
@@ -331,5 +371,4 @@ class SpriteLibrary {
         if( !( color == "BLUE" || color == "YELLOW" || color == "WHITE") ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
         return spritesMap.get( i + "_" + color );
     }
-
 }

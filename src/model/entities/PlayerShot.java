@@ -1,6 +1,7 @@
 package model.entities;
 
 import shared.Entities;
+import shared.GameState;
 import shared.RotationDirection;
 
  //max 2 bullet at the same time    
@@ -22,7 +23,7 @@ public class PlayerShot extends Entity {
     }
 
     @Override
-    public void update( int frameNumber ) {
+    public void update( int frameNumber, int secondsInState, GameState state ) {
         this.y = (this.y - this.speed );
         if (this.getY() < ( 0-BOUNDS_MARGIN ) ) {this.isToRemove = true;}
     }
