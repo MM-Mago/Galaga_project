@@ -410,6 +410,9 @@ public class GameModel implements ModelForView, ModelForController{
             if( state == GameState.GAME_OVER && secondsInState > 6 ){
                 startNewGame();
             }
+            if( state == GameState.INITIAL_SCREEN && coins > 0 ){
+                state = GameState.COIN_INSERTED;
+            }
 
             //update lives
             if( initialScore <= SCORE_FOR_FIRST_LIFE){ // case first life
