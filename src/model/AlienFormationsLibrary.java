@@ -8,8 +8,9 @@ import shared.Entities;
 import shared.SharedConstants;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -105,18 +106,26 @@ final class AlienFormationsLibrary {
     //initialize ALL formations
     static void initFormations(){
 
-        //initialize ALL formations
+        if( isLibraryInitialized ) return;
+        else isLibraryInitialized = true;
+
+        //------------------------
+        //INIT FILE READER
+        //------------------------
         
-        BufferedReader buffRead = null;
+        BufferedReader formationsFileReader = null;
+        BufferedReader divingPathsFileReader = null;
+
         try{
-            buffRead =  new BufferedReader(  
+
+            formationsFileReader =  new BufferedReader(  
                         new InputStreamReader( 
                         new FileInputStream( FORMATIONS_FILE_PATH), CHARSET ) );
-            String line = null;
-            int nStage = -1;
-            int mFormation = -1;
-            int kAlien = -1;
-            
+
+            divingPathsFileReader =  new BufferedReader(  
+                        new InputStreamReader( 
+                        new FileInputStream( DIVING_PATHS_FILE_PATH), CHARSET ) );
+
 
             //------------------------
             //INIT LISTS OF RECORDS
@@ -140,149 +149,13 @@ final class AlienFormationsLibrary {
             //ADD ALIENS FROM FILE
             //------------------------
 
-            while( ( ( line = buffRead.readLine() ) != null ) 
-                && ( nStage <= DEFINED_STAGES_IN_FILE ) 
-                && ( mFormation <= DEFINED_FORMATIONS_PER_STAGE_IN_FILE ) 
-                && ( kAlien <= DEFINED_ALIENS_PER_FORMATION_IN_FILE ) ){
-                
-
-
-                
-                line = line.trim(); //remove initial spaces
-                if (line.isEmpty()) continue; //if empty skip cicle
-                else if (line.startsWith("!")){ break; }
-                else if (line.startsWith("|")){ nStage++; mFormation = -1; }//check if reading new stage, ininitialized at -1
-                else if (line.startsWith("(")){ mFormation++; kAlien = -1; }//check if reading new Formation
-                else if (line.startsWith("[")){ kAlien++; //check if reading new Alien
-                    
-
-
-                    //---------------------
-                    //ALIEN PARSER
-                    //---------------------
-
-
-                    // 1. GET THE ALIEN NAME BETWEEN []
-
-                    // example: "[goei 1]" -> "GOEI"
-                    String typeStr = line.substring(1, line.indexOf(" ")).toUpperCase(); //substring from second char to space
-                    if( typeStr.contains( "ALIEN" ) ) {break;} //if name = ALIEN break cycle
-                    Entities type = Entities.valueOf(typeStr);
-
-
-                    // 2. READ ALIEN DATA LINES
-
-                    // we read all 4 lines
-                    // must add [] wich signals to consider { } and space as separate strings to replace
-                    String startPosStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
-                    String finalPosStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
-                    String directionsStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
-                    String pixelsStr = buffRead.readLine().trim().replaceAll("[{} ]", "");
-
-
-                    // 3. DATA CONVERSION
-
-                    // final position coordinates in formation, moved from center to up-left
-                    String[] finalCoords = finalPosStr.split(",");
-                    int finalX = Integer.parseInt(finalCoords[0]) - (type.getWidth()/2);
-                    int finalY = Integer.parseInt(finalCoords[1]) - (type.getHeight()/2);
-
-                    // start position coordinates to spawn, moved from center to up-left
-                    String[] startCoords = startPosStr.split(",");
-                    int startX = Integer.parseInt(startCoords[0]) - (type.getWidth()/2);
-                    int startY = Integer.parseInt(startCoords[1]) - (type.getHeight()/2);
-
-                    // Direction array (D, DR, L...)
-                    String[] directionsStringsArray = directionsStr.split(",");
-
-
-                    //check for shifted aliens ( to left or right )
-                    Queue<PointOfPath> pointsList;
-                    if( ( directionsStringsArray[0].toUpperCase().equals("RIGHT") ) || ( directionsStringsArray[0].toUpperCase().equals("LEFT" ) ) ){
-                        
-                        //4. PRODUCE LIST OF POINTOFPATH
-
-                        int alienIndexToCopy = ( Integer.parseInt( pixelsStr ) - 1 );
-                        //copy alien path with offset
-                        pointsList = copyAlienPathWithOffset(stageList.get(nStage).formationsList.get(mFormation).alienList.get(alienIndexToCopy).copyAlien(), directionsStringsArray[0].toUpperCase() );
-
-                    }
-                    //if fully declared aliens continue direction array
-                    else{
-                        Direction[] directionsArray = new Direction[directionsStringsArray.length];
-                        for (int i = 0; i < directionsArray.length; i++) {
-                            directionsArray[i] = Direction.valueOf(directionsStringsArray[i]);
-                        }
-
-                        // pixels array (20, 7, 1...)
-                        String[] pixelsStrings = pixelsStr.split(",");
-                        int[] pixelsArray = new int[pixelsStrings.length];
-                        for (int i = 0; i < pixelsStrings.length; i++) {
-                            pixelsArray[i] = Integer.parseInt(pixelsStrings[i]);
-                        }
-
-
-                        //4. PRODUCE LIST OF POINTOFPATH
-
-                        //initialize list and next point, add first point
-                        pointsList = new LinkedList<PointOfPath>();
-                        int nextX = startX;
-                        int nextY = startY;
-                        pointsList.add( new PointOfPath(startX, startY));
-
-                        //add every saved point
-                        for( int i = 0; i < pixelsArray.length; i++ ){
-                            for( int j = 0; j < pixelsArray[i]; j++ ){
-                                nextX = nextX + directionsArray[i].getDx();
-                                nextY = nextY + directionsArray[i].getDy();
-                                pointsList.add(new PointOfPath( nextX , nextY ));
-                            }
-                        }
-                    }
-                    
-                    //add points to reach designated position in formation
-                    //do it by calculating the higher axis pixel distance, and dividing both axis thistances by that number
-                    int lastX = (int)new ArrayList<PointOfPath>( pointsList ).getLast().x();
-                    int lastY = (int)new ArrayList<PointOfPath>( pointsList ).getLast().y();
-                    int POINTS_TO_CALCULATE_WITH_OFFSET = 0;
-                    double maxDistance = Math.max( Math.abs(finalY-lastY), Math.abs(finalX-lastX) );
-                    double dxPerFrame = (finalX-lastX)/maxDistance;
-                    double dyPerFrame = (finalY-lastY)/maxDistance;
-                    //and then add all points if maxDistance > 0
-                    if( maxDistance > 0 ){
-                        for( int i = 1; i <= maxDistance; i++ ){
-                            pointsList.add( new PointOfPath( (int)(lastX + (dxPerFrame*i)), (int)(lastY + (dyPerFrame*i)) ) );
-                            POINTS_TO_CALCULATE_WITH_OFFSET++;
-                        }
-                    }
-                    
-
-
-                    //5. FINALLY CREATE AND ADD ALIEN
-
-                    PointOfPath formationPoint = new PointOfPath( finalX, finalY );
-                    switch ( type ) {
-                        case GOEI:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Goei( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
-                            break;
-
-                        case ZAKO:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new Zako( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
-                            break;
-
-                        case BOSS_GALAGA:
-                            stageList.get(nStage).formationsList().get(mFormation).alienList().add( new BossGalaga( TEST_SPEED, pointsList, POINTS_TO_CALCULATE_WITH_OFFSET, formationPoint, isStageChallenging(nStage) ) );
-                            break;
-
-                        default:
-                            break;
-                    } // end switch
-
-                } // end alien parser
-
-            } //end while
+            addAliensFromFormationsFile( formationsFileReader, divingPathsFileReader, stageList );
+            
 
         } // end try
+        catch( FileNotFoundException fnfe ){
+            fnfe.printStackTrace();
+        }
         catch( IOException ioe ){
             ioe.printStackTrace();
         }
