@@ -24,8 +24,8 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
     //PRIVATE STATIC FINAL COSTANTS
     //--------------------------------
 
-    private static final int GAME_PANEL_WIDTH = 448;
-    private static final int GAME_PANEL_HEIGHT = 576;
+    private static final int GAME_PANEL_WIDTH = SharedConstants.VIEW_SCREEN_WIDTH;
+    private static final int GAME_PANEL_HEIGHT = SharedConstants.VIEW_SCREEN_HEIGHT;
 
     
     //------------------
@@ -171,7 +171,6 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         LinkedList<Events> eventsList = model.getEventsQueue();
         SoundManager.playSounds( eventsList );
 
-        //to do...........
     }
 
 
@@ -228,5 +227,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
             default:
                 break;
         }
+
     }//end keyReleased
-}
+    
+}//end GameView

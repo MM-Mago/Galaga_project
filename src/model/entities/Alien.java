@@ -212,7 +212,8 @@ public abstract class Alien extends Entity {
                 //cycle interator
                 pointsSkipped++;
                 pointsCounter++;
-            }
+                
+            }//end while
                 
             //update angle
             updateAngleWhileInPath();

@@ -139,7 +139,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
     @Override
     public void cmdNukeAll() {
-        model.nukeAll();
+        if( SharedConstants.CHEAT_NUKE_BUTTON ) model.nukeAll();
     }
 
 

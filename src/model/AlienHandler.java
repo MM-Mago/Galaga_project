@@ -45,7 +45,7 @@ class AlienHandler {
         AlienFormationsLibrary.initFormations();
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
-        numStage = 1; //must be 1
+        numStage = SharedConstants.CHEAT_START_STAGE; //must be 1
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;

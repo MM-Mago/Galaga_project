@@ -101,13 +101,4 @@ public class Player extends Entity {
     public void setPlayerMovingRight(Boolean moving){ this.isPlayerMovingRight = moving; }
     public void setPlayerMovingLeft(Boolean moving){ this.isPlayerMovingLeft = moving; }
 
-    
-    //-----------------
-    //COLLISION METHOD
-    //-----------------
-
-    public boolean checkCollisionWithAlienShot(AlienShot aShot) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'checkCollisionWith'");
-    }
 }

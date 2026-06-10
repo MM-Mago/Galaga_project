@@ -69,6 +69,7 @@ class InterfacePainter {
         //HIGH SCORE
         paintNumberFromRightToLeft(g, highScore, "WHITE", ( 55 + SPRITE_MODEL_WIDTH ), ( SPRITE_MODEL_HEIGHT + 1 ) );
         
+        
         //------------------------------
         //SPRITES ONLY IN SOME STATES
         //------------------------------

@@ -99,7 +99,7 @@ public class GameModel implements ModelForView, ModelForController{
         frameNumber = 0;
         secondsInState = 0;
         coins = 0;
-        lives = 3; //init with 3
+        lives = SharedConstants.INITIAL_LIVES;
         score = 0;
         highScore = 20000;
 
@@ -224,17 +224,19 @@ public class GameModel implements ModelForView, ModelForController{
 
         }// end check collisions between aliens and player shots
 
-        for(Alien a: aliensList){
-            if( ! a.isToRemove() ) if( a.checkCollisionWith(player) ){
-                killPlayer();
-                return; // exit method in case of player hit
+        if( ! SharedConstants.CHEAT_GOD_MODE ){
+            for(Alien a: aliensList){
+                if( ! a.isToRemove() ) if( a.checkCollisionWith(player) ){
+                    killPlayer();
+                    return; // exit method in case of player hit
+                }
             }
-        }
 
-        for(AlienShot aShot: alienShotsList ){
-            if( ! aShot.isToRemove() ) if( aShot.checkCollisionWith(player) ){
-                killPlayer();
-                return; // exit method in case of player hit
+            for(AlienShot aShot: alienShotsList ){
+                if( ! aShot.isToRemove() ) if( aShot.checkCollisionWith(player) ){
+                    killPlayer();
+                    return; // exit method in case of player hit
+                }
             }
         }
 
@@ -305,9 +307,9 @@ public class GameModel implements ModelForView, ModelForController{
             }
 
 
-            //------------------------------------------------
-            //DO ONLY IF PLAYING OR LIFE_LOST OR GAME_OVER
-            //------------------------------------------------
+            //------------------------------------------------------------
+            //UPDATE ALIENS ONLY IF PLAYING OR LIFE_LOST OR GAME_OVER
+            //------------------------------------------------------------
 
             if( state == GameState.PLAYING || state == GameState.LIFE_LOST || state == GameState.GAME_OVER ){
 
@@ -317,12 +319,11 @@ public class GameModel implements ModelForView, ModelForController{
                 for( Alien a: aliensToAdd){ addEntity(a); }
 
 
-                //----------------------
-                //DO ONLY IF PLAYING 
-                //----------------------
+                //-----------------------------------
+                //CHECK COLLISIONS ONLY IF PLAYING 
+                //-----------------------------------
 
                 if( state == GameState.PLAYING ){
-
 
                     //check collisions
                     this.checkCollisions();
@@ -360,13 +361,15 @@ public class GameModel implements ModelForView, ModelForController{
 
 
             //--------------------------------------
-            //MAKE ALIENS SHOOT
+            //MAKE ALIENS SHOOT IF PLAYING
             //--------------------------------------
             
-            //only at 2 points of diving path
-            for( Alien a: aliensList ){
-                if( a.isDiving() && ( ! a.isOfChallengingStage() ) && ( a.getPointOfPathCounter() == 25 || a.getPointOfPathCounter() == 35 ) ){
-                    addEntity( new AlienShot( a, player ) );
+            if( state == GameState.PLAYING ){
+                //only at 2 points of diving path
+                for( Alien a: aliensList ){
+                    if( a.isDiving() && ( ! a.isOfChallengingStage() ) && ( a.getPointOfPathCounter() == 25 || a.getPointOfPathCounter() == 35 ) ){
+                        addEntity( new AlienShot( a, player ) );
+                    }
                 }
             }
 
@@ -422,6 +425,14 @@ public class GameModel implements ModelForView, ModelForController{
                 }
             }
 
+            
+            //--------------------------------------
+            //CHECK FOR INFINITE LIVES
+            //--------------------------------------
+
+            if( SharedConstants.CHEAT_INFINITE_LIVES ) lives = 10;
+
+
             //--------------------------------------
             //CHECK FOR GAMEOVER
             //--------------------------------------
@@ -472,7 +483,7 @@ public class GameModel implements ModelForView, ModelForController{
     //make the player shoot
     @Override
     public void shoot(){
-        if( this.activePlayerShotsCount < 2 ){
+        if( this.activePlayerShotsCount < 2 || SharedConstants.CHEAT_INFINITE_SHOTS ){
             PlayerShot shot = new PlayerShot( this.player );
             addEntity(shot);
             activePlayerShotsCount++;
