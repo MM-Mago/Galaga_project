@@ -114,7 +114,7 @@ public abstract class Alien extends Entity {
 
 
 
-        //calculate distance from center
+        //calculate distance from center and scale factor
         double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
         double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + ( (double)this.height / 2 ) );
         double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
@@ -244,7 +244,7 @@ public abstract class Alien extends Entity {
     //DIVE METHOD
     //-----------------
 
-    public void setDiving(){
+    public void startDiving(){
 
         if( isDiving == false ){
             pointsCounter = 0;

@@ -38,7 +38,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
 
     //-----------------------------------
-    //COSTRUCTOR + 3 SINGLETON METHODS
+    //COSTRUCTOR + 2 SINGLETON METHODS
     //-----------------------------------
 
     private GameController( ViewForController view, ModelForController model ){
@@ -64,6 +64,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
         if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
         return controller;
     } //end getInstanceForMain
+
 
     //------------------------
     //PRIVATE METHODS
@@ -140,7 +141,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
     @Override
     public void cmdNukeAll() {
         if( SharedConstants.CHEAT_NUKE_BUTTON ) model.nukeAll();
-    }
+    }// end cmdNukeAll
 
 
     //------------------------------

@@ -110,7 +110,7 @@ final class AlienFormationsLibrary {
         else isLibraryInitialized = true;
 
         //------------------------
-        //INIT FILE READER
+        //init file reader
         //------------------------
         
         BufferedReader formationsFileReader = null;
@@ -128,7 +128,7 @@ final class AlienFormationsLibrary {
 
 
             //------------------------
-            //INIT LISTS OF RECORDS
+            //init lists of records
             //------------------------
 
             //create n stagePaths to fill
@@ -146,13 +146,13 @@ final class AlienFormationsLibrary {
             }
 
             //------------------------
-            //ADD ALIENS FROM FILE
+            //add aliens from file
             //------------------------
 
             addAliensFromFormationsFile( formationsFileReader, divingPathsFileReader, stageList );
             
 
-        } // end try
+        }
         catch( FileNotFoundException fnfe ){
             fnfe.printStackTrace();
         }
@@ -162,7 +162,7 @@ final class AlienFormationsLibrary {
         finally{
             try{ if(formationsFileReader != null ) formationsFileReader.close(); }
             catch( IOException ioe ){ioe.printStackTrace();}
-        }
+        } // end try-catch-finally block
 
     } //end initFormations
 
@@ -185,7 +185,7 @@ final class AlienFormationsLibrary {
 
         //all num start from 1
 
-        // Mapping Table:
+        // Mapping Table: (extracted from original game)
         // Stage: 1 2 3(C) | 4 5 6 7(C) | 8 9 10 11(C)
         // Index: 0 1 3    | 0 1 2 3    | 0 1 2  3
 
@@ -294,12 +294,12 @@ final class AlienFormationsLibrary {
 
 
         //-------------------------
-        // GET DIVING PATHS INFO
+        //get diving paths info
         //-------------------------
 
         final int ALIEN_DIVING_PATHS = 6;
 
-        //populate map
+        //populate diving paths map, first index is 0->directionStringArray, 1->pixelStringsArray
         HashMap<String, String[][]> divingPathsStringsMap = new HashMap<String, String[][]>();
         
         for( int i = 0; i < ALIEN_DIVING_PATHS; i ++ ){
@@ -318,7 +318,7 @@ final class AlienFormationsLibrary {
 
 
         //---------------------------------------
-        // CREATE ALIENS WITH ALIEN FORMATIONS
+        // create aliens with alien formation
         //---------------------------------------
 
         String line = null;
@@ -344,7 +344,7 @@ final class AlienFormationsLibrary {
 
 
                 //---------------------
-                //ALIEN PARSER
+                //alien parser
                 //---------------------
 
 
@@ -385,15 +385,14 @@ final class AlienFormationsLibrary {
                 Queue<PointOfPath> pointsList;
                 if( ( directionsStringsArray[0].toUpperCase().equals("RIGHT") ) || ( directionsStringsArray[0].toUpperCase().equals("LEFT" ) ) ){
                     
-                    //4. PRODUCE LIST OF POINTOFPATH
-
                     int alienIndexToCopy = ( Integer.parseInt( pixelsStr ) - 1 );
                     //copy alien path with offset
                     pointsList = copyAlienPathWithOffset(stageList.get(nStage).formationsList.get(mFormation).alienList.get(alienIndexToCopy).copyAlien(), directionsStringsArray[0].toUpperCase() );
 
-                }
-                //if fully declared aliens continue direction array
-                else{
+                }// end alien to copy case
+
+                else{//if fully declared aliens continue direction array
+
                     Direction[] directionsArray = new Direction[directionsStringsArray.length];
                     for (int i = 0; i < directionsArray.length; i++) {
                         directionsArray[i] = Direction.valueOf(directionsStringsArray[i]);
@@ -423,10 +422,12 @@ final class AlienFormationsLibrary {
                             pointsList.add(new PointOfPath( nextX , nextY ));
                         }
                     }
-                }
+
+                }// end fully declared alien case
                 
                 //add points to reach designated position in formation
                 //do it by calculating the higher axis pixel distance, and dividing both axis distances by that number
+                //also start counting points to calculate with offset
                 int lastX = (int)new ArrayList<PointOfPath>( pointsList ).getLast().x();
                 int lastY = (int)new ArrayList<PointOfPath>( pointsList ).getLast().y();
                 int points_to_calculate_with_offset = 0;
@@ -441,7 +442,6 @@ final class AlienFormationsLibrary {
                     }
                 }
                 
-
 
                 //5. CREATE DIVING PATH FROM FILE
 
@@ -472,7 +472,7 @@ final class AlienFormationsLibrary {
                 //add every saved point
                 for( int i = 0; i < divingPathPixelsArray.length; i++ ){
 
-                    //check for y change
+                    //check for y change to make different height aliens reach same y
                     final int MAIN_FINAL_Y = 46;
                     if( divingPathDirectionsArray[i] == Direction.DCHANGE ){ divingPathPixelsArray[i] = divingPathPixelsArray[i] - finalY + MAIN_FINAL_Y; }
 
@@ -503,8 +503,6 @@ final class AlienFormationsLibrary {
                 }
                 
 
-
-
                 //6. FINALLY CREATE AND ADD ALIEN
 
                 PointOfPath formationPoint = new PointOfPath( finalX, finalY );
@@ -532,6 +530,4 @@ final class AlienFormationsLibrary {
 
     }//end addAliensFromFormationFile method
 
-
-    //private static void addTwoDivingAliens( ArrayList<Alien> formationList ){}
-}
+}// end AlienFormationLibrarys
