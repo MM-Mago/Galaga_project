@@ -297,7 +297,7 @@ public class GameModel implements ModelForView, ModelForController{
 
 
         //--------------------------------------
-        //save initial frame score
+        //save frame initial score
         //--------------------------------------
         
         int initialScore = score;
@@ -460,20 +460,14 @@ public class GameModel implements ModelForView, ModelForController{
             eventsQueue.add( Events.COIN_SCREEN_OPENED );;
         }
     }
-
-    //remove coin -1
-    @Override
-    public void spendCoin(){
-        if( this.coins > 0 ) this.coins --;
-    }
     
     //start the game if coins>0 and spend coin
     @Override
     public void startGame(){
-        if( coins>0){
+        if( this.coins>0){
             state = GameState.LOADING_FIRST_STAGE;
             secondsInState = 0;  //TO CHANGE LATER
-            spendCoin();
+            this.coins--;
             eventsQueue.add( Events.GAME_STARTED );
         }
     }
@@ -502,19 +496,13 @@ public class GameModel implements ModelForView, ModelForController{
         ArrayList<Entity> listCopy = new ArrayList<Entity>(entitiesList);
         for( Entity e: listCopy ){
             switch (e.getEntityName()) {
-                case PLAYER:
-                    break;
-                case PLAYER_SHOT:
-                    break;
+                
                 case ALIEN_SHOT:
                     entitiesList.remove(e);
                     alienShotsList.remove(e);
                 default:
                     if( e instanceof Alien ){
-                        if( ((Alien)e).checkCollisionWith( new EntityKiller() ) ){
-                            aliensList.remove(e);
-                            entitiesList.remove(e);
-                        }
+                        ((Alien)e).checkCollisionWith( new EntityKiller() );
                     }
             }
         }
