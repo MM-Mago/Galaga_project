@@ -69,6 +69,7 @@ class InterfacePainter {
         //HIGH SCORE
         paintNumberFromRightToLeft(g, highScore, "WHITE", ( 55 + SPRITE_MODEL_WIDTH ), ( SPRITE_MODEL_HEIGHT + 1 ) );
         
+        
         //------------------------------
         //SPRITES ONLY IN SOME STATES
         //------------------------------
@@ -81,9 +82,9 @@ class InterfacePainter {
         }
 
         //LIVES SPRITES
-        if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 3 ) || gameState == GameState.PLAYING ||  gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
+        if( ( gameState == GameState.LOADING_FIRST_STAGE && secondsInState > 3 ) || gameState == GameState.PLAYING || gameState == GameState.LIFE_LOST || gameState == GameState.LOADING_NOT_FIRST_STAGE ){
             int livesToShow = lives;
-            if( gameState == GameState.LIFE_LOST ) livesToShow ++;
+            if( gameState == GameState.LIFE_LOST && secondsInState <= 3 ) livesToShow ++;
             for( int i = 0; i < ( livesToShow - 1 ) && ( i < 8 ); i++ ){
                 final int pWidth = Entities.PLAYER.getWidth();
                 final int pHeight = Entities.PLAYER.getHeight();

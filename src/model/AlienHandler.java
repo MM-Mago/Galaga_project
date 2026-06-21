@@ -45,7 +45,7 @@ class AlienHandler {
         AlienFormationsLibrary.initFormations();
         presentFormationAliens = new ArrayList<Alien>();
         presentStageAliens = new ArrayList<Alien>();
-        numStage = 1; //must be 1
+        numStage = SharedConstants.CHEAT_START_STAGE; //must be 1
         numFormation = 0;
         formationOffset = 0;
         isFormationOffsetGrowing = true;
@@ -95,7 +95,7 @@ class AlienHandler {
 
 
         //-----------------------------------------------
-        //CHECK FOR ALL PATH COMPLETED TO START DIVING
+        //check for completed path to start diving
         //-----------------------------------------------
         
         if( isStageFull() && areAllStageAlienPathsEmpty() ){ areAliensDiving = true; }
@@ -119,7 +119,7 @@ class AlienHandler {
 
                 int alienToDive = (int)Math.round( Math.random() * ( ALIENS_PER_STAGE - 1 ) );
                 if( ( ! presentStageAliens.get( alienToDive ).isToRemove() && ! presentStageAliens.get( alienToDive ).isDiving() ) ){
-                    presentStageAliens.get( alienToDive ).setDiving();
+                    presentStageAliens.get( alienToDive ).startDiving();
                     eventsQueue.add( Events.ALIEN_DIVING );
                     divingAliens.add( presentStageAliens.get( alienToDive ));
                     didAlienDive = true;
@@ -131,7 +131,7 @@ class AlienHandler {
     
 
         //----------------------------------------------------------------------
-        //CHECK FOR NEXT STAGE/FORMATION WHEN NOT IN LIFE_LOST OR GAME_OVER
+        //check for next stage/formation when not in LIFE_LOST or GAME_OVER
         //----------------------------------------------------------------------
 
         if( state != GameState.LIFE_LOST && state != GameState.GAME_OVER ){

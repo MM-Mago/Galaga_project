@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.dom.html.HTMLCanvasElement;
 
-import controller.GameController;
 import model.api.ModelForView;
 import shared.Entities;
 import shared.GameState;
@@ -21,15 +20,14 @@ class WebInterfacePainter {
 
     static void paint(CanvasRenderingContext2D ctx, int frameOfView, ModelForView model) {
         final GameState state       = model.getState();
+        final int screenW           = SharedConstants.MODEL_SCREEN_WIDTH;
+        final int screenH           = SharedConstants.MODEL_SCREEN_HEIGHT;
         final int score             = model.getScore();
         final int highScore         = model.getHighScore();
         final int lives             = model.getLives();
         final int secondsInState    = model.getSecondsInState();
         final int credits           = model.getCoins();
         final int fps               = SharedConstants.FRAMES_PER_SECOND;
-        final int numStage          = model.getNumStage();
-        final int boundsWidth       = SharedConstants.MODEL_SCREEN_WIDTH;
-        final int boundsHeight      = SharedConstants.MODEL_SCREEN_HEIGHT;
 
         // --- 1UP (flashes 2x/sec except on title/coin/gameover screens) ---
         final int FLASHES = 2;
@@ -53,8 +51,8 @@ class WebInterfacePainter {
                 || (state == GameState.LOADING_FIRST_STAGE && secondsInState < 4)) {
             int margin = 1;
             int px = Entities.PLAYER.getWidth();
-            drawSprite(ctx, WebSpriteLibrary.getSprite("CREDIT"), px, boundsHeight - SPRITE_H - margin, SPRITE_W, SPRITE_H);
-            paintNumberLTR(ctx, credits, "WHITE", px * 4, boundsHeight - SPRITE_H - margin);
+            drawSprite(ctx, WebSpriteLibrary.getSprite("CREDIT"), px, screenH - SPRITE_H - margin, SPRITE_W, SPRITE_H);
+            paintNumberLTR(ctx, credits, "WHITE", px * 4, screenH - SPRITE_H - margin);
         }
 
         // --- LIFE SPRITES ---
@@ -67,27 +65,27 @@ class WebInterfacePainter {
             int sep = 2, margin = 2;
             for (int i = 0; i < lives - 1 && i < 8; i++) {
                 HTMLCanvasElement playerSprite = WebSpriteLibrary.getSprite(Entities.PLAYER, RotationDirection.U, 1);
-                ctx.drawImage(playerSprite, (pw + sep) * i + margin, boundsHeight - ph);
+                ctx.drawImage(playerSprite, (pw + sep) * i + margin, screenH - ph);
             }
         }
 
         // --- GALAGA title ---
         if (state == GameState.INITIAL_SCREEN && secondsInState > 0) {
-            int x = boundsWidth / 2 - 22;
+            int x = screenW / 2 - 22;
             int y = Entities.PLAYER.getHeight() * 2;
             drawSprite(ctx, WebSpriteLibrary.getSprite("GALAGA"), x, y, SPRITE_W, SPRITE_H);
         }
 
         // --- SCORE label ---
         if (state == GameState.INITIAL_SCREEN && secondsInState > 1) {
-            int x = boundsWidth / 2 - 40;
+            int x = screenW / 2 - 40;
             int y = Entities.PLAYER.getHeight() * 3 + SPRITE_H;
             drawSprite(ctx, WebSpriteLibrary.getSprite("SCORE"), x, y, SPRITE_W, SPRITE_H);
         }
 
         // --- 50/100 row + blinking ZAKO ---
         if (state == GameState.INITIAL_SCREEN && secondsInState > 2) {
-            int x = boundsWidth / 2 - 15;
+            int x = screenW / 2 - 15;
             int y = Entities.PLAYER.getHeight() * 4 + SPRITE_H * 2;
             drawSprite(ctx, WebSpriteLibrary.getSprite("50_100"), x, y, SPRITE_W, SPRITE_H);
             int anim = frameOfView < fps / 2 ? 1 : 2;
@@ -97,7 +95,7 @@ class WebInterfacePainter {
 
         // --- 80/160 row + blinking GOEI ---
         if (state == GameState.INITIAL_SCREEN && secondsInState > 3) {
-            int x = boundsWidth / 2 - 15;
+            int x = screenW / 2 - 15;
             int y = Entities.PLAYER.getHeight() * 5 + SPRITE_H * 3;
             drawSprite(ctx, WebSpriteLibrary.getSprite("80_160"), x, y, SPRITE_W, SPRITE_H);
             int anim = frameOfView < fps / 2 ? 1 : 2;
@@ -108,7 +106,7 @@ class WebInterfacePainter {
         // --- COIN INSERTED screen ---
         if (state == GameState.COIN_INSERTED) {
             HTMLCanvasElement bg = WebSpriteLibrary.getSprite("COIN_INSERTED_SCREEN");
-            ctx.drawImage(bg, 0, 0, boundsWidth, boundsHeight);
+            ctx.drawImage(bg, 0, 0, screenW, screenH);
             int pw = Entities.PLAYER.getWidth();
             int ph = Entities.PLAYER.getHeight();
             HTMLCanvasElement player = WebSpriteLibrary.getSprite(Entities.PLAYER, RotationDirection.U, 1);
@@ -129,66 +127,53 @@ class WebInterfacePainter {
         // --- PLAYER 1 text ---
         if (state == GameState.LOADING_FIRST_STAGE && (secondsInState < 4 || secondsInState > 5)) {
             HTMLCanvasElement playerImg = WebSpriteLibrary.getSprite("PLAYER");
-            int cx = boundsWidth / 2;
+            int cx = screenW / 2;
             if (secondsInState < 4) {
-                drawSprite(ctx, playerImg, cx - 35, boundsHeight / 2 + 2, SPRITE_W, SPRITE_H);
-                paintNumberLTR(ctx, 1, "BLUE", cx + 20, boundsHeight / 2 + 2);
+                drawSprite(ctx, playerImg, cx - 35, screenH / 2 + 2, SPRITE_W, SPRITE_H);
+                paintNumberLTR(ctx, 1, "BLUE", cx + 20, screenH / 2 + 2);
             } else {
                 int h2 = playerImg.getHeight() / 2;
-                drawSprite(ctx, playerImg, cx - 35, boundsHeight / 2 - h2 - 2, SPRITE_W, SPRITE_H);
-                paintNumberLTR(ctx, 1, "BLUE", cx + 20, boundsHeight / 2 - h2 - 2);
+                drawSprite(ctx, playerImg, cx - 35, screenH / 2 - h2 - 2, SPRITE_W, SPRITE_H);
+                paintNumberLTR(ctx, 1, "BLUE", cx + 20, screenH / 2 - h2 - 2);
             }
         }
 
-        // --- STAGE N text OR CHALLENGING STAGE (non-challenging vs challenging stages) ---
+        // --- STAGE N text ---
         if ((state == GameState.LOADING_FIRST_STAGE && secondsInState > 3)
                 || (state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 1)) {
-            int cx = boundsWidth / 2;
-            if ((numStage - 3) % 4 != 0) {
-                // Regular stage - show "STAGE N"
-                HTMLCanvasElement stageImg = WebSpriteLibrary.getSprite("STAGE");
-                drawSprite(ctx, stageImg, cx - 35, boundsHeight / 2 + 2, SPRITE_W, SPRITE_H);
-                paintNumberLTR(ctx, numStage, "BLUE", cx + 10, boundsHeight / 2 + 2);
-            } else {
-                // Challenging stage (3, 7, 11, 15...) - show "CHALLENGING STAGE"
-                HTMLCanvasElement challengingImg = WebSpriteLibrary.getSprite("CHALLENGING_STAGE");
-                int scaledW = challengingImg.getWidth() / challengingImg.getHeight() * SPRITE_H;
-                ctx.drawImage(challengingImg, cx - 70, boundsHeight / 2 + 2, scaledW, SPRITE_H);
-            }
+            HTMLCanvasElement stageImg = WebSpriteLibrary.getSprite("STAGE");
+            int cx = screenW / 2;
+            drawSprite(ctx, stageImg, cx - 35, screenH / 2 + 2, SPRITE_W, SPRITE_H);
+            paintNumberLTR(ctx, model.getNumStage(), "BLUE", cx + 10, screenH / 2 + 2);
         }
 
-        // --- MEDALS ---
+        // --- MEDALS (bottom-right) ---
         if ((state == GameState.LOADING_FIRST_STAGE && secondsInState > 3)
                 || (state != GameState.INITIAL_SCREEN && state != GameState.COIN_INSERTED
-                        && state != GameState.LOADING_FIRST_STAGE)) {
-            paintMedals(ctx, numStage, boundsWidth, boundsHeight);
+                    && state != GameState.LOADING_FIRST_STAGE)
+                || state == GameState.GAME_OVER) {
+            paintMedals(ctx, model.getNumStage(), screenW - 1, screenH);
         }
     }
 
-    private static void paintMedals(CanvasRenderingContext2D ctx, int numStage, int boundsWidth, int boundsHeight) {
-        ArrayList<Integer> medalValues = new ArrayList<>();
-        if (numStage == 0) {
-            medalValues.add(1);
-        } else {
-            int[] medalOrder = {50, 30, 20, 10, 5, 1};
-            int temp = numStage;
-            for (int medalVal : medalOrder) {
-                while (temp >= medalVal) {
-                    medalValues.add(medalVal);
-                    temp -= medalVal;
-                }
+    private static void paintMedals(CanvasRenderingContext2D ctx, int nStage, int xMax, int yMax) {
+        if (nStage <= 0) nStage = 1;
+
+        int[] medalValues = {50, 30, 20, 10, 5, 1};
+        ArrayList<Integer> valueList = new ArrayList<>();
+        int temp = nStage;
+        for (int medalValue : medalValues) {
+            while (temp >= medalValue) {
+                valueList.add(medalValue);
+                temp -= medalValue;
             }
         }
 
-        // Draw medals from right to left
-        int xOffset = 0;
-        for (int i = medalValues.size() - 1; i >= 0; i--) {
-            HTMLCanvasElement medal = WebSpriteLibrary.getMedalSprite(medalValues.get(i));
-            if (i < medalValues.size() - 1) {
-                xOffset += medal.getWidth();
-            }
-            ctx.drawImage(medal, boundsWidth - xOffset - medal.getWidth(),
-                    boundsHeight - medal.getHeight());
+        int presentXOffset = 0;
+        for (int i = valueList.size() - 1; i >= 0; i--) {
+            HTMLCanvasElement medal = WebSpriteLibrary.getSprite("MEDAL_" + valueList.get(i));
+            presentXOffset += medal.getWidth();
+            ctx.drawImage(medal, xMax - presentXOffset, yMax - medal.getHeight());
         }
     }
 

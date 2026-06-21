@@ -114,7 +114,7 @@ public abstract class Alien extends Entity {
 
 
 
-        //calculate distance from center
+        //calculate distance from center and scale factor
         double distanceFromCenterX = CENTER_POINT_FOR_OFFSET.x() - ( formationPoint.x() + ( (double)this.width / 2 ) );
         double distanceFromCenterY = CENTER_POINT_FOR_OFFSET.y() - ( formationPoint.y() + ( (double)this.height / 2 ) );
         double scaleFactorX = distanceFromCenterX / MAX_DISTANCE_FROM_CENTERX;
@@ -212,7 +212,8 @@ public abstract class Alien extends Entity {
                 //cycle interator
                 pointsSkipped++;
                 pointsCounter++;
-            }
+                
+            }//end while
                 
             //update angle
             updateAngleWhileInPath();
@@ -243,7 +244,7 @@ public abstract class Alien extends Entity {
     //DIVE METHOD
     //-----------------
 
-    public void setDiving(){
+    public void startDiving(){
 
         if( isDiving == false ){
             pointsCounter = 0;
@@ -333,7 +334,7 @@ public abstract class Alien extends Entity {
             int minIndex = Math.max(0, pointsCounter - RADIUS);
             int maxIndex = Math.min(size, pointsCounter + RADIUS);
             //check for empty list
-            if (minIndex > maxIndex) { minIndex = maxIndex; }   
+            if (minIndex > maxIndex) { minIndex = maxIndex; }
 
             if( ! isDiving ) lastPoints = new LinkedList<PointOfPath>( pathArrayList.subList( minIndex, maxIndex ) );
             else lastPoints = new LinkedList<PointOfPath>( divingPathArrayList.subList( minIndex, maxIndex ) );

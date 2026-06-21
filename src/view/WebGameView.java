@@ -9,6 +9,7 @@ import org.teavm.jso.dom.html.HTMLDocument;
 
 import controller.api.ActionHandlerForView;
 import model.api.ModelForView;
+import shared.SharedConstants;
 import view.api.ViewForController;
 
 public class WebGameView implements ViewForController {
@@ -27,6 +28,7 @@ public class WebGameView implements ViewForController {
         this.canvas = (HTMLCanvasElement) doc.getElementById("game-canvas");
 
         WebBackgroundPainter.init();
+        WebSoundManager.init();
         WebSpriteLibrary.init(onReady);
     }
 
@@ -73,8 +75,8 @@ public class WebGameView implements ViewForController {
         org.teavm.jso.canvas.CanvasRenderingContext2D ctx =
             (org.teavm.jso.canvas.CanvasRenderingContext2D) canvas.getContext("2d");
 
-        double scaleX = (double) canvas.getWidth()  / shared.SharedConstants.MODEL_SCREEN_WIDTH;
-        double scaleY = (double) canvas.getHeight() / shared.SharedConstants.MODEL_SCREEN_HEIGHT;
+        double scaleX = (double) canvas.getWidth()  / SharedConstants.MODEL_SCREEN_WIDTH;
+        double scaleY = (double) canvas.getHeight() / SharedConstants.MODEL_SCREEN_HEIGHT;
         double scale  = Math.min(scaleX, scaleY);
 
         ctx.save();
@@ -84,6 +86,7 @@ public class WebGameView implements ViewForController {
         WebBackgroundPainter.paint(ctx, frameNumber, model);
         WebEntityPainter.paint(ctx, model.getEntityInfoListForView(), model);
         WebInterfacePainter.paint(ctx, frameNumber, model);
+        WebSoundManager.playSounds(model.getEventsQueue());
 
         ctx.restore();
 

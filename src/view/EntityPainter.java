@@ -70,6 +70,7 @@ class EntityPainter {
     //--------------------------------
     //PRIVATE STATIC METHODS
     //--------------------------------
+    
     private static void paintEntity( Graphics2D g, EntityInfo entityInfo ){
 
         if( entityInfo.animationFrame() != 0 ){

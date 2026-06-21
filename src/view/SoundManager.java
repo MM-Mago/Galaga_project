@@ -118,38 +118,9 @@ public class SoundManager {
                 //continue in case of not used events
                 if (soundFile == null || ( ! soundFile.exists() ) ) { continue; }
 
-                //create n clips
-                for( int i = 0; i < tempClipPerArray; i ++ ){
-
-                    // 1. Init clip
-                    Clip audioClip = null;
-
-                    try {
-
-                        // 2. open stream
-                        try (AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile)) {
-                            
-                            AudioFormat af = ais.getFormat();
-                            int bufferSize = (int) ais.getFrameLength() * af.getFrameSize();
-                            DataLine.Info dataLineInfo = new DataLine.Info(Clip.class, af, bufferSize);
-
-                            if (!AudioSystem.isLineSupported(dataLineInfo)) {
-                                throw new IOException("Error: AudioSystem does not support this DataLine");
-                            }
-
-                            audioClip = (Clip) AudioSystem.getLine(dataLineInfo);
-                            audioClip.open(ais);
-                        }
-                        
-                    } catch (Exception exc) {
-                        exc.printStackTrace();
-                    }
-
-                    // 3. add clip to array
-                    clipArray[i] = audioClip;
-
-                }// end fill array
-
+                //populate array
+                populateArray(clipArray, tempClipPerArray, soundFile);
+                
             //populate clipArrayMap
             clipArrayMap.put( e, clipArray );
 
@@ -190,6 +161,43 @@ public class SoundManager {
     // PRIVATE STATIC METHODS
     //------------------------------------
 
+    //array initialization method
+    private static void populateArray( Clip[] clipArray, int tempClipPerArray, File soundFile ){
+
+        //create n clips
+        for( int i = 0; i < tempClipPerArray; i ++ ){
+
+            // 1. Init clip
+            Clip audioClip = null;
+
+            try {
+
+                // 2. open stream
+                try (AudioInputStream ais = AudioSystem.getAudioInputStream(soundFile)) {
+                    
+                    AudioFormat af = ais.getFormat();
+                    int bufferSize = (int) ais.getFrameLength() * af.getFrameSize();
+                    DataLine.Info dataLineInfo = new DataLine.Info(Clip.class, af, bufferSize);
+
+                    if (!AudioSystem.isLineSupported(dataLineInfo)) {
+                        throw new IOException("Error: AudioSystem does not support this DataLine");
+                    }
+
+                    audioClip = (Clip) AudioSystem.getLine(dataLineInfo);
+                    audioClip.open(ais);
+                }
+                
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+
+            // 3. add clip to array
+            clipArray[i] = audioClip;
+
+        }// end for
+
+    }//end populateArray
+
     //audioPooling method
     private static void playSoundFromClipArray( Clip[] clipArray ){
 
@@ -213,6 +221,7 @@ public class SoundManager {
         clipArray[0].start();
 
     }// end playSoundFromClipArray
+
 
     //sound hardware warmup to fix first sound freeze
     private static void forceHardwareInitialization(File sampleFile) {

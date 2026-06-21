@@ -6,6 +6,7 @@ import model.api.ModelForController;
 import shared.GameState;
 import shared.SharedConstants;
 import view.api.ViewForController;
+import javax.swing.Timer;
 
 public class GameController implements ControllerForMain, ActionHandlerForView {
 
@@ -16,7 +17,8 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
     private static final int FRAMES_PER_SECOND = SharedConstants.FRAMES_PER_SECOND;
     private static final int MILLISECONDS_PER_FRAME = (int)Math.round(1000.0/FRAMES_PER_SECOND);
-    
+
+
 
     //------------------
     //STATIC VARIABLES
@@ -35,7 +37,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
 
     //-----------------------------------
-    //COSTRUCTOR + 3 SINGLETON METHODS
+    //COSTRUCTOR + 2 SINGLETON METHODS
     //-----------------------------------
 
     private GameController( ViewForController view, ModelForController model ){
@@ -58,6 +60,7 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
         if(controller == null ) throw new IllegalStateException("controller not initialized! first call getInstance( view, model)");
         return controller;
     } //end getInstanceForMain
+
 
     //------------------------
     //PRIVATE METHODS
@@ -127,13 +130,19 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
 
     @Override
     public void cmdNukeAll() {
-        model.nukeAll();
-    }
+        if( SharedConstants.CHEAT_NUKE_BUTTON ) model.nukeAll();
+    }// end cmdNukeAll
 
 
     //------------------------------
     //PUBLIC METHODS FOR MAIN
     //------------------------------
+
+    @Override
+    public void startTimer(){
+        Timer swingTimer = new Timer(MILLISECONDS_PER_FRAME, e -> tick());
+        swingTimer.start();
+    }
 
     /** Called once per frame by the platform-specific entry point (Swing timer or rAF). */
     @Override

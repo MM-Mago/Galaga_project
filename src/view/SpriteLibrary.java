@@ -132,9 +132,155 @@ class SpriteLibrary {
         //-------------------------
 
 
-        // GET ALIENS AND PLAYER
-        for( Entities name: Entities.values() ){
+        // PUT ALIENS AND PLAYER
 
+        putAliensAndPlayer();
+
+
+        // PUT PLAYER EXPLOSION SPRITES
+
+        for( int i = 0; i < 4; i ++ ){
+            final int PLAYER_EXPLOSION_SPRITE_DIMENSION = 32;
+            BufferedImage tempPlayerExplosionImage = spritesWholeImage.getSubimage( ( 1 + (16 + 2)*8 + ( 32 + 2)*i ), 1, PLAYER_EXPLOSION_SPRITE_DIMENSION, PLAYER_EXPLOSION_SPRITE_DIMENSION );
+            spritesMap.put( Entities.PLAYER.name() + "_" + "U" + "_" + (i+2), tempPlayerExplosionImage );
+        }
+
+
+        // PUT ALIEN EXPLOSION SPRITE
+
+        BufferedImage explosionSprite;
+        for( int i = 0; i < 5; i ++ ){
+            final int EXPLOSION_SPRITE_DIMENSIONS = 32;
+            explosionSprite = spritesWholeImage.getSubimage( ( 18 * 16 ) + 1 + ( ( EXPLOSION_SPRITE_DIMENSIONS + 2 ) * i ) , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
+            spritesMap.put( "ALIEN_EXPLOSION" + "_"  + "U" + "_" + (i+1), explosionSprite );
+        }
+
+
+        // PUT SHOTS
+
+        BufferedImage playerShot = spritesWholeImage.getSubimage( 313, 123, 3, 8 );
+        spritesMap.put( Entities.PLAYER_SHOT.name() + "_" + "U" + "_" + 1 , playerShot);
+        BufferedImage alienShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
+        spritesMap.put( Entities.ALIEN_SHOT.name() + "_" + "D" + "_" + 1 , alienShot );
+        
+
+        // PUT MEDALS
+
+        BufferedImage medal;
+        final int xInitialOffsetForMedals = 17*(16 + 2) + 1;
+        final int yOffsetForMedals = 9*(16 + 2) + 1 + 9;
+        final int medalHeight = 16;
+        final int smallerMedalsWidth = 8;
+        final int largerMedalsWidth = 16;
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals, yOffsetForMedals, smallerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 1, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2), yOffsetForMedals, smallerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 5, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 10, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2), yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 20, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 30, medal );
+        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*3, yOffsetForMedals, largerMedalsWidth, medalHeight );
+        spritesMap.put( "MEDAL" + "_" + 50, medal );
+
+
+        // PUT ALL INITIAL SCREEN SPRITES
+
+        spritesMap.put( "1UP", initialScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "HIGH_SCORE", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "GALAGA", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*2, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "SCORE", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*3, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "50_100", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*4, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "80_160", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*5, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        spritesMap.put( "CREDIT", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*6, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
+        
+
+        // PUT COIN_INSERTED_SCREEN
+
+        spritesMap.put( "COIN_INSERTED_SCREEN", coinInsertedScreenWholeImage );
+
+
+        // PUT ALL LOADING SCREEN SPRITES
+
+        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
+        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ), INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
+
+
+        // PUT CHALLENGING STAGE SPRITE
+    
+        spritesMap.put( "CHALLENGING_STAGE", challengingStageSpritesWholeImage ); //width 394, height 21
+
+
+        // PUT NUMBERS
+
+        for( int i = 0; i < 10; i++ ){
+            final int NUMBER_WIDTH = 24;
+            final int NUMBER_HEIGHT = 24;
+            final int offSetX = 25;
+            final int offsetY = 26;
+            for( int colorN = 0; colorN < 3; colorN++ ){
+
+                BufferedImage numberSprite = numbersWholeImage.getSubimage( ( (offSetX)*i ), ( (offsetY)*colorN ), ( NUMBER_WIDTH ), ( NUMBER_HEIGHT ) );
+                
+                if( colorN == 0 ){ spritesMap.put( i + "_" + "BLUE", numberSprite ); }
+                if( colorN == 1 ){ spritesMap.put( i + "_" + "YELLOW", numberSprite ); }
+                if( colorN == 2 ){ spritesMap.put( i + "_" + "WHITE", numberSprite ); }
+                
+            
+            }
+        }// end get numbers
+
+
+        // PUT READY TEXT
+
+        spritesMap.put( "READY", startTextImage );
+
+
+        // PUT GAME OVER TEXT
+
+        spritesMap.put( "GAME_OVER", gameOverTextImage );
+
+    }// end init sprites
+
+    //used only for sprites in sprites.png
+    static BufferedImage getSprite( Entities name, RotationDirection dir, int animationFrame ) {
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( animationFrame == 0 ) return null;
+        return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
+    }
+
+    //used only for medals in sprites.png
+    static BufferedImage getMedal( String name, int value ) {
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( !( "1,5,10,20,30,50".contains( "" + value ) ) ) throw new IllegalArgumentException( "values for medals must be chosen from 1, 5, 10, 20, 30, 50" );
+        return spritesMap.get( name + "_" + value );
+    }
+
+    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png, start_text.png
+    static BufferedImage getSprite( String name ) {
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        return spritesMap.get( name );
+    }
+
+    /*used only for numbers, number must be from 0 to 9 */
+    static BufferedImage getNumberSprite( String color, int i ) {
+        color = color.toUpperCase();
+        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
+        if( i<0 || i>9 ) throw new IllegalArgumentException( "must be an int between 0 and 9 both included" );
+        if( !( color == "BLUE" || color == "YELLOW" || color == "WHITE") ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
+        return spritesMap.get( i + "_" + color );
+    }
+
+
+    //--------------------------------
+    // PRIVATE STATIC METHODS
+    //--------------------------------
+
+    private static void putAliensAndPlayer(){
+
+        for( Entities name: Entities.values() ){
 
             // calculate offsets based on entityName
             int offsetX = 1;
@@ -232,143 +378,10 @@ class SpriteLibrary {
 
                 }// end cycle directions
                     
-            }//end animationFrame directions
+            }// end cycle animationFrames
 
-            // TO ADD second aliens sprite in formation
+        }// end cycle entities
 
+    }// end putAliensAndPlayer
 
-
-        }// end get aliens and player
-
-        //GET PLAYER EXPLOSION SPRITES
-
-        for( int i = 0; i < 4; i ++ ){
-            final int PLAYER_EXPLOSION_SPRITE_DIMENSION = 32;
-            BufferedImage tempPlayerExplosionImage = spritesWholeImage.getSubimage( ( 1 + (16 + 2)*8 + ( 32 + 2)*i ), 1, PLAYER_EXPLOSION_SPRITE_DIMENSION, PLAYER_EXPLOSION_SPRITE_DIMENSION );
-            spritesMap.put( Entities.PLAYER.name() + "_" + "U" + "_" + (i+2), tempPlayerExplosionImage );
-        }
-
-        //GET ALIEN EXPLOSION SPRITE
-
-        BufferedImage explosionSprite;
-        for( int i = 0; i < 5; i ++ ){
-            final int EXPLOSION_SPRITE_DIMENSIONS = 32;
-            explosionSprite = spritesWholeImage.getSubimage( ( 18 * 16 ) + 1 + ( ( EXPLOSION_SPRITE_DIMENSIONS + 2 ) * i ) , 1, EXPLOSION_SPRITE_DIMENSIONS, EXPLOSION_SPRITE_DIMENSIONS );
-            spritesMap.put( "ALIEN_EXPLOSION" + "_"  + "U" + "_" + (i+1), explosionSprite );
-        }
-
-
-        //GET SHOTS
-
-        BufferedImage playerShot = spritesWholeImage.getSubimage( 313, 123, 3, 8 );
-        spritesMap.put( Entities.PLAYER_SHOT.name() + "_" + "U" + "_" + 1 , playerShot);
-        BufferedImage alienShot = spritesWholeImage.getSubimage( 313, 123 + 16, 3, 8 );
-        spritesMap.put( Entities.ALIEN_SHOT.name() + "_" + "D" + "_" + 1 , alienShot );
-        
-
-
-        //GET MEDALS
-
-        BufferedImage medal;
-        final int xInitialOffsetForMedals = 17*(16 + 2) + 1;
-        final int yOffsetForMedals = 9*(16 + 2) + 1 + 9;
-        final int medalHeight = 16;
-        final int smallerMedalsWidth = 8;
-        final int largerMedalsWidth = 16;
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals, yOffsetForMedals, smallerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 1, medal );
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2), yOffsetForMedals, smallerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 5, medal );
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 10, medal );
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2), yOffsetForMedals, largerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 20, medal );
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*2, yOffsetForMedals, largerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 30, medal );
-        medal = spritesWholeImage.getSubimage( xInitialOffsetForMedals + (smallerMedalsWidth + 2)*2 + (largerMedalsWidth + 2)*3, yOffsetForMedals, largerMedalsWidth, medalHeight );
-        spritesMap.put( "MEDAL" + "_" + 50, medal );
-
-
-        //GET ALL INITIAL SCREEN SPRITES
-
-        spritesMap.put( "1UP", initialScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "HIGH_SCORE", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "GALAGA", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*2, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "SCORE", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*3, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "50_100", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*4, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "80_160", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*5, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        spritesMap.put( "CREDIT", initialScreenSpritesWholeImage.getSubimage(0, INITIAL_SCREEN_SPRITES_MAX_HEIGHT*6, INITIAL_SCREEN_SPRITES_MAX_WIDTH, INITIAL_SCREEN_SPRITES_MAX_HEIGHT ));
-        
-
-        //GET COIN_INSERTED_SCREEN
-
-        spritesMap.put( "COIN_INSERTED_SCREEN", coinInsertedScreenWholeImage );
-        
-
-        //GET ALL LOADING SCREEN SPRITES
-
-        spritesMap.put( "PLAYER", loadingScreenSpritesWholeImage.getSubimage(0, 0, INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
-        spritesMap.put( "STAGE", loadingScreenSpritesWholeImage.getSubimage(0, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ), INITIAL_SCREEN_SPRITES_MAX_WIDTH, ( INITIAL_SCREEN_SPRITES_MAX_HEIGHT ) ) );
-
-        //GET CHALLENGING STAGE SPRITE
-    
-        spritesMap.put( "CHALLENGING_STAGE", challengingStageSpritesWholeImage ); //width 394, height 21
-
-        //GET NUMBERS
-
-        for( int i = 0; i < 10; i++ ){
-            final int NUMBER_WIDTH = 24;
-            final int NUMBER_HEIGHT = 24;
-            final int offSetX = 25;
-            final int offsetY = 26;
-            for( int colorN = 0; colorN < 3; colorN++ ){
-
-                BufferedImage numberSprite = numbersWholeImage.getSubimage( ( (offSetX)*i ), ( (offsetY)*colorN ), ( NUMBER_WIDTH ), ( NUMBER_HEIGHT ) );
-                
-                if( colorN == 0 ){ spritesMap.put( i + "_" + "BLUE", numberSprite ); }
-                if( colorN == 1 ){ spritesMap.put( i + "_" + "YELLOW", numberSprite ); }
-                if( colorN == 2 ){ spritesMap.put( i + "_" + "WHITE", numberSprite ); }
-                
-            
-            }
-        }// end get numbers
-
-        //READY TEXT
-
-        spritesMap.put( "READY", startTextImage );
-
-        //GAME OVER TEXT
-
-        spritesMap.put( "GAME_OVER", gameOverTextImage );
-
-    }// end init sprites
-
-    //used only for sprites in sprites.png
-    static BufferedImage getSprite( Entities name, RotationDirection dir, int animationFrame ) {
-        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
-        if( animationFrame == 0 ) return null;
-        return spritesMap.get( name.name() + "_" + dir.name() + "_" + animationFrame );
-    }
-
-    //used only for medals in sprites.png
-    static BufferedImage getMedal( String name, int value ) {
-        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
-        if( !( "1,5,10,20,30,50".contains( "" + value ) ) ) throw new IllegalArgumentException( "values for medals must be chosen from 1, 5, 10, 20, 30, 50" );
-        return spritesMap.get( name + "_" + value );
-    }
-
-    //used only for sprites in initial_screen_sprites.png, coin_inserted_screen.png, loading_screen_sprites.png, challenging_stage.png, start_text.png
-    static BufferedImage getSprite( String name ) {
-        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
-        return spritesMap.get( name );
-    }
-
-    /*used only for numbers, number must be from 0 to 9 */
-    static BufferedImage getNumberSprite( String color, int i ) {
-        color = color.toUpperCase();
-        if( spritesMap == null ) throw new IllegalStateException( "SpriteLibrary not initialized" );
-        if( i<0 || i>9 ) throw new IllegalArgumentException( "must be an int between 0 and 9 both included" );
-        if( !( color == "BLUE" || color == "YELLOW" || color == "WHITE") ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
-        return spritesMap.get( i + "_" + color );
-    }
-}
+}//end SpriteLibrary

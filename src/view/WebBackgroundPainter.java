@@ -5,9 +5,9 @@ import org.teavm.jso.canvas.CanvasRenderingContext2D;
 import org.teavm.jso.dom.events.Event;
 import org.teavm.jso.dom.events.EventListener;
 
-import model.GameModel;
 import model.api.ModelForView;
 import shared.GameState;
+import shared.SharedConstants;
 
 class WebBackgroundPainter {
 
@@ -17,7 +17,7 @@ class WebBackgroundPainter {
 
     private static final int MAX_FRAME_INDEX = 3;
     private static final int FRAME_CHANGES_PER_SECOND = 8;
-    private static final int MAX_BACKGROUND_DY = GameModel.getSreenHeight();
+    private static final int MAX_BACKGROUND_DY = SharedConstants.MODEL_SCREEN_HEIGHT;
 
     // background frame image paths (relative to index.html)
     private static final String[] FRAME_PATHS = {

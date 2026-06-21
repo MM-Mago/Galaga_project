@@ -21,10 +21,15 @@ class WebEntityPainter {
         for (EntityInfo info : entities) {
             switch (info.entity()) {
                 case PLAYER:
-                    // mirror desktop: only show player once it has appeared
+                    // animationFrame 0 = dead, waiting to respawn — hide entirely
+                    // animationFrame >= 2 while LIFE_LOST = explosion frames — show
+                    // animationFrame 1 = normal sprite — show when appropriate
+                    if (info.animationFrame() == 0) break;
                     if (state == GameState.PLAYING
                             || state == GameState.LOADING_NOT_FIRST_STAGE
-                            || (state == GameState.LOADING_FIRST_STAGE && secondsInState > 5)) {
+                            || state == GameState.GAME_OVER
+                            || (state == GameState.LOADING_FIRST_STAGE && secondsInState > 5)
+                            || (state == GameState.LIFE_LOST && info.animationFrame() >= 2)) {
                         paintEntity(ctx, info);
                     }
                     break;

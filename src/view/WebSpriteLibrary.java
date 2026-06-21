@@ -115,17 +115,6 @@ class WebSpriteLibrary {
         return cache.get(key);
     }
 
-    static HTMLCanvasElement getMedalSprite(int value) {
-        if (!(value == 1 || value == 5 || value == 10 || value == 20 || value == 30 || value == 50)) {
-            throw new IllegalArgumentException("Medal value must be one of: 1, 5, 10, 20, 30, 50");
-        }
-        String key = "MEDAL_" + value;
-        if (!cache.containsKey(key)) {
-            cache.put(key, buildMedalSprite(value));
-        }
-        return cache.get(key);
-    }
-
     // -----------------------------------------------------------------------
     // Sprite-sheet source Y offsets (mirrors SpriteLibrary exactly)
     // -----------------------------------------------------------------------
@@ -152,15 +141,32 @@ class WebSpriteLibrary {
             return makeBlank(3, 8);
         }
 
+        // alien explosion: 5 frames of 32x32, laid out right of the alien grid
+        if (entity == Entities.ALIEN_EXPLOSION) {
+            final int EDIM = 32, EGRID = 2;
+            int frame = Math.max(1, Math.min(animationFrame, 5)) - 1;
+            int ex = (18 * 16) + 1 + (EDIM + EGRID) * frame;
+            return clip(imgSprites, ex, 1, EDIM, EDIM, false, false);
+        }
+
         final int DIM = 16;
         final int GRID = 2;
         final int offsetX = 1;
-        final int offsetY = offsetYForEntity(entity);
 
         int angle = dir.getAngle();
         int i;
 
-        // wings-closed frame (frame 2, facing up only)
+        // player explosion frames 2-5: stored right of the 8 normal alien columns
+        if (entity == Entities.PLAYER && animationFrame >= 2) {
+            final int EDIM = 32, EGRID = 2;
+            int frame = Math.min(animationFrame - 2, 3); // frames 2,3,4,5 -> index 0,1,2,3
+            int ex = 1 + (DIM + GRID) * 8 + (EDIM + EGRID) * frame;
+            return clip(imgSprites, ex, 1, EDIM, EDIM, false, false);
+        }
+
+        final int offsetY = offsetYForEntity(entity);
+
+        // wings-closed frame (animationFrame == 2 only applies to non-PLAYER entities here)
         if (animationFrame == 2 && angle == 0) {
             i = 7;
             return clip(imgSprites, offsetX + (DIM + GRID) * i, offsetY, DIM, DIM, false, false);
@@ -210,7 +216,14 @@ class WebSpriteLibrary {
             case "COIN_INSERTED_SCREEN": return clipFull(imgCoinInserted);
             case "PLAYER":               return clipHalf(imgLoadingScreen, false);
             case "STAGE":                return clipHalf(imgLoadingScreen, true);
-            case "CHALLENGING_STAGE":    return buildChallenggingStageSprite();
+            // medals — two sizes: 1,5 are 8x16; 10,20,30,50 are 16x16
+            // xBase=17*(16+2)+1=307, y=9*(16+2)+1+9=172
+            case "MEDAL_1":  return clip(imgSprites, 307, 172, 8,  16, false, false);
+            case "MEDAL_5":  return clip(imgSprites, 317, 172, 8,  16, false, false);
+            case "MEDAL_10": return clip(imgSprites, 327, 172, 16, 16, false, false);
+            case "MEDAL_20": return clip(imgSprites, 345, 172, 16, 16, false, false);
+            case "MEDAL_30": return clip(imgSprites, 363, 172, 16, 16, false, false);
+            case "MEDAL_50": return clip(imgSprites, 381, 172, 16, 16, false, false);
             default:                     return makeBlank(8, 8);
         }
     }
@@ -219,47 +232,6 @@ class WebSpriteLibrary {
         final int W = 24, H = 24, OFFX = 25, OFFY = 26;
         int colorRow = color.equals("BLUE") ? 0 : color.equals("YELLOW") ? 1 : 2;
         return clip(imgNumbers, OFFX * digit, OFFY * colorRow, W, H, false, false);
-    }
-
-    private static HTMLCanvasElement buildMedalSprite(int value) {
-        // Mirrors SpriteLibrary.java medal coordinates
-        final int xInitialOffsetForMedals = 17 * (16 + 2) + 1; // 307
-        final int yOffsetForMedals = 9 * (16 + 2) + 1 + 9;     // 171
-        final int medalHeight = 16;
-        final int smallerMedalsWidth = 8;
-        final int largerMedalsWidth = 16;
-
-        int x = xInitialOffsetForMedals;
-        int w = smallerMedalsWidth;
-
-        switch (value) {
-            case 1:
-                x = xInitialOffsetForMedals;
-                w = smallerMedalsWidth;
-                break;
-            case 5:
-                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2);
-                w = smallerMedalsWidth;
-                break;
-            case 10:
-                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2;
-                w = largerMedalsWidth;
-                break;
-            case 20:
-                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2);
-                w = largerMedalsWidth;
-                break;
-            case 30:
-                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2) * 2;
-                w = largerMedalsWidth;
-                break;
-            case 50:
-                x = xInitialOffsetForMedals + (smallerMedalsWidth + 2) * 2 + (largerMedalsWidth + 2) * 3;
-                w = largerMedalsWidth;
-                break;
-        }
-
-        return clip(imgSprites, x, yOffsetForMedals, w, medalHeight, false, false);
     }
 
     // -----------------------------------------------------------------------
@@ -336,13 +308,5 @@ class WebSpriteLibrary {
 
     private static HTMLCanvasElement makeBlank(int w, int h) {
         return makeCanvas(w, h);
-    }
-
-    private static HTMLCanvasElement buildChallenggingStageSprite() {
-        // CHALLENGING_STAGE sprite from sprites.png (394x21)
-        // Located after other sprites in sprite sheet
-        final int W = 394, H = 21;
-        final int X = 0, Y = 154; // Approximate Y position in sprite sheet
-        return clip(imgSprites, X, Y, W, H, false, false);
     }
 }

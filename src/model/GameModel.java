@@ -25,8 +25,6 @@ public class GameModel implements ModelForView, ModelForController{
     //PRIVATE STATIC FINAL VARIABLES
     //--------------------------------
 
-    private static final int MODEL_SCREEN_WIDTH = 224;
-    private static final int MODEL_SCREEN_HEIGHT = 288;
     private static final int SCORE_PER_LIFE = 70000;
     private static final int SCORE_FOR_FIRST_LIFE = 20000;
     
@@ -50,7 +48,7 @@ public class GameModel implements ModelForView, ModelForController{
     private ArrayList<AlienShot> alienShotsList;
     private ArrayList<PlayerShot> playerShotsList;
 
-    //Event
+    //Events
     private LinkedList<Events> eventsQueue;
 
     //counters
@@ -67,6 +65,7 @@ public class GameModel implements ModelForView, ModelForController{
     //frame number
     private int frameNumber;
     int secondsInState;
+
 
     //----------------------------------
     //COSTRUCTOR + 3 SINGLETON METHODS
@@ -99,7 +98,7 @@ public class GameModel implements ModelForView, ModelForController{
         frameNumber = 0;
         secondsInState = 0;
         coins = 0;
-        lives = 3; //init with 3
+        lives = SharedConstants.INITIAL_LIVES;
         score = 0;
         highScore = 20000;
 
@@ -112,23 +111,22 @@ public class GameModel implements ModelForView, ModelForController{
     public static ModelForView getInstanceForView(){
         if(model == null ) throw new IllegalStateException("model not initialized! first call getInstance() ");
         return model;
-    } //end getInstance
+    } //end getInstanceForWiew
 
-        public static ModelForController getInstanceForController(){
+    public static ModelForController getInstanceForController(){
         if(model == null ) throw new IllegalStateException("model not initialized! first call getInstance() ");
         return model;
-    } //end getInstance
+    } //end getInstanceForController
 
 
     //-----------------------
     //PUBLIC STATIC METHODS
     //-----------------------
 
-    public static int getSreenWidth(){ return MODEL_SCREEN_WIDTH; }
-    public static int getSreenHeight(){ return MODEL_SCREEN_HEIGHT; }
     public static boolean isStageFull(){ return alienHandler.isStageFull(); }
     public static boolean areAllStageAlienPathsEmpty(){ return alienHandler.areAllStageAlienPathsEmpty(); }
     public static boolean areAliensDiving(){ return alienHandler.areAliensDiving(); }
+
 
     //------------------
     //PRIVATE METHODS
@@ -142,13 +140,15 @@ public class GameModel implements ModelForView, ModelForController{
         else if (e instanceof PlayerShot ){ playerShotsList.add((PlayerShot)e);}
     } //end addEntity
 
+    //player kill sequence
     private void killPlayer(){
         lives --;
         state = GameState.LIFE_LOST;
         secondsInState = 0;
         eventsQueue.add(Events.LIFE_LOST);
-    }
+    }// end killPlayer
 
+    //start new game sequence
     private void startNewGame(){
 
         //lists
@@ -177,9 +177,10 @@ public class GameModel implements ModelForView, ModelForController{
         lives = 3;
         score = 0;
 
-    }
+    }//end startNewGame
 
     private void checkCollisions(){
+
 
         //use radius = half max dimension for aliens
         for( PlayerShot pShot: playerShotsList ){
@@ -224,19 +225,25 @@ public class GameModel implements ModelForView, ModelForController{
 
         }// end check collisions between aliens and player shots
 
-        for(Alien a: aliensList){
-            if( ! a.isToRemove() ) if( a.checkCollisionWith(player) ){
-                killPlayer();
-                return; // exit method in case of player hit
-            }
-        }
 
-        for(AlienShot aShot: alienShotsList ){
-            if( ! aShot.isToRemove() ) if( aShot.checkCollisionWith(player) ){
-                killPlayer();
-                return; // exit method in case of player hit
+        //check collisions with player if not in godMode
+        if( ! SharedConstants.CHEAT_GOD_MODE ){
+
+            for(Alien a: aliensList){
+                if( ! a.isToRemove() ) if( a.checkCollisionWith(player) ){
+                    killPlayer();
+                    return; // exit method in case of player being hit
+                }
             }
-        }
+
+            for(AlienShot aShot: alienShotsList ){
+                if( ! aShot.isToRemove() ) if( aShot.checkCollisionWith(player) ){
+                    killPlayer();
+                    return; // exit method in case of player being hit
+                }
+            }
+        }//end check collisions with player
+
 
     }//end check collisions
 
@@ -248,7 +255,7 @@ public class GameModel implements ModelForView, ModelForController{
     //game state
     @Override
     public int getSecondsInState() { return secondsInState; }
-    @Override //all Overrides repetitive but needed
+    @Override
     public GameState getState(){ return this.state; } //get the present state of the game
 
     //entities
@@ -285,153 +292,163 @@ public class GameModel implements ModelForView, ModelForController{
     //------------------------------
 
     //method called by timer to skip to next frame
-        @Override
-        public void update( int frameNumber ){
-
-            //save initial frame score
-            int initialScore = score;
-
-            //update frameNumber
-            this.frameNumber = frameNumber; 
-            if( frameNumber == SharedConstants.FRAMES_PER_SECOND ) secondsInState++;
+    @Override
+    public void update( int frameNumber ){
 
 
-            //--------------------------------------
-            //UPDATE PRESENT ENTITIES
-            //--------------------------------------
+        //--------------------------------------
+        //save initial frame score
+        //--------------------------------------
+        
+        int initialScore = score;
 
-            for( Entity e: entitiesList ){
-                e.update( this.frameNumber, secondsInState, state );
+        //--------------------------------------
+        //update frameNumber
+        //--------------------------------------
+        
+        this.frameNumber = frameNumber; 
+        if( frameNumber == SharedConstants.FRAMES_PER_SECOND ) secondsInState++;
+
+        //--------------------------------------
+        //update present entities
+        //--------------------------------------
+
+        for( Entity e: entitiesList ){
+            e.update( this.frameNumber, secondsInState, state );
+        }
+
+        //------------------------------------------------------------
+        //update alienHandler only if PLAYING or LIFE_LOST or GAME_OVER
+        //------------------------------------------------------------
+
+        if( state == GameState.PLAYING || state == GameState.LIFE_LOST || state == GameState.GAME_OVER ){
+
+            //get new aliens and add them
+            ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens( frameNumber, secondsInState, state, eventsQueue );
+            for( Alien a: aliensToAdd){ addEntity(a); }
+
+        }
+
+        //-----------------------------------
+        //check collisions only if PLAYING 
+        //-----------------------------------
+
+        if( state == GameState.PLAYING ){
+
+            //check collisions
+            this.checkCollisions();
+            
+        }
+
+        //--------------------------------------
+        //remove entities to remove
+        //--------------------------------------
+
+        //Lambda expression wich remove all Entities set for removal, and also decrement active shots count if it's a player shot
+        entitiesList.removeIf(e -> {
+
+            //if not to remove exit now
+            if (!e.isToRemove()) return false; 
+
+            //check for player shots to decrement counter
+            if (e instanceof PlayerShot) {
+                activePlayerShotsCount--;
+                playerShotsList.remove(e);
             }
 
+            //check for aliens
+            if( e instanceof Alien ) aliensList.remove(e);
+            if( e instanceof AlienShot ) alienShotsList.remove(e);
 
-            //------------------------------------------------
-            //DO ONLY IF PLAYING OR LIFE_LOST OR GAME_OVER
-            //------------------------------------------------
+            //check for player
+            if( e instanceof Player ) return false;
 
-            if( state == GameState.PLAYING || state == GameState.LIFE_LOST || state == GameState.GAME_OVER ){
+            return true; 
+        }); 
 
+        //--------------------------------------
+        //make aliens shoot if playing
+        //--------------------------------------
+        
+        if( state == GameState.PLAYING ){
 
-                //get new aliens and add them
-                ArrayList<Alien> aliensToAdd = alienHandler.updateHandlerAndGetNewAliens( frameNumber, secondsInState, state, eventsQueue );
-                for( Alien a: aliensToAdd){ addEntity(a); }
-
-
-                //----------------------
-                //DO ONLY IF PLAYING 
-                //----------------------
-
-                if( state == GameState.PLAYING ){
-
-
-                    //check collisions
-                    this.checkCollisions();
-                    
-                }// end if playing
-
-            }// end if playing or life lost
-            
-
-            //--------------------------------------
-            //REMOVE ENTITIES TO REMOVE
-            //--------------------------------------
-
-            //Lambda expression wich remove all Entities set for removal, and also decrement active shots count if it's a player shot
-            entitiesList.removeIf(e -> {
-
-                //if not to remove exit now
-                if (!e.isToRemove()) return false; 
-
-                //check for player shots to decrement counter
-                if (e instanceof PlayerShot) {
-                    activePlayerShotsCount--;
-                    playerShotsList.remove(e);
-                }
-
-                //check for aliens
-                if( e instanceof Alien ) aliensList.remove(e);
-                if( e instanceof AlienShot ) alienShotsList.remove(e);
-
-                //check for player
-                if( e instanceof Player ) return false;
-
-                return true; 
-            }); 
-
-
-            //--------------------------------------
-            //MAKE ALIENS SHOOT
-            //--------------------------------------
-            
             //only at 2 points of diving path
             for( Alien a: aliensList ){
                 if( a.isDiving() && ( ! a.isOfChallengingStage() ) && ( a.getPointOfPathCounter() == 25 || a.getPointOfPathCounter() == 35 ) ){
                     addEntity( new AlienShot( a, player ) );
                 }
             }
+        }
 
+        //--------------------------------------
+        //check if stage changed
+        //--------------------------------------
 
-            //--------------------------------------
-            //CHECK IF STAGE CHANGED
-            //--------------------------------------
+        if( (this.numStage != alienHandler.getNumStage()) && ( state == GameState.PLAYING ) ){
+            state = GameState.LOADING_NOT_FIRST_STAGE;
+            secondsInState = 0;
+            this.numStage = alienHandler.getNumStage(); 
+            if( AlienFormationsLibrary.isStageChallenging(numStage) ){ eventsQueue.add( Events.CHALLENGING_STAGE ); }
+            else{ eventsQueue.add( Events.NEXT_STAGE ); }
+        }
 
-            if( (this.numStage != alienHandler.getNumStage()) && ( state == GameState.PLAYING ) ){
-                state = GameState.LOADING_NOT_FIRST_STAGE;
-                secondsInState = 0;
-                this.numStage = alienHandler.getNumStage(); 
-                if( AlienFormationsLibrary.isStageChallenging(numStage) ){ eventsQueue.add( Events.CHALLENGING_STAGE ); }
-                else{ eventsQueue.add( Events.NEXT_STAGE ); }
+        //--------------------------------------
+        //update counters
+        //--------------------------------------
+
+        //update highScore
+        if( score > highScore ) highScore = score;
+
+        //update state
+        if( state == GameState.LOADING_FIRST_STAGE && secondsInState > 6 ){
+            state = GameState.PLAYING;
+            secondsInState = 0;
+        }
+        if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 3 ){
+            state = GameState.PLAYING;
+            secondsInState = 0;
+        }
+        if( state == GameState.LIFE_LOST && secondsInState > 4 ){
+            state = GameState.PLAYING;
+            secondsInState = 0;
+        }
+        if( state == GameState.GAME_OVER && secondsInState > 6 ){
+            startNewGame();
+        }
+        if( state == GameState.INITIAL_SCREEN && coins > 0 ){
+            state = GameState.COIN_INSERTED;
+        }
+
+        //update lives
+        if( initialScore <= SCORE_FOR_FIRST_LIFE){ // case first life
+            if( SCORE_FOR_FIRST_LIFE <= score ){ // check if already gotten
+                lives++;
             }
-
-
-            //--------------------------------------
-            //UPDATE COUNTERS
-            //--------------------------------------
-
-            //update highScore
-            if( score > highScore ) highScore = score;
-
-            //update state
-            if( state == GameState.LOADING_FIRST_STAGE && secondsInState > 6 ){
-                state = GameState.PLAYING;
-                secondsInState = 0;
+        }
+        else{ //case other lives
+            int totalLifeToHaveAcquired = 1 + ( ( initialScore ) / SCORE_PER_LIFE );
+            int scoreForPresentLife = ( totalLifeToHaveAcquired ) * SCORE_PER_LIFE; 
+            if( initialScore < scoreForPresentLife && score >= scoreForPresentLife ){ // check if already gotten and if to get
+                lives++;
             }
-            if( state == GameState.LOADING_NOT_FIRST_STAGE && secondsInState > 3 ){
-                state = GameState.PLAYING;
-                secondsInState = 0;
-            }
-            if( state == GameState.LIFE_LOST && secondsInState > 4 ){
-                state = GameState.PLAYING;
-                secondsInState = 0;
-            }
-            if( state == GameState.GAME_OVER && secondsInState > 6 ){
-                startNewGame();
-            }
+        }
 
-            //update lives
-            if( initialScore <= SCORE_FOR_FIRST_LIFE){ // case first life
-                if( SCORE_FOR_FIRST_LIFE <= score ){ // check if already gotten
-                    lives++;
-                }
-            }
-            else{ //case other lives
-                int totalLifeToHaveAcquired = 1 + ( ( initialScore ) / SCORE_PER_LIFE );
-                int scoreForPresentLife = ( totalLifeToHaveAcquired ) * SCORE_PER_LIFE; 
-                if( initialScore < scoreForPresentLife && score >= scoreForPresentLife ){ // check if already gotten and if to get
-                    lives++;
-                }
-            }
+        //--------------------------------------
+        //check for infinite lives cheat
+        //--------------------------------------
 
-            //--------------------------------------
-            //CHECK FOR GAMEOVER
-            //--------------------------------------
+        if( SharedConstants.CHEAT_INFINITE_LIVES ) lives = 10;
 
-            if( lives == 0 && state != GameState.GAME_OVER ){
-                state = GameState.GAME_OVER;
-                secondsInState = 0;
-            }
+        //--------------------------------------
+        //check for game over
+        //--------------------------------------
 
-        }// end update 
+        if( lives == 0 && state != GameState.GAME_OVER ){
+            state = GameState.GAME_OVER;
+            secondsInState = 0;
+        }
+
+    }// end update 
 
     //add coin number +1
     @Override
@@ -472,7 +489,7 @@ public class GameModel implements ModelForView, ModelForController{
     //make the player shoot
     @Override
     public void shoot(){
-        if( this.activePlayerShotsCount < 2 ){
+        if( this.activePlayerShotsCount < 2 || SharedConstants.CHEAT_INFINITE_SHOTS ){
             PlayerShot shot = new PlayerShot( this.player );
             addEntity(shot);
             activePlayerShotsCount++;
