@@ -167,7 +167,7 @@ public class GameView extends JPanel implements ViewForController, KeyListener{
         //paint everything again
         this.repaint();
         
-        //play a sound if needed
+        //play sounds if needed
         LinkedList<Events> eventsList = model.getEventsQueue();
         SoundManager.playSounds( eventsList );
 

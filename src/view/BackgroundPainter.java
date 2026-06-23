@@ -58,13 +58,13 @@ public class BackgroundPainter {
     static void initBackgroundPainter(){
 
         //load images
-            try {
-                FRAME_0 = ImageIO.read(new File(FRAME_0_PATH) );
-                FRAME_1 = ImageIO.read(new File(FRAME_1_PATH) );
-                FRAME_2 = ImageIO.read(new File(FRAME_2_PATH) );
-                FRAME_3 = ImageIO.read(new File(FRAME_3_PATH) );
+        try {
+            FRAME_0 = ImageIO.read(new File(FRAME_0_PATH) );
+            FRAME_1 = ImageIO.read(new File(FRAME_1_PATH) );
+            FRAME_2 = ImageIO.read(new File(FRAME_2_PATH) );
+            FRAME_3 = ImageIO.read(new File(FRAME_3_PATH) );
 
-            } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) { e.printStackTrace(); }
     
         //init variables
         presentFrame = 0;

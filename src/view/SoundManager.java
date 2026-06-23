@@ -137,7 +137,7 @@ public class SoundManager {
     
 
     //play sound from event
-    public static void playSounds( LinkedList<Events> eventsQueue ) {
+    static void playSounds( LinkedList<Events> eventsQueue ) {
 
         if (clipArrayMap == null) { throw new IllegalStateException("First Initialize SoundManager"); }
         if( eventsQueue == null) return; 

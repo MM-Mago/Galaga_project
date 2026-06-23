@@ -257,7 +257,7 @@ class InterfacePainter {
         color = color.toUpperCase();
         if( !( color.equals( "BLUE" ) || color.equals("YELLOW") || color.equals("WHITE") ) ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
 
-        // Correctly isolate individual digits using base-10 math (to check algorithm), adding them from right to left
+        // Correctly isolate individual digits using base-10 math, adding them from right to left
         int n = 0;
         int temp = number;
         if (temp == 0) {
@@ -290,7 +290,7 @@ class InterfacePainter {
         color = color.toUpperCase();
         if( !( color.equals( "BLUE" ) || color.equals("YELLOW") || color.equals("WHITE") ) ) throw new IllegalArgumentException( "color must be white, yellow or blue" );
 
-        // Correctly isolate individual digits using base-10 math (to check algorithm), adding them from right to left
+        // Correctly isolate individual digits using base-10 math, adding them from right to left
         int n = 0;
         int temp = number;
         if (temp == 0) {

@@ -125,14 +125,9 @@ public class GameController implements ControllerForMain, ActionHandlerForView {
                 model.startGame();
                 break;
         
-            case PLAYING:
+            case PLAYING, LOADING_NOT_FIRST_STAGE:
                 model.shoot();
-                break;
-
-            case LOADING_NOT_FIRST_STAGE:
-                model.shoot();
-                break;
-
+                
             default:
                 break;
         }
