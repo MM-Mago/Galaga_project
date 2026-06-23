@@ -6,4 +6,4 @@
 
 # Config file istructions
 you can enable cheats, modify initial lives and set screen dimensions by changing values in config.properties.
-Some time is needed to use changes
+Some time is needed to let the changes take place
